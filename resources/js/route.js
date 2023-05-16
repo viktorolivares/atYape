@@ -3,6 +3,10 @@ import { createRouter, createWebHistory } from "vue-router";
 /* Guest Component */
 import NotFound from "./components/NotFound.vue";
 import Transaction from "./components/modules/transactions/index.vue";
+import Business from "./components/modules/transactions/business.vue";
+import Teleservicios from "./components/modules/transactions/teleservicios.vue";
+import Televentas from "./components/modules/transactions/televentas.vue";
+import Mulfood from "./components/modules/transactions/mulfood.vue";
 import Dashboard from "./components/modules/dashboard/index.vue";
 import Domain from "./components/modules/domain/index.vue";
 import Users from "./components/modules/users/index.vue";
@@ -13,6 +17,7 @@ import RoleForm from "./components/modules/roles/form.vue";
 import Dni from "./components/modules/dni/index.vue";
 import Ip from "./components/modules/ip/index.vue";
 import Login from "./components/modules/auth/login.vue";
+
 
 function verifyAcces(to, from, next) {
     let authUser = JSON.parse(localStorage.getItem("authUser"));
@@ -52,6 +57,42 @@ const routes = [
         path: "/transactions",
         component: Transaction,
         name: "transactions.index",
+        beforeEnter: (to, from, next) => {
+            verifyAcces(to, from, next);
+        },
+    },
+    {
+        path: "/yape/business",
+        component: Business,
+        name: "yape.business",
+        props: true,
+        beforeEnter: (to, from, next) => {
+            verifyAcces(to, from, next);
+        },
+    },
+    {
+        path: "/yape/mulfood",
+        component: Mulfood,
+        name: "yape.mulfood",
+        props: true,
+        beforeEnter: (to, from, next) => {
+            verifyAcces(to, from, next);
+        },
+    },
+    {
+        path: "/yape/teleservicios",
+        component: Teleservicios,
+        name: "yape.teleservicios",
+        props: true,
+        beforeEnter: (to, from, next) => {
+            verifyAcces(to, from, next);
+        },
+    },
+    {
+        path: "/yape/televentas",
+        component: Televentas,
+        name: "yape.televentas",
+        props: true,
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },

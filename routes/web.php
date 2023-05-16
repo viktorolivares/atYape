@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\PermissionController;
@@ -21,7 +20,6 @@ use App\Http\Controllers\Api\AuthController;
 |
 */
 
-
 Route::group(['prefix' => 'api'], function () {
 
 
@@ -33,13 +31,6 @@ Route::group(['prefix' => 'api'], function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/refresh/auth', function () {
             return Auth::user()->load('file');
-        });
-
-        Route::controller(TransactionController::class)->group(function () {
-            Route::get('/transactions/list', 'index');
-            Route::put('/transactions/{id}/state', 'updateState');
-            Route::put('/transactions/{id}/details', 'updateDetails');
-            Route::post('/transactions/save', 'saveTransaction');
         });
 
         Route::controller(DashboardController::class)->group(function () {
@@ -69,6 +60,14 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('/roles/{id}', 'getRole');
         });
 
+        Route::controller(TransactionController::class)->group(function () {
+            Route::get('/transactions/list', 'index');
+            Route::put('/transactions/{id}/state', 'updateState');
+            Route::put('/transactions/{id}/details', 'updateDetails');
+            Route::post('/transactions/save', 'saveTransaction');
+            Route::get('/transactions/description/{description}', 'listByDescription');
+        });
+
         Route::controller(PermissionController::class)->group(function () {
             Route::get('/permissions/by-module', 'getPermissionsByModule');
         });
@@ -76,6 +75,25 @@ Route::group(['prefix' => 'api'], function () {
         Route::controller(FileController::class)->group(function () {
             Route::get('/files/preloaded', 'getPreloadedImages');
         });
+
+
+    /* Consulta IP*/
+
+    Route::get('/ip', [IpController::class, 'ip'])->name('ip');
+    Route::get('/ip-consult/{ip}', [IpController::class, 'ipConsult'])->name('ip-consult');
+
+
+    /*Domain*/
+
+    Route::get('/domain', [DomainController::class, 'domain'])->name('domain');
+    Route::get('/domain-consult/{domain}', [DomainController::class, 'getDomain'])->name('domain-consult');
+
+
+    /*DNI Deceased + Minors*/
+
+    Route::get('/deceased', [DeceasedController::class, 'index'])->name('dni-deceased');
+    Route::post('/query-deceased', [DeceasedController::class, 'getDni'])->name('query-deceased');
+    Route::get('/captcha', [DeceasedController::class, 'getCaptcha'])->name('captcha');
     });
 });
 

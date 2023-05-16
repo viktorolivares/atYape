@@ -9,7 +9,7 @@
 
         <div class="content-page">
             <div class="content">
-                <Navbar :route="route" :user="authUser"></Navbar>
+                <Navbar :route="route" :user="authUser" :permissions="permissions"></Navbar>
                 <div class="container-fluid">
                     <router-view v-slot="{ Component }">
                         <Transition name="slide-fade" mode="out-in">

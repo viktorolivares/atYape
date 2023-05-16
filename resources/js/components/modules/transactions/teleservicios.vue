@@ -1,16 +1,16 @@
 <template>
     <div>
-         <!-- start page title -->
-         <div class="row">
+        <!-- start page title -->
+        <div class="row">
             <div class="col-12">
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="#">Transacciones</a></li>
+                            <li class="breadcrumb-item"><a href="#">Teleservicios</a></li>
                             <li class="breadcrumb-item active">Listado de Transacciones</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Transacciones</h4>
+                    <h4 class="page-title">Yape! Teleservicios</h4>
                 </div>
             </div>
         </div>
@@ -18,13 +18,13 @@
 
         <!-- Formulario de filtro -->
         <form class="row g-1 mt-1" @submit.prevent="fetchData">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="input-group">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Mostrar</small>
                     </span>
-                    <select id="perPage" v-model="paginated.perPage" @change="changeItemsPerPage(paginated.perPage)" class="form-select form-select-sm"
-                        aria-label="Mostrar resultados por página">
+                    <select id="perPage" v-model="paginated.perPage" @change="changeItemsPerPage(paginated.perPage)"
+                        class="form-select form-select-sm" aria-label="Mostrar resultados por página">
                         <option :value="5">5</option>
                         <option :value="10">10</option>
                         <option :value="20">20</option>
@@ -47,30 +47,16 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-5">
-                <div class="input-group">
-                    <span class="input-group-text bg-primary border-primary text-white">
-                        <small>Yape!</small>
-                    </span>
-                    <select id="description" v-model="filter.description" class="form-select form-select-sm"
-                        @change="fetchData" aria-label="Filtrar por Yape">
-                        <option :value="''">Todos</option>
-                        <option :value="'Business'">Business</option>
-                        <option :value="'Mulfood'">Mulfood</option>
-                        <option :value="'Televentas'">Televentas</option>
-                        <option :value="'Teleservicios'">Teleservicios</option>
-                    </select>
-                </div>
-            </div>
             <div class="col-md-4">
                 <div class="input-group input-group-sm">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Persona</small>
                     </span>
-                    <input type="text" class="form-control" v-model="filter.person"  @input="fetchData" aria-label="Filtrar por persona">
+                    <input type="text" class="form-control" v-model="filter.person" @input="fetchData"
+                        aria-label="Filtrar por persona">
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="input-group input-group-sm">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Desde</small>
@@ -79,7 +65,7 @@
                         aria-label="Filtrar por fecha de inicio">
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="input-group input-group-sm">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Hasta</small>
@@ -88,9 +74,9 @@
                         aria-label="Filtrar por fecha de fin">
                 </div>
             </div>
-            <div class="col-md-2 d-grid gap-2">
+            <div class="col-md-4 d-grid gap-2">
                 <button type="submit" class="btn btn-sm btn-primary" aria-label="Buscar transacciones">
-                    <i class="mdi mdi-search-web"></i>
+                    <i class="mdi mdi-search-web"></i> BUSCAR
                 </button>
             </div>
         </form>
@@ -148,12 +134,12 @@
                                         <td>{{ transaction.amount }}</td>
                                         <td>{{ transaction.formatted_date }}</td>
                                         <td class="table-action text-center">
-                                            <label class="switch" aria-label="Cambiar estado">
-                                                <input type="checkbox" :checked="transaction.state === 'validated'"
-                                                    @change="toggleStatus(transaction)"
-                                                    aria-checked="transaction.state === 'validated'" />
-                                                <span class="slider round"></span>
-                                            </label>
+                                            <button class="btn btn-sm"
+                                                :class="transaction.state === 'validated' ? 'btn-light text-muted' : 'btn-success'"
+                                                :disabled="transaction.state === 'validated'"
+                                                @click="toggleStatus(transaction)">
+                                                {{ transaction.state === 'validated' ? 'Validado' : 'Validar' }}
+                                            </button>
                                         </td>
                                         <td>
                                             <span v-if="transaction.state === 'validated'">
@@ -223,6 +209,8 @@
     </div>
 </template>
 
+
+
 <script>
 
 import { format, subDays } from 'date-fns';
@@ -237,10 +225,10 @@ export default {
 
     data() {
         return {
-            apiUrl: "/api/transactions/list",
-            filter : {
-                description : '',
-                state : '',
+            apiUrl: "/api/transactions/list?description=teleservicios",
+            filter: {
+                description: '',
+                state: '',
                 person: '',
             },
         }
@@ -251,19 +239,30 @@ export default {
         this.fetchData();
         this.setDefaultDates();
 
+        window.Echo.channel('transactions').listen('NewTransactionSaved', (e) => {
+
+            if (e.transaction.description === 'Teleservicios') {
+
+                e.transaction.formatted_date = format(new Date(e.transaction.created_at), 'dd/MM/yyyy HH:mm:ss');
+                this.items.unshift(e.transaction);
+
+                if (this.items.length > this.paginated.perPage) {
+                    this.items.pop();
+                }
+            }
+        });
     },
 
     methods: {
 
         fetchData(resetPagination = false) {
-            this.loadData(this.apiUrl, resetPagination );
+            this.loadData(this.apiUrl, resetPagination);
         },
 
         getFilterParams() {
             return {
                 startDate: this.filter.startDate,
                 endDate: this.filter.endDate,
-                description: this.filter.description,
                 person: this.filter.person,
                 state: this.filter.state,
                 page: this.paginated.page,
@@ -276,7 +275,6 @@ export default {
             const endDate = new Date();
             const startDate = subDays(endDate, 7);
 
-
             endDate.setDate(endDate.getDate() + 1);
             endDate.setHours(0, 0, 0, 0);
 
@@ -286,18 +284,19 @@ export default {
 
         async toggleStatus(transaction) {
 
-            const state = transaction.state === 'validated' ? 'pending' : 'validated';
-            try {
-                await axios.put(`/api/transactions/${transaction.id}/state`, {
-                    state: state,
-                    id: this.user.id
-                });
-                transaction.state = state;
-                this.showToast("Success, Actualizado!", {
-                    type : "success"
-                });
-            } catch (error) {
-                console.error('Error al actualizar el estado de la transacción:', error);
+            if (transaction.state === 'pending') {
+                try {
+                    await axios.put(`/api/transactions/${transaction.id}/state`, {
+                        state: 'validated',
+                        id: this.user.id
+                    });
+                    transaction.state = 'validated';
+                    this.showToast("Success, Actualizado!", {
+                        type: "success"
+                    });
+                } catch (error) {
+                    console.error('Error al actualizar el estado de la transacción:', error);
+                }
             }
         },
 
@@ -308,7 +307,7 @@ export default {
                     id: this.user.id
                 });
                 this.showToast("Success, Actualizado!", {
-                    type : "success"
+                    type: "success"
                 });
 
             } catch (error) {
@@ -338,5 +337,4 @@ export default {
     }
 
 };
-
 </script>

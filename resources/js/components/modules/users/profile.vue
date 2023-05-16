@@ -170,7 +170,6 @@ export default {
                 const response = await axios.get(`/api/users/profile`);
                 this.formData = response.data;
 
-
                 console.log(this.formData)
 
                 if (this.formData.file) {

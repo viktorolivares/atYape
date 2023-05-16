@@ -41,7 +41,7 @@ class ModuleSeeder extends Seeder
         ]);
 
         DB::table('modules')->insert([
-            'name' => 'Dashboard',
+            'name' => 'Yape',
             'created_at' => now(),
             'updated_at' => now()
 

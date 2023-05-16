@@ -12,6 +12,5 @@
 export default {
     name: "Auth",
     props: ['route'],
-    components: {},
 }
 </script>

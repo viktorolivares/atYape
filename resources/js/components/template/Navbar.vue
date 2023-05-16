@@ -3,52 +3,52 @@
         <!-- Topbar Start -->
         <div class="navbar-custom">
             <ul class="list-unstyled topbar-menu float-end mb-0">
-                <li class="dropdown notification-list">
-                    <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                        <i class="dripicons-bell noti-icon"></i>
-                        <span class="noti-icon-badge"></span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated dropdown-lg">
+                <template v-if="permissions.includes('yape.business') || permissions.includes('yape.televentas') || permissions.includes('yape.mulfood') || permissions.includes('yape.teleservicios')" >
 
-                        <!-- item-->
-                        <div class="dropdown-item noti-title">
-                            <h5 class="m-0">
-                                <span class="float-end">
-                                    <a href="javascript: void(0);" class="text-dark">
-                                        <small>Clear All</small>
-                                    </a>
-                                </span>Notification
-                            </h5>
-                        </div>
-
-                        <div style="max-height: 230px;" data-simplebar="">
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <div class="notify-icon bg-primary">
-                                    <i class="mdi mdi-comment-account-outline"></i>
-                                </div>
-                                <p class="notify-details">Caleb Flakelar commented on Admin
-                                    <small class="text-muted">1 min ago</small>
-                                </p>
-                            </a>
-                        </div>
-
-                        <!-- All-->
-                        <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all">
-                            View All
+                    <li class="dropdown notification-list topbar-dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="false" aria-expanded="false">
+                            <img :src="route + '/assets/images/yape.png'" alt="Yape!" class="me-0 me-sm-2" height="40">
+                            <i class="mdi mdi-chevron-down d-none d-sm-inline-block align-middle"></i>
                         </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu">
+                            <!-- item-->
 
-                    </div>
-                </li>
+                            <template v-if="permissions.includes('yape.business')">
+                                <router-link class="dropdown-item notify-item" :to="{name: 'yape.business'}">
+                                    <i class="mdi mdi-circle mx-1 text-success"></i>
+                                    <span class="align-middle">Business</span>
+                                </router-link>
+                            </template>
+                            <!-- item-->
+                            <template v-if="permissions.includes('yape.televentas')">
+                                <router-link class="dropdown-item notify-item" :to="{name: 'yape.televentas'}">
+                                    <i class="mdi mdi-circle mx-1 text-primary"></i>
+                                    Televentas
+                                </router-link>
+                            </template>
+                            <!-- item-->
+                            <template v-if="permissions.includes('yape.mulfood')">
+                                <router-link class="dropdown-item notify-item" :to="{name: 'yape.mulfood'}">
+                                    <i class="mdi mdi-circle mx-1 text-warning"></i>
+                                    Mulfood
+                                </router-link>
+                            </template>
+                            <!-- item-->
+                            <template v-if="permissions.includes('yape.teleservicios')">
+                                <router-link class="dropdown-item notify-item" :to="{name: 'yape.teleservicios'}">
+                                    <i class="mdi mdi-circle mx-1 text-danger"></i>
+                                    Teleservicios
+                                </router-link>
+                            </template>
+                        </div>
+                    </li>
+                </template>
 
-                <li class="notification-list">
-                    <a class="nav-link end-bar-toggle" href="javascript: void(0);">
-                        <i class="dripicons-gear noti-icon"></i>
-                    </a>
-                </li>
 
                 <li class="dropdown notification-list">
-                    <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" aria-expanded="false">
                         <span class="account-user-avatar">
 
                             <template v-if="!user.file_id">
@@ -60,10 +60,11 @@
                         </span>
                         <span>
                             <span class="account-user-name">{{ user.firstname }}</span>
-                            <span class="account-position">{{ user.email  }}</span>
+                            <span class="account-position">{{ user.email }}</span>
                         </span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
+                    <div
+                        class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
                         <!-- item-->
                         <div class=" dropdown-header noti-title">
                             <h6 class="text-overflow m-0">Welcome !</h6>
@@ -71,7 +72,7 @@
 
                         <!-- item-->
 
-                        <router-link class="dropdown-item notify-item" :to="{name: 'users.profile'}">
+                        <router-link class="dropdown-item notify-item" :to="{ name: 'users.profile' }">
                             <i class="mdi mdi-account-circle me-1"></i>
                             <span>Mi perfil</span>
                         </router-link>
@@ -87,6 +88,9 @@
             <button class="button-menu-mobile open-left">
                 <i class="mdi mdi-menu"></i>
             </button>
+            <div class="app-search dropdown d-none d-lg-block">
+
+            </div>
         </div>
         <!-- end Topbar -->
     </div>
@@ -98,7 +102,8 @@ import toastMixin from "../modules/mixins/toastMixin";
 
 export default {
 
-    props: ['route', 'user'],
+    props: ['route', 'user', 'permissions'],
+
     mixins: [toastMixin],
 
     methods: {
@@ -122,7 +127,8 @@ export default {
                 })
                 .catch(error => console.log(error))
         }
-    }
+    },
+
 }
 </script>
 

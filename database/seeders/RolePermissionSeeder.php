@@ -35,6 +35,10 @@ class RolePermissionSeeder extends Seeder
             array('role_id' => '1', 'permission_id' => '19'),
             array('role_id' => '1', 'permission_id' => '20'),
             array('role_id' => '1', 'permission_id' => '21'),
+            array('role_id' => '1', 'permission_id' => '22'),
+            array('role_id' => '1', 'permission_id' => '23'),
+            array('role_id' => '1', 'permission_id' => '24'),
+            array('role_id' => '1', 'permission_id' => '25'),
         ];
 
         DB::table('role_permissions')->insert($role_permissions);

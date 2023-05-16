@@ -23,67 +23,58 @@
             <div class="h-100" id="leftside-menu-container" data-simplebar="">
                 <!--- Sidemenu -->
                 <ul class="side-nav">
-
                     <template v-if="permissions.includes('dashboard.index')">
                         <li class="side-nav-title side-nav-item">Home</li>
                         <li class="side-nav-item">
-                            <router-link class="side-nav-link" :to="'/'">
+                            <router-link class="side-nav-link" :to="{name: 'dashboard.index'}">
                                 <i class="uil-dashboard"></i>
                                 <span>Dashboard</span>
                             </router-link>
                         </li>
                     </template>
-
                     <template v-if="permissions.includes('transactions.index')">
                         <li class="side-nav-title side-nav-item">APP</li>
                         <template v-if="permissions.includes('transactions.index')">
                             <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="'/transactions'">
+                                <router-link class="side-nav-link" :to="{name: 'transactions.index'}">
                                     <i class="uil-bill"></i>
                                     <span>Transacciones</span>
                                 </router-link>
                             </li>
                         </template>
                     </template>
-
                     <template v-if="permissions.includes('dni.index') || permissions.includes('ip.index') || permissions.includes('domain.index')">
-
                         <li class="side-nav-title side-nav-item">Utilidades</li>
-
                         <template v-if="permissions.includes('dni.index')">
                             <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="'/dni'">
+                                <router-link class="side-nav-link" :to="{name: 'dni.index'}">
                                     <i class="uil-file-check"></i>
                                     <span>Validar DNI</span>
                                 </router-link>
                             </li>
                         </template>
-
-                        <template v-if="permissions.includes('ip.index')">
-                            <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="'/ip'">
-                                    <i class="uil-map-marker-info"></i>
-                                    <span>IP</span>
-                                </router-link>
-                            </li>
-                        </template>
-
                         <template v-if="permissions.includes('domain.index')">
                             <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="'/domain'">
+                                <router-link class="side-nav-link" :to="{name: 'domain.index'}">
                                     <i class="uil-globe"></i>
                                     <span>Dominios</span>
                                 </router-link>
                             </li>
                         </template>
-
+                        <template v-if="permissions.includes('ip.index')">
+                            <li class="side-nav-item">
+                                <router-link class="side-nav-link" :to="{name: 'ip.index'}">
+                                    <i class="uil-map-marker-info"></i>
+                                    <span>IP</span>
+                                </router-link>
+                            </li>
+                        </template>
                     </template>
-
                     <template v-if="permissions.includes('users.index') || permissions.includes('roles.index')">
                         <li class="side-nav-title side-nav-item">Admin</li>
                         <template v-if="permissions.includes('users.index')">
                             <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="'/users'">
+                                <router-link class="side-nav-link" :to="{name: 'users.index'}">
                                     <i class="uil-user"></i>
                                     <span>Usuarios</span>
                                 </router-link>
@@ -91,7 +82,7 @@
                         </template>
                         <template v-if="permissions.includes('roles.index')">
                             <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="'/roles'">
+                                <router-link class="side-nav-link" :to="{name: 'roles.index'}">
                                     <i class="uil-user-square"></i>
                                     <span>Roles</span>
                                 </router-link>

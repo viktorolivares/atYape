@@ -268,12 +268,6 @@ export default {
 
         editUser(userId) {
             this.$router.push(`/users/edit/${userId}`);
-        },
-
-        infoPermissions() {
-            this.showToast("No tiene los permisos suficiente!", {
-                type: "warning"
-            });
         }
 
     },

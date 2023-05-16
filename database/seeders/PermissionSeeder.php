@@ -141,17 +141,51 @@ class PermissionSeeder extends Seeder
             'updated_at' => now()
         ]);
 
-        //Dashboard
+        // Yape
         DB::table('permissions')->insert([
-            'name' => 'Dashboard',
-            'slug' => 'dashboard.index',
+            'name' => 'Business',
+            'slug' => 'yape.business',
+            'module_id' => 5,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'Mulfood',
+            'slug' => 'yape.mulfood',
+            'module_id' => 5,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'Teleservicios',
+            'slug' => 'yape.teleservicios',
+            'module_id' => 5,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'Televentas',
+            'slug' => 'yape.televentas',
             'module_id' => 5,
             'created_at' => now(),
             'updated_at' => now()
         ]);
 
-
         //Uilidades
+        DB::table('permissions')->insert([
+            'name' => 'Dashboard',
+            'slug' => 'dashboard.index',
+            'module_id' => 6,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'Dominios',
+            'slug' => 'domain.index',
+            'module_id' => 6,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
         DB::table('permissions')->insert([
             'name' => 'DNI',
             'slug' => 'dni.index',
@@ -166,12 +200,6 @@ class PermissionSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
-        DB::table('permissions')->insert([
-            'name' => 'Dominios',
-            'slug' => 'domain.index',
-            'module_id' => 6,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+
     }
 }
