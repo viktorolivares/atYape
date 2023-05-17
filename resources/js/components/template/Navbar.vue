@@ -123,7 +123,7 @@ export default {
                         window.location.href = "/login";
                     }, toastDuration);
 
-                    localStorage.clear();
+                    sessionStorage.clear();
                 })
                 .catch(error => console.log(error))
         }

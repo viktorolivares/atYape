@@ -3,10 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 /* Guest Component */
 import NotFound from "./components/NotFound.vue";
 import Transaction from "./components/modules/transactions/index.vue";
-import Business from "./components/modules/transactions/business.vue";
-import Teleservicios from "./components/modules/transactions/teleservicios.vue";
-import Televentas from "./components/modules/transactions/televentas.vue";
-import Mulfood from "./components/modules/transactions/mulfood.vue";
+import Description from "./components/modules/transactions/description.vue";
 import Dashboard from "./components/modules/dashboard/index.vue";
 import Domain from "./components/modules/domain/index.vue";
 import Users from "./components/modules/users/index.vue";
@@ -20,10 +17,10 @@ import Login from "./components/modules/auth/login.vue";
 
 
 function verifyAcces(to, from, next) {
-    let authUser = JSON.parse(localStorage.getItem("authUser"));
+    let authUser = JSON.parse(sessionStorage.getItem("authUser"));
 
     if (authUser) {
-        let permissions = JSON.parse(localStorage.getItem("permissions"));
+        let permissions = JSON.parse(sessionStorage.getItem("permissions"));
         if (permissions.includes(to.name)) {
             next();
         } else {
@@ -36,7 +33,7 @@ function verifyAcces(to, from, next) {
                 );
                 next(accessibleRoute.path);
             } else {
-                next("/:pathMatch(.*)*");
+                next("/error");
             }
         }
     } else {
@@ -63,36 +60,36 @@ const routes = [
     },
     {
         path: "/yape/business",
-        component: Business,
+        component: Description,
         name: "yape.business",
-        props: true,
+        props: { description: 'Business', apiUrl: '/api/transactions/list?description=business' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },
     },
     {
         path: "/yape/mulfood",
-        component: Mulfood,
+        component: Description,
         name: "yape.mulfood",
-        props: true,
+        props: { description: 'Mulfood', apiUrl: '/api/transactions/list?description=mulfood' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },
     },
     {
         path: "/yape/teleservicios",
-        component: Teleservicios,
+        component: Description,
         name: "yape.teleservicios",
-        props: true,
+        props: { description: 'Teleservicios', apiUrl: '/api/transactions/list?description=teleservicios' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },
     },
     {
         path: "/yape/televentas",
-        component: Televentas,
+        component: Description,
         name: "yape.televentas",
-        props: true,
+        props: { description: 'Televentas', apiUrl: '/api/transactions/list?description=televentas' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },
@@ -183,7 +180,7 @@ const routes = [
         path: "/login",
         component: Login,
         beforeEnter: (to, from, next) => {
-            let authUser = JSON.parse(localStorage.getItem("authUser"));
+            let authUser = JSON.parse(sessionStorage.getItem("authUser"));
             if (authUser) {
                 next("/");
             } else {

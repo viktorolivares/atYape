@@ -161,8 +161,10 @@ export default {
                     }
                 });
                 if (response.status === 200) {
-                    localStorage.setItem('permissions', JSON.stringify(response.data));
-                    localStorage.setItem('authUser', JSON.stringify(authUser))
+
+                    console.log(response.data)
+                    sessionStorage.setItem('permissions', JSON.stringify(response.data));
+                    sessionStorage.setItem('authUser', JSON.stringify(authUser))
                 }
             } catch (error) {
                 console.log(error)

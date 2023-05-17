@@ -225,7 +225,7 @@ export default {
                 state: '',
                 name: '',
             },
-            getPermissions: JSON.parse(localStorage.getItem('permissions'))
+            getPermissions: JSON.parse(sessionStorage.getItem('permissions'))
         };
     },
 

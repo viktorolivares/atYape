@@ -13,7 +13,7 @@
                 <div class="container-fluid">
                     <router-view v-slot="{ Component }">
                         <Transition name="slide-fade" mode="out-in">
-                            <component :is="Component"  :route="route" :user="user"/>
+                            <component :is="Component" :route="route" :user="user" />
                         </Transition>
                     </router-view>
                 </div>
@@ -40,14 +40,14 @@ export default {
 
     data() {
         return {
-            authUser : this.user,
-            permissions : []
+            authUser: this.user,
+            permissions: [],
         }
     },
 
     mounted() {
 
-        this.permissions = JSON.parse(localStorage.getItem('permissions'));
+        this.permissions = JSON.parse(sessionStorage.getItem('permissions'));
 
         this.$eventBus.$on('verifyAuth', data => {
             this.authUser = data
@@ -60,5 +60,6 @@ export default {
         })
 
     },
+
 }
 </script>

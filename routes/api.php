@@ -3,7 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\TransactionApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(TransactionController::class)->group(function () {
-    Route::post('/transactions/save', 'saveTransaction');
+Route::controller(TransactionApiController::class)->group(function () {
+    Route::post('/transactions/saveApk', 'saveTransaction');
 });
 
 

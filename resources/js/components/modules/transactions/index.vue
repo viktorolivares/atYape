@@ -251,6 +251,10 @@ export default {
         this.fetchData();
         this.setDefaultDates();
 
+        setInterval(() => {
+            this.fetchData();
+        }, 5000);
+
     },
 
     methods: {

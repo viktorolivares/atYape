@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use App\Events\NewTransactionSaved;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -62,17 +61,11 @@ class TransactionController extends Controller
 
     public function saveTransaction(Request $request)
     {
-        $key = $request->key;
-        $message = $request->message;
         $description = $request->description;
-
-        $person = explode("te", $message)[0];
-        $person = trim(str_replace("Yape! ", "", $person));
-        $amount_array = explode(" ", $message);
-        $amount = end($amount_array);
-        $uuid = Str::uuid()->toString();
-        $transaction = substr((string) $key, 36) . '|' . $uuid;
-
+        $person = $request->person;
+        $amount = $request->amount;
+        $transaction = Str::uuid()->toString();
+        $message = 'Yape!'." ".$person." ".'te envió un pago por S/'." ".$amount;
 
         $data = [
             'description' => $description,
@@ -80,8 +73,8 @@ class TransactionController extends Controller
             'message' => $message,
             'person' => $person,
             'amount' => $amount,
-            'created_by' => 1,
-            'updated_by' => 1
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id()
         ];
 
         $rules = [
@@ -105,9 +98,6 @@ class TransactionController extends Controller
         $transactions = new Transaction();
         $transactions->fill($data);
         $transactions->save();
-
-        // Fire the event when a new transaction is saved
-        event(new NewTransactionSaved($transactions));
 
         return response()->json([
             'success' => true,

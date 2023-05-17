@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\File;
@@ -268,13 +267,12 @@ class UserController extends Controller
     {
         $userId = $request->userId;
 
-
         if (!$userId) {
             $userId = Auth::id();
         }
 
         $user = User::find($userId);
-        $permissions = $user->permissions;
+        $permissions = $user->permissionsByRole;
         $slugs = $permissions->pluck('slug');
 
         return response()->json($slugs);

@@ -6,11 +6,11 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="#">Business</a></li>
+                            <li class="breadcrumb-item"><a href="#">{{this.description}}</a></li>
                             <li class="breadcrumb-item active">Listado de Transacciones</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Yape! Business</h4>
+                    <h4 class="page-title">Yape! {{this.description}}</h4>
                 </div>
             </div>
         </div>
@@ -209,8 +209,6 @@
     </div>
 </template>
 
-
-
 <script>
 
 import { format, subDays } from 'date-fns';
@@ -221,11 +219,10 @@ export default {
 
     mixins: [dataMixin, toastMixin],
 
-    props: ['user'],
+    props: ['user', 'description', 'apiUrl'],
 
     data() {
         return {
-            apiUrl: "/api/transactions/list?description=business",
             filter: {
                 description: '',
                 state: '',
@@ -239,9 +236,13 @@ export default {
         this.fetchData();
         this.setDefaultDates();
 
+        setInterval(() => {
+            this.fetchData();
+        }, 5000);
+
         window.Echo.channel('transactions').listen('NewTransactionSaved', (e) => {
 
-            if (e.transaction.description === 'Business') {
+            if (e.transaction.description === this.description) {
 
                 e.transaction.formatted_date = format(new Date(e.transaction.created_at), 'dd/MM/yyyy HH:mm:ss');
                 this.items.unshift(e.transaction);
@@ -252,6 +253,27 @@ export default {
             }
 
         });
+    },
+
+    watch: {
+        description: {
+            handler: function (newVal, oldVal) {
+                if (newVal !== oldVal) {
+                    this.fetchData(true);
+                }
+            },
+            immediate: false,
+            deep: false
+        },
+        apiUrl: {
+            handler: function (newVal, oldVal) {
+                if (newVal !== oldVal) {
+                    this.fetchData(true);
+                }
+            },
+            immediate: false,
+            deep: false
+        }
     },
 
     methods: {

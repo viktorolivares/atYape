@@ -27,7 +27,6 @@ app.component('app', App);
 app.component('auth', Auth);
 app.use(router);
 
-
 app.mount('#app');
 
 
