@@ -18,5 +18,5 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('users-online', function ($user) {
-    return ['id' => $user->id, 'name' => $user->full_name];
+    return ['id' => $user->id, 'name' => $user->full_name, 'email' => $user->email];
 });

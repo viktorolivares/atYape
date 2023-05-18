@@ -6,11 +6,11 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="#">{{this.description}}</a></li>
+                            <li class="breadcrumb-item"><a href="#">{{ this.description }}</a></li>
                             <li class="breadcrumb-item active">Listado de Transacciones</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Yape! {{this.description}}</h4>
+                    <h4 class="page-title">Yape! {{ this.description }}</h4>
                 </div>
             </div>
         </div>
@@ -149,11 +149,12 @@
                                                 <i class="mdi mdi-circle text-warning"></i> Pendiente
                                             </span>
                                         </td>
-                                        <td>
-                                            <input type="text" v-model="transaction.details"
-                                                @keyup.enter="updateDetails(transaction)"
-                                                :class="['form-control', 'form-control-light', 'form-control-sm']"
-                                                aria-label="Agregar o actualizar detalles" />
+                                        <td class="table-action text-center">
+                                            <button type="button" class="btn action-icon" data-bs-toggle="modal"
+                                                data-bs-target="#transactionModal" @click="openModal(transaction)"
+                                                :title="transaction.details" data-bs-placement="top">
+                                                <i class="mdi mdi-eye-check"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                 </transition-group>
@@ -206,6 +207,30 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="transactionModalLabel">Modificar Detalles de Transacción</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="transactionDetails">Detalles de la Transacción:</label>
+                            <textarea class="form-control" id="transactionDetails"
+                                v-model="selectedTransaction.details"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" @click="updateDetails(transaction)">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -228,31 +253,22 @@ export default {
                 state: '',
                 person: '',
             },
+            selectedTransaction: {},
+            updateInterval: null,
         }
     },
-
     mounted() {
 
         this.fetchData();
         this.setDefaultDates();
 
-        setInterval(() => {
+        this.updateInterval = setInterval(() => {
             this.fetchData();
         }, 5000);
 
-        window.Echo.channel('transactions').listen('NewTransactionSaved', (e) => {
-
-            if (e.transaction.description === this.description) {
-
-                e.transaction.formatted_date = format(new Date(e.transaction.created_at), 'dd/MM/yyyy HH:mm:ss');
-                this.items.unshift(e.transaction);
-
-                if (this.items.length > this.paginated.perPage) {
-                    this.items.pop();
-                }
-            }
-
-        });
+    },
+    beforeUnmount() {
+        clearInterval(this.updateInterval);
     },
 
     watch: {
@@ -317,24 +333,12 @@ export default {
                     this.showToast("Success, Actualizado!", {
                         type: "success"
                     });
+
+                    this.createActivityLog(`update-transaction-state: [ Transaction: ${transaction.id}, State: validated ]`, this.user.email)
+
                 } catch (error) {
                     console.error('Error al actualizar el estado de la transacción:', error);
                 }
-            }
-        },
-
-        async updateDetails(transaction) {
-            try {
-                await axios.put(`/api/transactions/${transaction.id}/details`, {
-                    details: transaction.details,
-                    id: this.user.id
-                });
-                this.showToast("Success, Actualizado!", {
-                    type: "success"
-                });
-
-            } catch (error) {
-                console.error('Error al actualizar los detalles de la transacción:', error);
             }
         },
 
@@ -355,6 +359,48 @@ export default {
         changeItemsPerPage(newPerPage) {
             this.paginated.perPage = newPerPage;
             this.fetchData(true);
+        },
+
+        createActivityLog(type, email) {
+            axios.post('/api/logs', { type: type, email: email })
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        },
+
+        openModal(transaction) {
+            this.selectedTransaction = JSON.parse(JSON.stringify(transaction));
+        },
+
+        closeModal() {
+            const modalElement = document.getElementById('transactionModal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+                modal.hide();
+            }
+        },
+
+        async updateDetails() {
+            try {
+                await axios.put(`/api/transactions/${this.selectedTransaction.id}/details`, {
+                    details: this.selectedTransaction.details,
+                    id: this.user.id
+                });
+
+                this.showToast("Success, Actualizado!", {
+                    type: "success"
+                });
+
+                this.closeModal();
+
+                this.createActivityLog(`update-transaction-details: [Transaction: ${this.selectedTransaction.id}, Details: ${this.selectedTransaction.details}]`, this.user.email);
+
+            } catch (error) {
+                console.error('Error al actualizar los detalles de la transacción:', error);
+            }
         },
 
     }

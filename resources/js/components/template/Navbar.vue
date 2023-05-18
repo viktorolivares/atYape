@@ -108,6 +108,9 @@ export default {
 
     methods: {
         logout() {
+
+            this.createActivityLog('disconnection', this.user.email)
+
             axios.post('/api/logout')
                 .then(response => {
 
@@ -121,12 +124,23 @@ export default {
 
                     setTimeout(() => {
                         window.location.href = "/login";
+
                     }, toastDuration);
 
                     sessionStorage.clear();
                 })
                 .catch(error => console.log(error))
-        }
+        },
+
+        createActivityLog(type, email) {
+            axios.post('/api/logs', { type: type, email: email })
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        },
     },
 
 }

@@ -29,13 +29,13 @@ export default {
         this.loading = true;
 
         const response = await axios.get(apiUrl, {
-          params: {
-            ...this.getFilterParams(),
-            page: this.paginated.page,
-            perPage: this.paginated.perPage,
-            sort_field: this.sort.field,
-            sort_direction: this.sort.direction
-        },
+            params: {
+                ...this.getFilterParams(),
+                page: this.paginated.page,
+                perPage: this.paginated.perPage,
+                sort_field: this.sort.field,
+                sort_direction: this.sort.direction
+            },
         });
 
         this.updateItems(response.data.data);

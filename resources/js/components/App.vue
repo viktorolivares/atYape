@@ -5,7 +5,7 @@
         <!-- Start Page Content here -->
         <!-- ============================================================== -->
 
-        <Sidebar :route="route" :permissions="permissions"></Sidebar>
+        <Sidebar :route="route" :permissions="permissions" :user="authUser"></Sidebar>
 
         <div class="content-page">
             <div class="content">
@@ -13,7 +13,7 @@
                 <div class="container-fluid">
                     <router-view v-slot="{ Component }">
                         <Transition name="slide-fade" mode="out-in">
-                            <component :is="Component" :route="route" :user="user" />
+                            <component :is="Component" :route="route" :user="authUser" />
                         </Transition>
                     </router-view>
                 </div>

@@ -9,7 +9,7 @@ class Ip2Location
 {
     public static function search($ip)
     {
-        $key = 'cb549c1421a8d8c20a332fdb17b661d2';
+        $key = 'CB549C1421A8D8C20A332FDB17B661D2';
 
         $response = Http::get('https://api.ip2location.io/', [
                         'ip'      => $ip,
@@ -18,7 +18,7 @@ class Ip2Location
                     ]);
 
 
-        $response->body();
+        $response = json_decode($response->getBody()->getContents(), true);
 
         return $response;
     }

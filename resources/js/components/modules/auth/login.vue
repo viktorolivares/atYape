@@ -125,6 +125,8 @@ export default {
                         theme: 'colored',
                     });
 
+                    this.createActivityLog('connection', response.data.authUser.email)
+
                     setTimeout(() => {
                         window.location.href = "/";
                     }, toastDuration);
@@ -173,6 +175,16 @@ export default {
 
         togglePasswordVisibility() {
             this.showPassword = !this.showPassword;
+        },
+
+        createActivityLog(type, email) {
+            axios.post('/api/logs', { type: type, email: email })
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                });
         },
 
     },

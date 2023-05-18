@@ -93,13 +93,14 @@
 
                 </ul>
                 <!-- Help Box -->
-                <div class="help-box text-white">
-                    <h5 class="mt-3 text-center">Usuarios conectados</h5>
+                <div class="help-box text-white text-center">
+                    <h5 class="mt-3">Usuarios conectados</h5>
                     <ul class="list-group text-start">
-                      <li class="list-group-item" v-for="user in connectedUsers" :key="user.id">
-                        <span class="mdi mdi-checkbox-blank-circle text-success"></span>
-                        {{ user.name }}
-                      </li>
+                        <li v-if="isLoading" class="list-group-item text-muted">Cargando...</li>
+                        <li v-else v-for="user in connectedUsers" :key="user.id" class="list-group-item">
+                            <span class="mdi mdi-checkbox-blank-circle text-success"></span>
+                            {{ user.id === this.user.id ? 'Tú' : user.name }}
+                        </li>
                     </ul>
                 </div>
                 <!-- end Help Box -->
@@ -113,49 +114,40 @@
 </template>
 
 <script>
-
 import toastMixin from "../modules/mixins/toastMixin";
 
 export default {
-
     mixins: [toastMixin],
-
-    props: ['route', 'permissions'],
-
+    props: ['route', 'permissions', 'user'],
     data() {
         return {
             connectedUsers: [],
+            isLoading: true
         };
     },
-
     created() {
-        this.fetchUsersOnline()
+        this.fetchUsersOnline();
     },
-
     methods: {
         fetchUsersOnline() {
             window.Echo.join('users-online')
-            .here((users) => {
-                this.connectedUsers = users
-            })
-            .joining((user) => {
-                this.showToast(`Nuevo usuario conectado: ${user.name}`, {
-                    type: "success"
+                .here((users) => {
+                    this.connectedUsers = users;
+                    this.isLoading = false;
+                })
+                .joining((user) => {
+                    this.connectedUsers.push(user);
+                    this.isLoading = false;
+                })
+                .leaving((user) => {
+                    const index = this.connectedUsers.findIndex(u => u.id === user.id);
+                    if (index !== -1) {
+                        this.connectedUsers.splice(index, 1);
+                    }
+                    this.isLoading = false;
                 });
-                this.connectedUsers.push(user);
-            })
-            .leaving((user) => {
-                this.showToast(`Usuario desconectado: ${user.name}`, {
-                    type: "warning"
-                });
-                const index = this.connectedUsers.findIndex(u => u.id === user.id);
-                if (index !== -1) {
-                    this.connectedUsers.splice(index, 1);
-                }
-            });
         },
     },
-}
+};
 </script>
-
 

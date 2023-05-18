@@ -1,14 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\DeceasedController;
+use App\Http\Controllers\DomainController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\IpController;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +65,7 @@ Route::group(['prefix' => 'api'], function () {
             Route::put('/users/{id}', 'updateUser');
             Route::get('/users/{id}', 'getUser');
             Route::get('/users/roles/permissions', 'getRolePermissions');
+            Route::post('/logs', 'logs');
         });
 
         /*Roles*/
@@ -92,18 +98,22 @@ Route::group(['prefix' => 'api'], function () {
         });
 
         /*Consulta IP*/
-        Route::get('/ip', [IpController::class, 'ip'])->name('ip');
-        Route::get('/ip-consult/{ip}', [IpController::class, 'ipConsult'])->name('ip-consult');
+        Route::controller(FileController::class)->group(function () {
+            Route::get('/ip', [IpController::class, 'ipConsult']);
+        });
 
         /*Domain*/
-        Route::get('/domain', [DomainController::class, 'domain'])->name('domain');
-        Route::get('/domain-consult/{domain}', [DomainController::class, 'getDomain'])->name('domain-consult');
+        Route::get('/domain', [DomainController::class, 'domain']);
 
         /*DNI Deceased + Minors*/
-        Route::get('/deceased', [DeceasedController::class, 'index'])->name('dni-deceased');
-        Route::post('/query-deceased', [DeceasedController::class, 'getDni'])->name('query-deceased');
-        Route::get('/captcha', [DeceasedController::class, 'getCaptcha'])->name('captcha');
+        Route::controller(DeceasedController::class)->group(function () {
+            Route::get('/deceased', 'index');
+            Route::post('/query-deceased', 'getDni');
+            Route::get('/captcha', 'getCaptcha');
+        });
+
     });
+
 });
 
 Route::get('/{any?}', function () {

@@ -59,7 +59,7 @@ class TransactionApiController extends Controller
         $transactions->save();
 
         // Fire the event when a new transaction is saved
-        event(new NewTransactionSaved($transactions));
+        // event(new NewTransactionSaved($transactions));
 
         return response()->json([
             'success' => true,

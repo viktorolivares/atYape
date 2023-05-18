@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Services\ActivityLogService;
 use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\User;
@@ -14,6 +15,14 @@ use DB;
 
 class UserController extends Controller
 {
+
+    protected $activityLogService;
+
+    public function __construct(ActivityLogService $activityLogService)
+    {
+        $this->activityLogService = $activityLogService;
+    }
+
     public function index(Request $request)
     {
         $name = $request->name;
@@ -191,7 +200,7 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
 
-        if($request->ajax()) {
+        if ($request->ajax()) {
 
             $user = User::find(Auth::id());
 
@@ -244,10 +253,7 @@ class UserController extends Controller
                 'success' => true,
                 'data' => $user,
             ], Response::HTTP_CREATED);
-
         }
-
-
     }
 
     public function getUser($id)
@@ -255,9 +261,9 @@ class UserController extends Controller
         $user = User::with('file', 'roles')->find($id);
 
         if (!$user) {
-            return response()->json( [
+            return response()->json([
                 'message' => 'User not found'
-            ],Response::HTTP_NOT_FOUND);
+            ], Response::HTTP_NOT_FOUND);
         }
 
         return response()->json($user);
@@ -294,4 +300,20 @@ class UserController extends Controller
             return response()->json($user);
         }
     }
+
+    public function logs(Request $request)
+    {
+        $email = $request->email;
+        $type = $request->type;
+        $ip = $request->ip();
+
+        $this->activityLogService->createLog($type, $email, $ip);
+
+        return response()->json([
+            'success' => true,
+            'data' => $email,
+
+        ], Response::HTTP_CREATED);
+    }
+
 }

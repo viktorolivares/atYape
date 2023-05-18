@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-use App\Events\NewTransactionSaved;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Transaction;
