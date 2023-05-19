@@ -15,8 +15,7 @@ window.axios.interceptors.response.use(
     },
     function (error) {
         if (error.response.status === 401) {
-            sessionStorage.removeItem("authUser");
-            sessionStorage.removeItem("permissions");
+            sessionStorage.clear();
             router.push("/login");
         }
         return Promise.reject(error);

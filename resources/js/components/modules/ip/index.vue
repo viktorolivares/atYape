@@ -84,8 +84,7 @@
                                     <td>{{ data.region }}</td>
                                     <td>{{ data.city }}</td>
                                     <td>
-                                        <a href="#" @click.prevent="openModal(data.latitude, data.longitude)"
-                                            data-bs-toggle="modal" data-bs-target="#mapModal">Ver Mapa</a>
+                                        <a href="#" @click.prevent="openMap(data.latitude, data.longitude)">Ver Mapa</a>
                                     </td>
                                     <td>{{ data.org }}</td>
                                 </tr>
@@ -113,38 +112,25 @@
                         </nav>
                     </div>
                 </div>
-            </div>
-            <!-- Modal -->
-            <!-- Modal -->
-            <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="mapModalLabel">Mapa Incrustado</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <Map :latitude="modalLatitude" :longitude="modalLongitude" />
-                        </div>
+                <div class="card" id="mapCard" v-if="mapCard">
+                    <div class="card-body text-center">
+                        <span class="mdi mdi-loading mdi-spin mdi-48px" v-if="isLoading"></span>
+                        <Map :latitude="lat" :longitude="lng" v-else />
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
 <script>
-import toastMixin from "../mixins/toastMixin.js";
+import toastMixin from "../mixins/toastMixin.js"
 import Json from "../utils/flag.json"
-import Map from "./map.vue";
-import * as XLSX from 'xlsx';
+import Map from "./map.vue"
+import * as XLSX from 'xlsx'
 
 export default {
-
     mixins: [toastMixin],
     components: { Map },
-
     data() {
         return {
             ips: '',
@@ -152,50 +138,48 @@ export default {
             flagImages: {},
             apiUrl: '/api/ip',
             isFetching: false,
+            isLoading: false,
+            mapCard: false,
             fetchProgress: 0,
             showTable: false,
             currentPage: 1,
             pageSize: 5,
-            modalLatitude: null,
-            modalLongitude: null
+            lat: 10,
+            lng: 20
         }
     },
     computed: {
         totalPages() {
-            return Math.ceil(this.responses.length / this.pageSize);
+            return Math.ceil(this.responses.length / this.pageSize)
         },
         paginatedResponses() {
-            const startIndex = (this.currentPage - 1) * this.pageSize;
-            const endIndex = startIndex + this.pageSize;
-            return this.responses.slice(startIndex, endIndex);
+            const startIndex = (this.currentPage - 1) * this.pageSize
+            const endIndex = startIndex + this.pageSize
+            return this.responses.slice(startIndex, endIndex)
         }
     },
     methods: {
         async fetchIps() {
-
             if (!this.ips || this.ips.trim() === '') {
                 this.showToast("Por favor, introduce las IPs", {
                     type: "warning"
-                });
-                return;
+                })
+                return
             }
-
             const ipArray = this.ips.split('\n')
             if (ipArray.length > 100) {
                 this.showToast("Por favor, introduce hasta 100 IPs", {
                     type: "warning"
-                });
+                })
                 return
             }
-
             this.responses = []
             this.isFetching = true
+            this.mapCard = false
             this.fetchProgress = 0
             this.showTable = false
-
             const totalIps = ipArray.length
             let completedIps = 0
-
             for (const ip of ipArray) {
                 const trimmedIp = ip.trim()
                 if (trimmedIp.length > 0 && this.isValidIp(trimmedIp)) {
@@ -208,77 +192,74 @@ export default {
                         console.error(`Error al buscar la IP: ${trimmedIp}`, error)
                     }
                 } else {
-                    console.error('Ingrese una dirección valida')
+                    console.error('Ingrese una dirección válida')
                 }
-
                 completedIps++
-                this.fetchProgress = Math.round((completedIps / totalIps) * 100);
+                this.fetchProgress = Math.round((completedIps / totalIps) * 100)
             }
-
-            console.log(this.responses)
-
             setTimeout(() => {
                 this.isFetching = false
                 this.showTable = true
                 this.showToast("Se cargaron los datos", {
                     type: "success"
-                });
-            }, 2000);
-
+                })
+            }, 2000)
         },
-
         isValidIp(ip) {
             const ipRegex = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]{1,2})$/g
             return ipRegex.test(ip)
         },
-
         exportToExcel() {
-            const worksheet = XLSX.utils.json_to_sheet(this.responses);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'ips');
-            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-            const fileName = `ips_${this.getCurrentTime()}.xlsx`;
-            this.saveExcelFile(excelBuffer, fileName);
+            const worksheet = XLSX.utils.json_to_sheet(this.responses)
+            const workbook = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'ips')
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+            const fileName = `ips_${this.getCurrentTime()}.xlsx`
+            this.saveExcelFile(excelBuffer, fileName)
         },
-
         saveExcelFile(buffer, fileName) {
-            const data = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(data);
-            link.download = fileName;
-            link.click();
+            const data = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+            const link = document.createElement('a')
+            link.href = URL.createObjectURL(data)
+            link.download = fileName
+            link.click()
         },
-
         getCurrentTime() {
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            return `${hours}${minutes}${seconds}`;
+            const now = new Date()
+            const hours = now.getHours().toString().padStart(2, '0')
+            const minutes = now.getMinutes().toString().padStart(2, '0')
+            const seconds = now.getSeconds().toString().padStart(2, '0')
+            return `${hours}${minutes}${seconds}`
         },
-
         getFlags() {
             for (const item of Json) {
-                this.flagImages[item.code] = item.image;
+                this.flagImages[item.code] = item.image
             }
         },
-
         goToPage(page) {
             if (page >= 1 && page <= this.totalPages) {
-                this.currentPage = page;
+                this.currentPage = page
             }
         },
-
-        openModal(latitude, longitude) {
-            this.modalLatitude = latitude;
-            this.modalLongitude = longitude;
+        openMap(latitude, longitude) {
+            if (latitude && longitude) {
+                this.isLoading = true;
+                this.lat = latitude;
+                this.lng = longitude;
+                this.mapCard = true;
+                setTimeout(() => {
+                    this.isLoading = false;
+                }, 2000);
+                console.log([this.lat, this.lng]);
+            } else {
+                this.showToast('Error: No se proporcionaron las coordenadas.', {
+                    type: "error"
+                })
+            }
         }
     },
     mounted() {
-        this.getFlags();
-
-    },
-
-
+        this.getFlags()
+    }
 }
 </script>

@@ -25,6 +25,7 @@ use Illuminate\Http\Request;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::post('/', [AuthController::class, 'login']);
 
 Route::group(['prefix' => 'api'], function () {
 
@@ -87,24 +88,6 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('/transactions/description/{description}', 'listByDescription');
         });
 
-        /*Permisos*/
-        Route::controller(PermissionController::class)->group(function () {
-            Route::get('/permissions/by-module', 'getPermissionsByModule');
-        });
-
-        /*Files*/
-        Route::controller(FileController::class)->group(function () {
-            Route::get('/files/preloaded', 'getPreloadedImages');
-        });
-
-        /*Consulta IP*/
-        Route::controller(FileController::class)->group(function () {
-            Route::get('/ip', [IpController::class, 'ipConsult']);
-        });
-
-        /*Domain*/
-        Route::get('/domain', [DomainController::class, 'domain']);
-
         /*DNI Deceased + Minors*/
         Route::controller(DeceasedController::class)->group(function () {
             Route::get('/deceased', 'index');
@@ -112,8 +95,18 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('/captcha', 'getCaptcha');
         });
 
-    });
+        /*Permisos*/
+        Route::get('/permissions/by-module', [PermissionController::class, 'getPermissionsByModule']);
 
+        /*Files*/
+        Route::get('/files/preloaded', [FileController::class, 'getPreloadedImages']);
+
+        /*Consulta IP*/
+        Route::get('/ip', [IpController::class, 'ipConsult']);
+
+        /*Domain*/
+        Route::get('/domain', [DomainController::class, 'domain']);
+    });
 });
 
 Route::get('/{any?}', function () {
