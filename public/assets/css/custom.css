@@ -101,3 +101,15 @@ input:checked+.slider:before {
 .fade-leave-to {
     opacity: 0;
 }
+
+.text-pink {
+    color: pink !important;
+}
+
+.bg-purple {
+    background-color: purple !important;
+}
+
+.bg-pink {
+    background-color: pink !important;
+}

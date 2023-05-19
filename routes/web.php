@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::post('/', [AuthController::class, 'login']);
 
 Route::group(['prefix' => 'api'], function () {
@@ -96,6 +97,12 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('/captcha', 'getCaptcha');
         });
 
+        /*Logs*/
+        Route::controller(LogsController::class)->group(function () {
+            Route::get('/logs/list', 'index');
+            Route::get('/logs/github', 'github');
+        });
+
         /*Permisos*/
         Route::get('/permissions/by-module', [PermissionController::class, 'getPermissionsByModule']);
 
@@ -107,10 +114,6 @@ Route::group(['prefix' => 'api'], function () {
 
         /*Domain*/
         Route::get('/domain', [DomainController::class, 'domain']);
-
-        /*Github*/
-        Route::get('/logs', [LogsController::class, 'index']);
-        Route::get('/logs/github', [LogsController::class, 'github']);
     });
 });
 

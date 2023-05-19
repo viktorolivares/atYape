@@ -38,6 +38,8 @@ export default {
             },
         });
 
+        console.log(response.data.data)
+
         this.updateItems(response.data.data);
         this.loading = false;
 

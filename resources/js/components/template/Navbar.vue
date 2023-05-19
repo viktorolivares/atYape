@@ -122,10 +122,11 @@ export default {
                         type: "success"
                     });
 
-                    setTimeout(() => {
-                        window.location.href = "/login";
+                    window.location.href = "/login";
 
-                    }, toastDuration);
+                    // setTimeout(() => {
+                    //     window.location.href = "/login";
+                    // }, toastDuration);
 
                     sessionStorage.clear();
                 })

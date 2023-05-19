@@ -15,6 +15,7 @@
             </div>
         </div>
         <!-- end page title -->
+        
         <!-- Formulario de filtro -->
         <form class="row g-1 mt-1" @submit.prevent="fetchData">
             <div class="col-md-3">
