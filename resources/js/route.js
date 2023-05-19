@@ -202,7 +202,6 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
-    linkExactActiveClass: "menuitem-active",
     routes,
 });
 

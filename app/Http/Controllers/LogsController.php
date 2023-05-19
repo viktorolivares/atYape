@@ -22,7 +22,7 @@ class LogsController extends Controller
         $sortDirection = $request->sort_direction;
 
         if (empty($startDate) && empty($endDate)) {
-            $startDate = Carbon::now()->subDays(7)->format('Y-m-d H:i:s');
+            $startDate = Carbon::now()->subDays(1)->format('Y-m-d H:i:s');
             $endDate = Carbon::now()->format('Y-m-d H:i:s');
         }
 

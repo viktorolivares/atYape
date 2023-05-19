@@ -23,15 +23,19 @@
             <div class="h-100" id="leftside-menu-container" data-simplebar>
                 <!--- Sidemenu -->
                 <ul class="side-nav">
+
+                    <!-- Dashboard -->
                     <template v-if="permissions.includes('dashboard.index')">
                         <li class="side-nav-title side-nav-item">Home</li>
-                        <li class="side-nav-item">
+                        <li :class="['side-nav-item', { 'menuitem-active': isActiveRoute('dashboard.index') }]">
                             <router-link class="side-nav-link" :to="{ name: 'dashboard.index' }">
                                 <i class="uil-dashboard"></i>
                                 <span>Dashboard</span>
                             </router-link>
                         </li>
                     </template>
+
+                    <!-- Transacciones + APK -->
                     <template v-if="permissions.includes('transactions.index')">
                         <li class="side-nav-title side-nav-item">APP</li>
                         <template v-if="permissions.includes('transactions.index')">
@@ -42,74 +46,112 @@
                                 </router-link>
                             </li>
                         </template>
-                    </template>
-                    <template
-                        v-if="permissions.includes('dni.index') || permissions.includes('ip.index') || permissions.includes('domain.index') || permissions.includes('logs.index')">
-                        <li class="side-nav-title side-nav-item">Utilidades</li>
-                        <template v-if="permissions.includes('dni.index')">
-                            <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="{ name: 'dni.index' }">
-                                    <i class="uil-file-check"></i>
-                                    <span>Validar DNI</span>
-                                </router-link>
-                            </li>
-                        </template>
-                        <template v-if="permissions.includes('domain.index')">
-                            <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="{ name: 'domain.index' }">
-                                    <i class="uil-globe"></i>
-                                    <span>Dominios</span>
-                                </router-link>
-                            </li>
-                        </template>
-                        <template v-if="permissions.includes('logs.index')">
-                            <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="{ name: 'logs.index' }">
-                                    <i class="uil-map-marker-info"></i>
-                                    <span>Logs</span>
-                                </router-link>
-                            </li>
-                        </template>
-                        <template v-if="permissions.includes('ip.index')">
-                            <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="{ name: 'ip.index' }">
-                                    <i class="uil-map-marker-info"></i>
-                                    <span>IP</span>
-                                </router-link>
-                            </li>
-                        </template>
-                    </template>
-                    <template v-if="permissions.includes('users.index') || permissions.includes('roles.index')">
-                        <li class="side-nav-title side-nav-item">Admin</li>
-                        <template v-if="permissions.includes('users.index')">
-                            <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="{ name: 'users.index' }">
-                                    <i class="uil-user"></i>
-                                    <span>Usuarios</span>
-                                </router-link>
-                            </li>
-                        </template>
-                        <template v-if="permissions.includes('roles.index')">
-                            <li class="side-nav-item">
-                                <router-link class="side-nav-link" :to="{ name: 'roles.index' }">
-                                    <i class="uil-user-square"></i>
-                                    <span>Roles</span>
-                                </router-link>
-                            </li>
-                        </template>
+                        <li class="side-nav-item">
+                            <a class="side-nav-link">
+                                <i class="uil-user-square"></i>
+                                <span>APK</span>
+                            </a>
+                        </li>
                     </template>
 
+                    <!-- Gestión de Usuarios -->
+                    <template v-if="permissions.includes('users.index') || permissions.includes('roles.index')">
+                        <li class="side-nav-title side-nav-item">Admin</li>
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#users" aria-expanded="false" aria-controls="utilities"
+                                class="side-nav-link">
+                                <i class="uil-store"></i>
+                                <span> Gestión de Usuarios </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="users"
+                                :class="{ 'show': isActiveRoute(['users.index', 'roles.index']) }">
+                                <ul class="side-nav-second-level">
+                                    <template v-if="permissions.includes('users.index')">
+                                        <li :class="{ 'menuitem-active': isActiveRoute('users.index') }">
+                                            <router-link :to="{ name: 'users.index' }">
+                                                <i class="uil-user"></i>
+                                                <span>&nbsp;Usuarios</span>
+                                            </router-link>
+                                        </li>
+                                    </template>
+                                    <template v-if="permissions.includes('roles.index')">
+                                        <li :class="{ 'menuitem-active': isActiveRoute('roles.index') }">
+                                            <router-link :to="{ name: 'roles.index' }">
+                                                <i class="uil-user-square"></i>
+                                                <span>&nbsp;Roles</span>
+                                            </router-link>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </li>
+                    </template>
+
+                    <!-- Utilidades -->
+                    <template
+                        v-if="permissions.includes('dni.index') || permissions.includes('ip.index') || permissions.includes('domain.index') || permissions.includes('logs.index')">
+                        <li class="side-nav-title side-nav-item">Tasks</li>
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#utilities" aria-expanded="false" aria-controls="utilities"
+                                class="side-nav-link">
+                                <i class="uil-store"></i>
+                                <span> Utilidades </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="utilities" :class="{ 'show': isActiveRoute(['dni.index', 'domain.index', 'logs.index', 'ip.index']) }">
+                                <ul class="side-nav-second-level">
+                                    <template v-if="permissions.includes('dni.index')">
+                                        <li :class="{ 'menuitem-active': isActiveRoute('dni.index') }">
+                                            <router-link :to="{ name: 'dni.index' }">
+                                                <i class="uil-file-check"></i>
+                                                &nbsp;<span>Validar DNI</span>
+                                            </router-link>
+                                        </li>
+                                    </template>
+                                    <template v-if="permissions.includes('domain.index')">
+                                        <li :class="{ 'menuitem-active': isActiveRoute('domain.index') }">
+                                            <router-link :to="{ name: 'domain.index' }">
+                                                <i class="uil-globe"></i>
+                                                &nbsp;<span>Dominios</span>
+                                            </router-link>
+                                        </li>
+                                    </template>
+                                    <template v-if="permissions.includes('logs.index')">
+                                        <li :class="{ 'menuitem-active': isActiveRoute('logs.index') }">
+                                            <router-link :to="{ name: 'logs.index' }">
+                                                <i class="uil-file-info-alt"></i>
+                                                &nbsp;<span>Logs</span>
+                                            </router-link>
+                                        </li>
+                                    </template>
+                                    <template v-if="permissions.includes('ip.index')">
+                                        <li :class="{ 'menuitem-active': isActiveRoute('ip.index') }">
+                                            <router-link :to="{ name: 'ip.index' }">
+                                                <i class="uil-map-marker-info"></i>
+                                                &nbsp;<span>IP</span>
+                                            </router-link>
+                                        </li>
+                                    </template>
+
+                                </ul>
+                            </div>
+                        </li>
+                    </template>
                 </ul>
+
                 <!-- Users online -->
-                <div class="help-box text-white text-center">
-                    <h5 class="mt-3">Usuarios conectados</h5>
+                <div class="help-box text-white text-center mt-4">
+                    <img :src="route + '/assets/images/rocket.svg'" height="40" alt="Helper Icon Image">
+                    <h5 class="mt-3">🔌Usuarios conectados</h5>
                     <ul class="list-group text-start">
                         <li v-if="isLoading" class="list-group-item text-muted">Cargando...</li>
-                        <li v-else v-for="user in connectedUsers" :key="user.id" class="list-group-item">
+                        <li v-else v-for="user in connectedUsers" :key="user.id" class="list-group-item p-1">
                             <span class="mdi mdi-checkbox-blank-circle text-success"></span>
-                            {{ user.id === this.user.id ? 'Tú' : user.name }}
+                            <span class="m-1">{{ user.id === this.user.id ? 'Tú' : user.name }}</span>
                         </li>
                     </ul>
+                    <p class="mt-3">Desarrollado por PF-Online⚡</p>
                 </div>
                 <!-- end Users online -->
                 <!-- End Sidebar -->
@@ -155,6 +197,10 @@ export default {
                     this.isLoading = false;
                 });
         },
+
+        isActiveRoute(routeName) {
+            return this.$route.name === routeName || (Array.isArray(routeName) && routeName.includes(this.$route.name));
+        }
     },
 };
 </script>

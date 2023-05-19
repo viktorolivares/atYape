@@ -38,7 +38,7 @@
                                             <i class="mdi" :class="getSortIconClass('email')"></i>
                                         </th>
                                         <th @click="toggleSort('ip')">
-                                            <span>Estado</span>
+                                            <span>IP</span>
                                             &nbsp;
                                             <i class="mdi" :class="getSortIconClass('ip')"></i>
                                         </th>
@@ -165,31 +165,34 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-12" v-if="!loadingLanguages">
-                        <div class="card" v-if="Object.keys(languages).length > 0">
-                            <div class="card-body">
-                                <div class="progress">
-                                    <div v-for="(percentage, language) in languagePercentages" :key="language"
-                                        :class="getProgressBarClasses(language)" :style="{ width: percentage + '%' }"
-                                        role="progressbar" :aria-valuenow="percentage" aria-valuemin="0"
-                                        aria-valuemax="100"></div>
-                                </div>
-                                <ul class="nav justify-content-start">
-                                    <li class="nav-item" v-for="(percentage, language) in languagePercentages"
-                                        :key="language">
-                                        <a href="#" class="nav-link">
-                                            <span :class="getIconClasses(language)"></span>
-                                            {{ language }}: {{ percentage }}%
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12" v-else>
+                    <div class="col-12">
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-header">
+                                <h6 class="card-title">
+                                    Lenguajes de Programación
+                                </h6>
+                            </div>
+                            <div v-if="!loadingLanguages">
+                                <div class="card-body" v-if="Object.keys(languages).length > 0">
+                                    <div class="progress">
+                                        <div v-for="(percentage, language) in languagePercentages" :key="language"
+                                            :class="getProgressBarClasses(language)" :style="{ width: percentage + '%' }"
+                                            role="progressbar" :aria-valuenow="percentage" aria-valuemin="0"
+                                            aria-valuemax="100"></div>
+                                    </div>
+                                    <ul class="nav justify-content-start">
+                                        <li class="nav-item" v-for="(percentage, language) in languagePercentages"
+                                            :key="language">
+                                            <a href="#" class="nav-link">
+                                                <span :class="getIconClasses(language)"></span>
+                                                {{ language }}: {{ percentage }}%
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                            <div class="card-body" v-else>
                                 <div class="d-flex justify-content-center">
                                     <div class="spinner-border text-primary" role="status">
                                         <span class="visually-hidden">Loading...</span>
@@ -202,16 +205,18 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-title">
-                                    Últimas actualizaciones:
+                                    Últimas 3 actualizaciones:
                                 </div>
                             </div>
                             <div v-if="!loadingLanguages">
                                 <div class="m-3" v-for="commit in lastCommits" :key="commit.sha">
                                     <img :src="commit.author.avatar_url" alt="image" class="img-fluid avatar-xs">
-                                    <p class="pt-1">{{ commit.author.login }}</p>
+                                    <p class="pt-1 text-success">{{ commit.author.login }}</p>
                                     <span class="d-block"><strong>Nombre:</strong> {{ commit.commit.author.name }}</span>
                                     <span class="d-block"><strong>Email:</strong> {{ commit.commit.author.email }}</span>
-                                    <span class="d-block"><strong>Email:</strong> {{ formatDate(commit.commit.author.date) }}</span>
+                                    <span class="d-block"><strong>Fecha:</strong>
+                                        {{ formatDate(commit.commit.author.date) }}
+                                    </span>
                                     <span class="d-block"><strong>Cambios:</strong> {{ commit.commit.message }}</span>
                                     <hr>
                                 </div>
@@ -258,7 +263,7 @@ export default {
     mounted() {
         this.fetchData();
         this.setDefaultDates();
-        this.fetchLanguages();
+        this.fetchGithub();
 
         this.updateInterval = setInterval(() => {
             this.fetchData();
@@ -292,7 +297,7 @@ export default {
             };
         },
 
-        async fetchLanguages() {
+        async fetchGithub() {
             try {
                 const response = await axios.get('/api/logs/github');
                 this.languages = response.data.languages;
@@ -357,7 +362,7 @@ export default {
         setDefaultDates() {
 
             const endDate = new Date();
-            const startDate = subDays(endDate, 7);
+            const startDate = subDays(endDate, 1);
 
 
             endDate.setDate(endDate.getDate() + 1);
