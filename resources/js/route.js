@@ -13,6 +13,7 @@ import Roles from "./components/modules/roles/index.vue";
 import RoleForm from "./components/modules/roles/form.vue";
 import Dni from "./components/modules/dni/index.vue";
 import Ip from "./components/modules/ip/index.vue";
+import Logs from "./components/modules/logs/index.vue";
 import Login from "./components/modules/auth/login.vue";
 
 
@@ -114,6 +115,14 @@ const routes = [
         path: "/ip",
         component: Ip,
         name: "ip.index",
+        beforeEnter: (to, from, next) => {
+            verifyAcces(to, from, next);
+        },
+    },
+    {
+        path: "/logs",
+        component: Logs,
+        name: "logs.index",
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },

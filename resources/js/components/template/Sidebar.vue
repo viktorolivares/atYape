@@ -44,7 +44,7 @@
                         </template>
                     </template>
                     <template
-                        v-if="permissions.includes('dni.index') || permissions.includes('ip.index') || permissions.includes('domain.index')">
+                        v-if="permissions.includes('dni.index') || permissions.includes('ip.index') || permissions.includes('domain.index') || permissions.includes('logs.index')">
                         <li class="side-nav-title side-nav-item">Utilidades</li>
                         <template v-if="permissions.includes('dni.index')">
                             <li class="side-nav-item">
@@ -59,6 +59,14 @@
                                 <router-link class="side-nav-link" :to="{ name: 'domain.index' }">
                                     <i class="uil-globe"></i>
                                     <span>Dominios</span>
+                                </router-link>
+                            </li>
+                        </template>
+                        <template v-if="permissions.includes('logs.index')">
+                            <li class="side-nav-item">
+                                <router-link class="side-nav-link" :to="{ name: 'logs.index' }">
+                                    <i class="uil-map-marker-info"></i>
+                                    <span>Logs</span>
                                 </router-link>
                             </li>
                         </template>
@@ -92,7 +100,7 @@
                     </template>
 
                 </ul>
-                <!-- Help Box -->
+                <!-- Users online -->
                 <div class="help-box text-white text-center">
                     <h5 class="mt-3">Usuarios conectados</h5>
                     <ul class="list-group text-start">
@@ -103,7 +111,7 @@
                         </li>
                     </ul>
                 </div>
-                <!-- end Help Box -->
+                <!-- end Users online -->
                 <!-- End Sidebar -->
                 <div class="clearfix"></div>
             </div>

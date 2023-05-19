@@ -152,7 +152,7 @@
                                         <td class="table-action text-center">
                                             <button type="button" class="btn action-icon" data-bs-toggle="modal"
                                                 data-bs-target="#transactionModal" @click="openModal(transaction)"
-                                                :title="transaction.details" data-bs-placement="top">
+                                                :title="transaction.details">
                                                 <i class="mdi mdi-eye-check"></i>
                                             </button>
                                         </td>

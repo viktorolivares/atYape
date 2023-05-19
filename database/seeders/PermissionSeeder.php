@@ -200,6 +200,13 @@ class PermissionSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
+        DB::table('permissions')->insert([
+            'name' => 'Logs',
+            'slug' => 'logs.index',
+            'module_id' => 6,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
 
     }
 }

@@ -7,7 +7,7 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="#">IP</a></li>
-                            <li class="breadcrumb-item active">Consulta de IP</li>
+                            <li class="breadcrumb-item active">Consulta de IPs</li>
                         </ol>
                     </div>
                     <h4 class="page-title">IP</h4>

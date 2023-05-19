@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LogsController;
 use App\Http\Controllers\IpController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -106,6 +107,10 @@ Route::group(['prefix' => 'api'], function () {
 
         /*Domain*/
         Route::get('/domain', [DomainController::class, 'domain']);
+
+        /*Github*/
+        Route::get('/logs', [LogsController::class, 'index']);
+        Route::get('/logs/github', [LogsController::class, 'github']);
     });
 });
 
