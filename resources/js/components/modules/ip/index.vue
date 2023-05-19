@@ -20,10 +20,11 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-title font-14 text-primary">
-                            Introduce las IPs
+                            IP's | Consulta máxima 100 registros
                         </span>
                     </div>
                     <div class="card-body">
+                        *Máximo de consultas diarias 1000
                         <textarea class="form-control" v-model="ips" rows="10"></textarea>
                         <button class="btn btn-primary mt-3" :disabled="isFetching" @click.prevent="fetchIps">
                             {{ isFetching ? 'Consultando...' : 'Buscar IPs' }}
@@ -194,16 +195,25 @@ export default {
                 } else {
                     console.error('Ingrese una dirección válida')
                 }
+
                 completedIps++
                 this.fetchProgress = Math.round((completedIps / totalIps) * 100)
             }
-            setTimeout(() => {
-                this.isFetching = false
-                this.showTable = true
-                this.showToast("Se cargaron los datos", {
-                    type: "success"
-                })
-            }, 2000)
+
+            if (!this.responses.length) {
+                this.showToast("No se encontró información, revise sus datos", { type: "error" });
+                this.isFetching = false;
+            } else {
+                setTimeout(() => {
+                    this.isFetching = false;
+                    this.showTable = true;
+                    this.showToast("Se cargaron los datos", { type: "success" });
+                }, 2000);
+            }
+
+            console.log(this.responses)
+
+
         },
         isValidIp(ip) {
             const ipRegex = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]{1,2})$/g
