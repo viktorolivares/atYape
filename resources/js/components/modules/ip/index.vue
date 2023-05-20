@@ -27,6 +27,9 @@
                         *Máximo de consultas diarias 1000
                         <textarea class="form-control" v-model="ips" rows="10"></textarea>
                         <button class="btn btn-primary mt-3" :disabled="isFetching" @click.prevent="fetchIps">
+                            <template v-if="isFetching">
+                                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                            </template>
                             {{ isFetching ? 'Consultando...' : 'Buscar IPs' }}
                         </button>
                     </div>
@@ -45,7 +48,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-body">
+                    <div class="px-3 pt-2">
                         <div class="alert alert-info alert-dismissible fade show" role="alert">
                             <span class="mdi mdi-information"></span>
                             <strong>&nbsp; Ipapi (https://ipapi.co/)</strong>
@@ -80,7 +83,7 @@
                                     <td>
                                         <img v-if="data.country_code && flagImages[data.country_code]"
                                             :src="flagImages[data.country_code]" :alt="data.country_name + ' Flag'"
-                                            width="30">
+                                            width="20">
                                     </td>
                                     <td>{{ data.region }}</td>
                                     <td>{{ data.city }}</td>
@@ -112,10 +115,19 @@
                             </ul>
                         </nav>
                     </div>
+                    <div class="card-body" v-if="loading">
+                        <div class="d-flex align-items-center">
+                            <strong>Cargando...</strong>
+                            <div class="spinner-border text-primary ms-auto" role="status" aria-hidden="true"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card" id="mapCard" v-if="mapCard">
                     <div class="card-body text-center">
-                        <span class="mdi mdi-loading mdi-spin mdi-48px" v-if="isLoading"></span>
+                        <div class="d-flex align-items-center" v-if="isLoading">
+                            <strong>Cargando...</strong>
+                            <div class="spinner-border text-success ms-auto" role="status" aria-hidden="true"></div>
+                        </div>
                         <Map :latitude="lat" :longitude="lng" v-else />
                     </div>
                 </div>
@@ -140,6 +152,7 @@ export default {
             apiUrl: '/api/ip',
             isFetching: false,
             isLoading: false,
+            loading: false,
             mapCard: false,
             fetchProgress: 0,
             showTable: false,
@@ -176,6 +189,7 @@ export default {
             }
             this.responses = []
             this.isFetching = true
+            this.loading = true
             this.mapCard = false
             this.fetchProgress = 0
             this.showTable = false
@@ -203,10 +217,12 @@ export default {
             if (!this.responses.length) {
                 this.showToast("No se encontró información, revise sus datos", { type: "error" });
                 this.isFetching = false;
+                this.loading = false
             } else {
                 setTimeout(() => {
                     this.isFetching = false;
                     this.showTable = true;
+                    this.loading = false
                     this.showToast("Se cargaron los datos", { type: "success" });
                 }, 2000);
             }

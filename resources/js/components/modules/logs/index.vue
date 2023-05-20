@@ -21,6 +21,35 @@
         <div class="row">
             <div class="col-md-9">
                 <div class="card">
+                    <div class="mt-3 mx-3">
+                        <div class="row justify-content-between">
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-primary border-primary text-white">
+                                        <small>Mostrar</small>
+                                    </span>
+                                    <select id="perPage" v-model="paginated.perPage" class="form-select form-select-sm"
+                                        @change="changeItemsPerPage(paginated.perPage)"
+                                        aria-label="Mostrar resultados por página">
+                                        <option :value="5">5</option>
+                                        <option :value="10">10</option>
+                                        <option :value="20">20</option>
+                                        <option :value="50">50</option>
+                                        <option :value="100">100</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-primary border-primary text-white">
+                                        <small>Email</small>
+                                    </span>
+                                    <input type="text" class="form-control" v-model="filter.email" @input="fetchData"
+                                        aria-label="Filtrar por email">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body" v-if="items.length > 0">
                         <div class="table-responsive-sm">
                             <table class="table table-bordered table-centered table-hover table-sm">
@@ -114,56 +143,34 @@
                 <div class="row">
                     <div class="col-12 mb-3">
                         <!-- Formulario de filtro -->
-                        <form class="row g-1" @submit.prevent="fetchData">
-                            <div class="col-12">
-                                <div class="input-group">
-                                    <span class="input-group-text bg-primary border-primary text-white">
-                                        <small>Mostrar</small>
-                                    </span>
-                                    <select id="perPage" v-model="paginated.perPage" class="form-select form-select-sm"
-                                        @change="changeItemsPerPage(paginated.perPage)"
-                                        aria-label="Mostrar resultados por página">
-                                        <option :value="5">5</option>
-                                        <option :value="10">10</option>
-                                        <option :value="20">20</option>
-                                        <option :value="50">50</option>
-                                        <option :value="100">100</option>
-                                    </select>
+                        <fieldset>
+                            <form class="row g-1" @submit.prevent="fetchData">
+                                <div class="col-12">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text bg-primary border-primary text-white">
+                                            <small>Desde</small>
+                                        </span>
+                                        <input type="datetime-local" class="form-control" id="startDate"
+                                            v-model="filter.startDate" aria-label="Filtrar por fecha de inicio">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text bg-primary border-primary text-white">
-                                        <small>Email</small>
-                                    </span>
-                                    <input type="text" class="form-control" v-model="filter.email" @input="fetchData"
-                                        aria-label="Filtrar por email">
+                                <div class="col-12">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text bg-primary border-primary text-white">
+                                            <small>Hasta</small>
+                                        </span>
+                                        <input type="datetime-local" class="form-control" id="endDate"
+                                            v-model="filter.endDate" aria-label="Filtrar por fecha de fin">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text bg-primary border-primary text-white">
-                                        <small>Desde</small>
-                                    </span>
-                                    <input type="datetime-local" class="form-control" id="startDate"
-                                        v-model="filter.startDate" aria-label="Filtrar por fecha de inicio">
+                                <div class="col-12 d-grid gap-2">
+                                    <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
+                                        <i class="mdi mdi-search-web"></i>
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text bg-primary border-primary text-white">
-                                        <small>Hasta</small>
-                                    </span>
-                                    <input type="datetime-local" class="form-control" id="endDate" v-model="filter.endDate"
-                                        aria-label="Filtrar por fecha de fin">
-                                </div>
-                            </div>
-                            <div class="col-12 d-grid gap-2">
-                                <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
-                                    <i class="mdi mdi-search-web"></i>
-                                </button>
-                            </div>
-                        </form>
+                            </form>
+
+                        </fieldset>
                     </div>
                     <div class="col-12">
                         <div class="card">

@@ -113,7 +113,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('/ip', [IpController::class, 'ipConsult']);
 
         /*Domain*/
-        Route::get('/domain', [DomainController::class, 'domain']);
+        Route::get('/domain/list', [DomainController::class, 'index']);
     });
 });
 

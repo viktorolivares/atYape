@@ -2,9 +2,7 @@
 
 namespace App\Http\Services;
 
-
-
-class DomainValid
+class DomainValidation
 {
 
     public static function search($URL)
@@ -47,7 +45,23 @@ class DomainValid
         $result = json_decode($json, true);
 
         return $result;
+    }
+
+    public static function credits()
+    {
+        // You API Key.
+        $key = 'R6XtJ6zztFZLBoz50cl93kde3uwgAeT3';
+
+        // Base URL
+        $url = 'https://www.ipqualityscore.com/api/json/account/%s';
 
 
+        // Finish assembling the URL and make the request.
+        $json = file_get_contents(sprintf($url, $key));
+
+        // Decode json and print the number of available credits.
+        $result = json_decode($json, true);
+
+        return $result;
     }
 }

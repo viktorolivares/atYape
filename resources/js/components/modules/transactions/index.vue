@@ -17,24 +17,8 @@
         <!-- end page title -->
 
         <!-- Formulario de filtro -->
-        <form class="row g-1 mt-1" @submit.prevent="fetchData">
+        <form class="row g-1 mb-1" @submit.prevent="fetchData">
             <div class="col-md-2">
-                <div class="input-group">
-                    <span class="input-group-text bg-primary border-primary text-white">
-                        <small>Mostrar</small>
-                    </span>
-                    <select id="perPage" v-model="paginated.perPage" @change="changeItemsPerPage(paginated.perPage)"
-                        class="form-select form-select-sm" aria-label="Mostrar resultados por página">
-                        <option :value="5">5</option>
-                        <option :value="10">10</option>
-                        <option :value="20">20</option>
-                        <option :value="50">50</option>
-                        <option :value="100">100</option>
-                        <option :value="200">200</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-5">
                 <div class="input-group">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Estado</small>
@@ -47,7 +31,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-3">
                 <div class="input-group">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Yape!</small>
@@ -60,15 +44,6 @@
                         <option :value="'Televentas'">Televentas</option>
                         <option :value="'Teleservicios'">Teleservicios</option>
                     </select>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-text bg-primary border-primary text-white">
-                        <small>Persona</small>
-                    </span>
-                    <input type="text" class="form-control" v-model="filter.person" @input="fetchData"
-                        aria-label="Filtrar por persona">
                 </div>
             </div>
             <div class="col-md-3">
@@ -89,9 +64,9 @@
                         aria-label="Filtrar por fecha de fin">
                 </div>
             </div>
-            <div class="col-md-2 d-grid gap-2">
+            <div class="col-md-1 d-grid gap-2">
                 <button type="submit" class="btn btn-sm btn-primary" aria-label="Buscar transacciones">
-                    <i class="mdi mdi-search-web"></i>
+                    <i class="uil-search"></i>
                 </button>
             </div>
         </form>
@@ -100,8 +75,34 @@
         <div class="row">
             <div class="col-md-12 mt-1">
                 <div class="card">
-                    <div class="card-header bg-primary-lighten">
-                        Transacciones
+                    <div class="mt-3 mx-3">
+                        <div class="row justify-content-between">
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-primary border-primary text-white">
+                                        <small>Mostrar</small>
+                                    </span>
+                                    <select id="perPage" v-model="paginated.perPage" class="form-select form-select-sm"
+                                        @change="changeItemsPerPage(paginated.perPage)"
+                                        aria-label="Mostrar resultados por página">
+                                        <option :value="5">5</option>
+                                        <option :value="10">10</option>
+                                        <option :value="20">20</option>
+                                        <option :value="50">50</option>
+                                        <option :value="100">100</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-primary border-primary text-white">
+                                        <small>Persona</small>
+                                    </span>
+                                    <input type="text" class="form-control" v-model="filter.person" @input="fetchData"
+                                        aria-label="Filtrar por persona">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body" v-if="items.length > 0">
                         <div class="table-responsive-sm">
@@ -284,6 +285,7 @@ export default {
         }, 5000);
 
     },
+
     beforeUnmount() {
         clearInterval(this.updateInterval);
     },

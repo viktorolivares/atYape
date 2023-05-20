@@ -2,7 +2,7 @@
     <div>
         <div class="row justify-content-center mt-5">
             <div class="col-lg-4 mt-5">
-                <div class="text-center mt-4">
+                <div class="text-center">
                     <img :src="route + '/assets/images/file-searching.svg'" height="90" alt="File not found Image">
                     <h1 class="text-error mt-4">404</h1>
                     <h4 class="text-uppercase text-danger mt-3">Página no encontrada</h4>
