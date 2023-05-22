@@ -51,22 +51,26 @@ export default defineComponent({
 
         const createMapLayer = () => {
             if (L && L.map && document.getElementById('mapContainer')) {
-                map = L.map('mapContainer').setView([props.latitude, props.longitude], 15)
+                map = L.map('mapContainer', {
+                    maxZoom: 18,
+                    minZoom: 5
+                }).setView([props.latitude, props.longitude], 15);
+
                 L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(map)
+                }).addTo(map);
 
-                marker = setMarkers(props.latitude, props.longitude)
+                setMarkers(props.latitude, props.longitude);
             } else {
-                console.error('Error: Leaflet library or map container element not found.')
+                console.error('Error: Leaflet library or map container element not found.');
             }
         }
 
         const setMarkers = (latitude, longitude) => {
             if (map) {
-                return L.marker([latitude, longitude]).addTo(map)
+                L.marker([latitude, longitude]).addTo(map);
             } else {
-                console.error('Error: Map not initialized.')
+                console.error('Error: Map not initialized.');
             }
         }
     },
@@ -74,11 +78,3 @@ export default defineComponent({
 })
 
 </script>
-<style scoped>
-#mapContainer {
-    width: 100%;
-    height: 100%;
-    min-height: 50vh;
-    max-height: calc(100vh - 500px);
-}
-</style>

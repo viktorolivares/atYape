@@ -185,7 +185,7 @@ export default {
                 name : '',
                 slug : ''
             },
-            getPermissions: JSON.parse(sessionStorage.getItem('permissions'))
+            getPermissions: JSON.parse(localStorage.getItem('permissions'))
         };
     },
 

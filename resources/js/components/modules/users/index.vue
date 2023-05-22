@@ -15,7 +15,7 @@
             </div>
         </div>
         <!-- end page title -->
-        
+
         <!-- Formulario de filtro -->
         <form class="row g-1 mt-1" @submit.prevent="fetchData">
             <div class="col-md-3">
@@ -226,7 +226,7 @@ export default {
                 state: '',
                 name: '',
             },
-            getPermissions: JSON.parse(sessionStorage.getItem('permissions'))
+            getPermissions: JSON.parse(localStorage.getItem('permissions'))
         };
     },
 

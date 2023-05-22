@@ -15,7 +15,7 @@ window.axios.interceptors.response.use(
     },
     function (error) {
         if (error.response.status === 401) {
-            sessionStorage.clear();
+            localStorage.clear();
             router.push("/login");
         }
         return Promise.reject(error);

@@ -3,7 +3,8 @@
         <!-- Topbar Start -->
         <div class="navbar-custom">
             <ul class="list-unstyled topbar-menu float-end mb-0">
-                <template v-if="permissions.includes('yape.business') || permissions.includes('yape.televentas') || permissions.includes('yape.mulfood') || permissions.includes('yape.teleservicios')" >
+                <template
+                    v-if="permissions.includes('yape.business') || permissions.includes('yape.televentas') || permissions.includes('yape.mulfood') || permissions.includes('yape.teleservicios')">
 
                     <li class="dropdown notification-list topbar-dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
@@ -15,28 +16,28 @@
                             <!-- item-->
 
                             <template v-if="permissions.includes('yape.business')">
-                                <router-link class="dropdown-item notify-item" :to="{name: 'yape.business'}">
+                                <router-link class="dropdown-item notify-item" :to="{ name: 'yape.business' }">
                                     <i class="mdi mdi-circle mx-1 text-success"></i>
                                     <span class="align-middle">Business</span>
                                 </router-link>
                             </template>
                             <!-- item-->
                             <template v-if="permissions.includes('yape.televentas')">
-                                <router-link class="dropdown-item notify-item" :to="{name: 'yape.televentas'}">
+                                <router-link class="dropdown-item notify-item" :to="{ name: 'yape.televentas' }">
                                     <i class="mdi mdi-circle mx-1 text-primary"></i>
                                     Televentas
                                 </router-link>
                             </template>
                             <!-- item-->
                             <template v-if="permissions.includes('yape.mulfood')">
-                                <router-link class="dropdown-item notify-item" :to="{name: 'yape.mulfood'}">
+                                <router-link class="dropdown-item notify-item" :to="{ name: 'yape.mulfood' }">
                                     <i class="mdi mdi-circle mx-1 text-warning"></i>
                                     Mulfood
                                 </router-link>
                             </template>
                             <!-- item-->
                             <template v-if="permissions.includes('yape.teleservicios')">
-                                <router-link class="dropdown-item notify-item" :to="{name: 'yape.teleservicios'}">
+                                <router-link class="dropdown-item notify-item" :to="{ name: 'yape.teleservicios' }">
                                     <i class="mdi mdi-circle mx-1 text-danger"></i>
                                     Teleservicios
                                 </router-link>
@@ -122,13 +123,12 @@ export default {
                         type: "success"
                     });
 
-                    window.location.href = "/login";
+                    localStorage.clear();
 
-                    // setTimeout(() => {
-                    //     window.location.href = "/login";
-                    // }, toastDuration);
+                    setTimeout(() => {
+                        window.location.href = "/login";
+                    }, toastDuration);
 
-                    sessionStorage.clear();
                 })
                 .catch(error => console.log(error))
         },

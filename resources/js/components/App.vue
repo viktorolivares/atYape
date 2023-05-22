@@ -47,7 +47,7 @@ export default {
 
     mounted() {
 
-        this.permissions = JSON.parse(sessionStorage.getItem('permissions'));
+        this.permissions = JSON.parse(localStorage.getItem('permissions'));
 
         this.$eventBus.$on('verifyAuth', data => {
             this.authUser = data

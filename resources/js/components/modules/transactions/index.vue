@@ -104,10 +104,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body" v-if="items.length > 0">
-                        <div class="table-responsive-sm">
+                    <div class="card-body table-fixed-header" v-if="items.length > 0">
+                        <div class="table-responsive">
                             <table class="table table-bordered table-centered table-hover table-sm">
-                                <thead>
+                                <thead >
                                     <tr>
                                         <th @click="toggleSort('description')">
                                             <span>Yape!</span>
@@ -407,3 +407,18 @@ export default {
 };
 
 </script>
+
+<style type="text/css">
+thead tr th{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #ffffff;
+}
+
+.table-responsive {
+  height: 500px;
+  overflow:scroll;
+}
+
+</style>

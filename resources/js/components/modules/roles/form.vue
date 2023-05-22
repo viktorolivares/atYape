@@ -296,7 +296,7 @@ export default {
             try {
                 const response = await axios.get("/api/users/roles/permissions");
                 if (response.status === 200) {
-                    sessionStorage.setItem('permissions', JSON.stringify(response.data));
+                    localStorage.setItem('permissions', JSON.stringify(response.data));
                     this.$eventBus.$emit('updatePermissions', response.data);
                 }
             } catch (error) {

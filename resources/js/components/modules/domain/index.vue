@@ -15,6 +15,7 @@
             </div>
         </div>
         <!-- end page title -->
+
         <div class="row">
             <div class="col-md-3">
                 <div class="card">
@@ -24,17 +25,21 @@
                         </span>
                     </div>
                     <div class="card-body">
-                        [Consultas máximas por mes 5000]
+                        <p class="mb-3">Consultas máximas por mes: 5000</p>
                         <textarea class="form-control" v-model="domains" rows="10"></textarea>
                         <button class="btn btn-primary mt-3" :disabled="isFetching" @click.prevent="fetchDomains">
                             <template v-if="isFetching">
                                 <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
                             </template>
-                            {{ isFetching ? 'Consultando...' : 'Buscar Dominios' }}
+                            <template v-else>
+                                <span class="mdi mdi-magnify"></span>
+                                Buscar Dominios
+                            </template>
                         </button>
                     </div>
                 </div>
             </div>
+
             <div class="col-md-9">
                 <div v-if="isFetching" class="card">
                     <div class="card-body">
@@ -47,151 +52,199 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="px-3 pt-2">
-                        <div class="alert alert-info alert-dismissible fade show" role="alert">
-                            <span class="mdi mdi-information"></span>
-                            <strong>&nbsp; API: ipqualityscore.com</strong>
-                            Prueba de reputación de dominio: Incluyen phishing, malware, SPAM, Temp-Email
 
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
-                                disabled>
+                <transition name="fade">
+                    <div class="card" v-if="showTable && !isFetching">
+                        <div class="px-3 pt-2">
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <span class="mdi mdi-information"></span>
+                                <strong>API: ipqualityscore.com:</strong>
+                                <span>Prueba de reputación de dominio, incluyen phishing, malware, SPAM, Temp-Email</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                                    disabled></button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <button class="btn btn-sm btn-success float-end mb-2" @click="exportToExcel">
+                                <span class="mdi mdi-download"></span>
+                                Exportar en excel
                             </button>
-                        </div>
-                    </div>
-                    <div class="card-body" v-if="showTable && !isFetching">
-                        <button class="btn btn-sm btn-success float-end mb-2" @click="exportToExcel">
-                            .xlsx
-                        </button>
-                        <table class="table table-sm table-bordered table-condensed table-hover table-striped">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Dominio</th>
-                                    <th scope="col">Categoría</th>
-                                    <th scope="col">Flag</th>
-                                    <th scope="col">Score</th>
-                                    <th scope="col">Score ID</th>
-                                    <th scope="col">Domain Age</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(data, index) in paginatedResponses" :key="index">
-                                    <th scope="row">{{ index + 1 }}</th>
-                                    <td>{{ data.domain }}</td>
-                                    <td>{{ data.category }}</td>
-                                    <td>
-                                        <template
-                                            v-if="!data.malware && !data.parking && !data.phishing && !data.spamming && !data.suspicious && !data.unsafe">
-                                            <span class="badge bg-success mx-1">Dominio seguro</span>
-                                        </template>
-                                        <template v-else>
-                                            <span v-if="data.malware" class="badge bg-danger mx-1">Malware</span>
-                                            <span v-if="data.parking" class="badge bg-danger mx-1">Email temporal</span>
-                                            <span v-if="data.phishing" class="badge bg-danger mx-1">Suplantación de identidad</span>
-                                            <span v-if="data.spamming" class="badge bg-danger mx-1">Spam</span>
-                                            <span v-if="data.suspicious" class="badge bg-warning mx-1">Sospechoso</span>
-                                            <span v-if="data.unsafe" class="badge bg-warning mx-1">Inseguro</span>
-                                        </template>
 
-                                    </td>
-                                    <td>
-                                        <span v-html="getScoreBadge(data.risk_score)"></span>
-                                    </td>
-                                    <td>{{ data.risk_score ? data.risk_score : '-' }}</td>
-                                    <td>{{ data.domain_age.human }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <nav>
-                            <ul class="pagination">
-                                <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                                    <a class="page-link" href="#" @click.prevent="goToPage(currentPage - 1)">
-                                        Anterior
-                                    </a>
-                                </li>
-                                <li class="page-item" v-for="page in totalPages" :key="page"
-                                    :class="{ 'active': currentPage === page }">
-                                    <a class="page-link" href="#" @click.prevent="goToPage(page)">
-                                        {{ page }}
-                                    </a>
-                                </li>
-                                <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                                    <a class="page-link" href="#" @click.prevent="goToPage(currentPage + 1)">
-                                        Siguiente
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                        <h6 class="text-info">Créditos disponibles: {{ credits.credits }}</h6>
-                    </div>
-                    <div class="card-body" v-if="loading">
-                        <div class="d-flex align-items-center">
-                            <strong>Cargando...</strong>
-                            <div class="spinner-border text-primary ms-auto" role="status" aria-hidden="true"></div>
+                            <table class="table table-sm table-bordered table-condensed table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Dominio</th>
+                                        <th scope="col">Categoría</th>
+                                        <th scope="col">Flag</th>
+                                        <th scope="col">Score</th>
+                                        <th scope="col">Score ID</th>
+                                        <th scope="col">Domain Age</th>
+                                    </tr>
+                                </thead>
+                                <transition-group name="fade">
+                                    <tbody>
+                                        <tr v-for="(data, index) in paginatedResponses" :key="index">
+                                            <th scope="row">{{ index + 1 }}</th>
+                                            <td>{{ data.domain }}</td>
+                                            <td>{{ data.category }}</td>
+                                            <td>
+                                                <template
+                                                    v-if="!data.malware && !data.parking && !data.phishing && !data.spamming && !data.suspicious && !data.unsafe">
+                                                    <span class="badge bg-success mx-1">Dominio seguro</span>
+                                                </template>
+                                                <template v-else>
+                                                    <span v-if="data.malware" class="badge bg-danger mx-1">Malware</span>
+                                                    <span v-if="data.parking" class="badge bg-danger mx-1">Email
+                                                        temporal</span>
+                                                    <span v-if="data.phishing" class="badge bg-danger mx-1">Suplantación de
+                                                        identidad</span>
+                                                    <span v-if="data.spamming" class="badge bg-danger mx-1">Spam</span>
+                                                    <span v-if="data.suspicious"
+                                                        class="badge bg-warning mx-1">Sospechoso</span>
+                                                    <span v-if="data.unsafe" class="badge bg-warning mx-1">Inseguro</span>
+                                                </template>
+                                            </td>
+                                            <td>
+                                                <span v-html="getScoreBadge(data.risk_score)"></span>
+                                            </td>
+                                            <td>{{ data.risk_score ? data.risk_score : '-' }}</td>
+                                            <td>{{ data.domain_age.human }}</td>
+                                        </tr>
+                                    </tbody>
+                                </transition-group>
+                            </table>
+
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+                                        <a class="page-link" href="#" @click.prevent="goToPage(currentPage - 1)">
+                                            Anterior
+                                        </a>
+                                    </li>
+                                    <li class="page-item" v-for="page in totalPages" :key="page"
+                                        :class="{ 'active': currentPage === page }">
+                                        <a class="page-link" href="#" @click.prevent="goToPage(page)">
+                                            {{ page }}
+                                        </a>
+                                    </li>
+                                    <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+                                        <a class="page-link" href="#" @click.prevent="goToPage(currentPage + 1)">
+                                            Siguiente
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            <h6 class="text-info">Créditos disponibles: {{ credits.credits }}</h6>
                         </div>
                     </div>
-                </div>
+                </transition>
+
+                <transition name="fade">
+                    <div class="card" v-if="loading">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <strong>Cargando...</strong>
+                                <div class="spinner-border text-primary ms-auto" role="status" aria-hidden="true"></div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+
                 <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title">Scores:</h6>
+                    </div>
                     <div class="card-body">
-                        <div class="alert alert-light alert-dismissible fade show" role="alert">
-                        <h5>
-                            <i class="mdi mdi-information-outline"></i> Información de categorías:
-                        </h5>
-                        <small>
-                            <ul class="list-unstyled">
-                                <li>
-                                    <b>Inseguro:</b> Sospecha de dominio no es seguro debido a suplantación de identidad, malware, spam o comportamiento abusivo.
-                                </li>
-                                <li>
-                                    <b>Sospechoso:</b> Sospecha de URL maliciosa o se usa para phishing.
-                                </li>
-                                <li>
-                                    <b>Suplantación de identidad:</b> URL asociada con un comportamiento de phishing malicioso
-                                </li>
-                                <li>
-                                    <b>Malware:</b> URL está asociada con malware o virus.
-                                </li>
-                                <li>
-                                    <b>Email temporal:</b> URL actualmente estacionado con un aviso de venta
-                                </li>
-                                <li>
-                                    <b>Spam:</b> Dominio de URL asociado con correo electrónico SPAM o direcciones de correo electrónico abusivas
-                                </li>
-                            </ul>
-                            <ol class="list-group list-group-numbered shadow">
-                                <li class="list-group-item d-flex justify-content-between align-items-start">
-                                    <div class="ms-2 me-auto">
-                                        Puntajes de riesgo >= 75 - sospechoso - generalmente debido a patrones asociados con enlaces maliciosos.
-                                    </div>
-                                    <span class="badge bg-danger rounded-pill">75</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-start">
-                                    <div class="ms-2 me-auto">
-                                        Puntuaciones de riesgo >= 85 - alto riesgo - gran confianza en que la URL es maliciosa.
-                                    </div>
-                                    <span class="badge bg-danger rounded-pill">85</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-start">
-                                    <div class="ms-2 me-auto">
-                                        Risk Scores = 100 AND Phishing = "true" OR Malware = "true" - indicates confirmed malware or phishing activity in the past 24-48 hours.
-                                    </div>
-                                    <span class="badge bg-danger rounded-pill">100</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-start">
-                                    <div class="ms-2 me-auto">
-                                        Las URL sospechosas marcadas con Sospechoso = "verdadero" indicarán dominios con una alta probabilidad de estar involucrados en un comportamiento abusivo.
-                                    </div>
-                                </li>
-                            </ol>
-                        </small>
-                        </div>
+                        <ol class="list-group list-group-numbered shadow">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    Puntajes de riesgo >= 75 - sospechoso - generalmente debido a patrones asociados con
+                                    enlaces
+                                    maliciosos.
+                                </div>
+                                <span class="badge bg-danger rounded-pill">75</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    Puntuaciones de riesgo >= 85 - alto riesgo - gran confianza en que la URL es maliciosa.
+                                </div>
+                                <span class="badge bg-danger rounded-pill">85</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    Puntajes de riesgo = 100 + Phishing o Malware: indica malware confirmado o actividad de
+                                    phishing en las últimas 24 a 48 horas.
+                                </div>
+                                <span class="badge bg-danger rounded-pill">100</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    Las URL sospechosas marcadas con Sospechoso indicarán dominios con una alta probabilidad
+                                    de
+                                    estar involucrados en un comportamiento abusivo.
+                                </div>
+                            </li>
+                        </ol>
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title">Categorías:</h6>
+                    </div>
+                    <div class="card-body">
+                        <ol class="list-group list-group-numbered shadow">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Inseguro:</div>
+                                    Sospecha de dominio no es seguro debido a suplantación de identidad, malware, spam o
+                                    comportamiento abusivo.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Sospechoso:</div>
+                                    Sospecha de URL maliciosa o se usa para phishing.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Suplantación de identidad:</div>
+                                    URL asociada con un comportamiento de phishing malicioso.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Malware:</div>
+                                    URL está asociada con malware o virus.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Email temporal:</div>
+                                    URL actualmente estacionado con un aviso de venta.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Spam:</div>
+                                    Dominio de URL asociado con correo electrónico SPAM o direcciones de correo electrónico
+                                    abusivas.
+                                </div>
+                            </li>
+                        </ol>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
 <script>
 
 import toastMixin from "../mixins/toastMixin.js"
@@ -250,21 +303,26 @@ export default {
             this.showTable = false
             this.loading = true;
 
-            const totalDomains = domainArray.length
-            let completedDomains = 0
+            const totalDomains = domainArray.length;
+            let completedDomains = 0;
+
             for (const domain of domainArray) {
-                const trimmedDomain = domain.trim()
+
+                const trimmedDomain = domain.trim();
+
                 if (trimmedDomain.length > 0 && this.isValidDomain(trimmedDomain)) {
                     try {
+
                         const response = await axios.get(this.apiUrl, {
                             params: { domain: trimmedDomain }
-                        })
-                        this.responses.push(response.data.data)
-                        this.credits = response.data.credits
+                        });
 
-                        console.log(response.data)
+                        this.responses.push(response.data.data);
+                        this.credits = response.data.credits;
+
                     } catch (error) {
-                        console.error(`Error al buscar el Dominio: ${trimmedDomain}`, error)
+                        console.error(`Error al buscar el Dominio: ${trimmedDomain}`, error);
+                        this.showToast("Error al buscar el Dominio", { type: "error" });
                     }
                 } else {
                     console.error('Ingrese un dominio valido')
@@ -286,7 +344,6 @@ export default {
                     this.showToast("Se cargaron los datos", { type: "success" });
                 }, 2000);
             }
-            console.log(this.responses)
         },
 
         isValidDomain(domain) {
@@ -330,7 +387,7 @@ export default {
                 (score >= 0 && score < 25 ? '<span class="badge bg-primary">Very Low</span> ' : '') +
                 (score >= 25 && score < 50 ? '<span class="badge bg-success">Low</span> ' : '') +
                 (score >= 50 && score < 75 ? '<span class="badge bg-info">Medium</span> ' : '') +
-                (score >= 75 && score < 85 ? '<span class="badge bg-dark">High</span> ' : '') +
+                (score >= 75 && score < 85 ? '<span class="badge bg-warning">High</span> ' : '') +
                 (score >= 85 && score <= 100 ? '<span class="badge bg-danger">Very High</span> ' : '')
             );
         },

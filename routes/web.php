@@ -118,6 +118,6 @@ Route::group(['prefix' => 'api'], function () {
 });
 
 Route::get('/{any?}', function () {
-    return view('layouts.app');
+    return view('app');
 })->name('basepath')
     ->where('any', '.*');

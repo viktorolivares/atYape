@@ -15,6 +15,7 @@
             </div>
         </div>
         <!-- end page title -->
+
         <div class="row">
             <div class="col-md-3">
                 <div class="card">
@@ -24,29 +25,36 @@
                         </span>
                     </div>
                     <div class="card-body">
-                        *Máximo de consultas diarias 1000
+                        <p class="mb-3">Máximo de consultas diarias: 1000</p>
                         <textarea class="form-control" v-model="ips" rows="10"></textarea>
                         <button class="btn btn-primary mt-3" :disabled="isFetching" @click.prevent="fetchIps">
                             <template v-if="isFetching">
                                 <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
                             </template>
-                            {{ isFetching ? 'Consultando...' : 'Buscar IPs' }}
+                            <template v-else>
+                                <span class="mdi mdi-magnify"></span>
+                                Buscar IPs
+                            </template>
                         </button>
                     </div>
                 </div>
             </div>
+
             <div class="col-md-9">
-                <div v-if="isFetching" class="card">
-                    <div class="card-body">
-                        <div class="progress mb-3">
-                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                :style="{ width: fetchProgress + '%' }" :aria-valuenow="fetchProgress" aria-valuemin="0"
-                                aria-valuemax="100">
-                                {{ fetchProgress }}%
+                <transition name="fade">
+                    <div v-if="isFetching" class="card">
+                        <div class="card-body">
+                            <div class="progress mb-3">
+                                <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                                    :style="{ width: fetchProgress + '%' }" :aria-valuenow="fetchProgress" aria-valuemin="0"
+                                    aria-valuemax="100">
+                                    {{ fetchProgress }}%
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </transition>
+
                 <div class="card">
                     <div class="px-3 pt-2">
                         <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -58,79 +66,105 @@
                                 disabled></button>
                         </div>
                     </div>
-                    <div class="card-body" v-if="showTable && !isFetching">
-                        <button class="btn btn-sm btn-success float-end mb-2" @click="exportToExcel">
-                            .xlsx
-                        </button>
-                        <table class="table table-sm table-bordered table-condensed table-hover table-striped">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">IP</th>
-                                    <th scope="col">País</th>
-                                    <th scope="col">Flag</th>
-                                    <th scope="col">Región</th>
-                                    <th scope="col">Ciudad</th>
-                                    <th scope="col">Coordenadas</th>
-                                    <th scope="col">Organización</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(data, index) in paginatedResponses" :key="index">
-                                    <th scope="row">{{ index + 1 }}</th>
-                                    <td>{{ data.ip }}</td>
-                                    <td>{{ data.country_name }}</td>
-                                    <td>
-                                        <img v-if="data.country_code && flagImages[data.country_code]"
-                                            :src="flagImages[data.country_code]" :alt="data.country_name + ' Flag'"
-                                            width="20">
-                                    </td>
-                                    <td>{{ data.region }}</td>
-                                    <td>{{ data.city }}</td>
-                                    <td>
-                                        <a href="#" @click.prevent="openMap(data.latitude, data.longitude)">Ver Mapa</a>
-                                    </td>
-                                    <td>{{ data.org }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <nav>
-                            <ul class="pagination">
-                                <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                                    <a class="page-link" href="#" @click.prevent="goToPage(currentPage - 1)">
-                                        Anterior
-                                    </a>
-                                </li>
-                                <li class="page-item" v-for="page in totalPages" :key="page"
-                                    :class="{ 'active': currentPage === page }">
-                                    <a class="page-link" href="#" @click.prevent="goToPage(page)">
-                                        {{ page }}
-                                    </a>
-                                </li>
-                                <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                                    <a class="page-link" href="#" @click.prevent="goToPage(currentPage + 1)">
-                                        Siguiente
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="card-body" v-if="loading">
-                        <div class="d-flex align-items-center">
-                            <strong>Cargando...</strong>
-                            <div class="spinner-border text-primary ms-auto" role="status" aria-hidden="true"></div>
+
+                    <transition name="fade">
+                        <div class="card-body" v-if="showTable && !isFetching">
+                            <button class="btn btn-sm btn-success float-end mb-2" @click="exportToExcel">
+                                <span class="mdi mdi-download"></span>
+                                Exportar en excel
+                            </button>
+
+                            <table class="table table-sm table-bordered table-condensed table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">IP</th>
+                                        <th scope="col">País</th>
+                                        <th scope="col">Flag</th>
+                                        <th scope="col">Región</th>
+                                        <th scope="col">Ciudad</th>
+                                        <th scope="col">Coordenadas</th>
+                                        <th scope="col">Organización</th>
+                                    </tr>
+                                </thead>
+                                <transition-group name="fade">
+                                    <tbody>
+                                        <tr v-for="(data, index) in paginatedResponses" :key="index">
+                                            <th scope="row">{{ index + 1 }}</th>
+                                            <td>{{ data.ip }}</td>
+                                            <td>{{ data.country_name }}</td>
+                                            <td>
+                                                <img v-if="data.country_code && flagImages[data.country_code]"
+                                                    :src="flagImages[data.country_code]" :alt="data.country_name + ' Flag'"
+                                                    width="20" />
+                                            </td>
+                                            <td>{{ data.region }}</td>
+                                            <td>{{ data.city }}</td>
+                                            <td>
+                                                <a href="#" @click.prevent="openMap(data.latitude, data.longitude)">Ver
+                                                    Mapa</a>
+                                            </td>
+                                            <td>{{ data.org }}</td>
+                                        </tr>
+                                    </tbody>
+                                </transition-group>
+                            </table>
+
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+                                        <a class="page-link" href="#" @click.prevent="goToPage(1)">
+                                            <i class="mdi mdi-arrow-bottom-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+                                        <a class="page-link" href="#"
+                                            @click.prevent="goToPage(currentPage - 1)">Anterior</a>
+                                    </li>
+                                    <li class="page-item" v-for="page in visiblePages" :key="page"
+                                        :class="{ 'disabled': page === null, 'active': page === currentPage }">
+                                        <a class="page-link" href="#"
+                                            @click.prevent="goToPage(page)">{{ page === null ? '...' : page }}</a>
+                                    </li>
+                                    <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+                                        <a class="page-link" href="#"
+                                            @click.prevent="goToPage(currentPage + 1)">Siguiente</a>
+                                    </li>
+                                    <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+                                        <a class="page-link" href="#" @click.prevent="goToPage(totalPages)">
+                                            <i class="mdi mdi-arrow-bottom-left"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </transition>
+
+                    <transition name="fade">
+                        <div class="card-body" v-if="loading">
+                            <div class="d-flex align-items-center">
+                                <strong>Cargando...</strong>
+                                <div class="spinner-border text-primary ms-auto" role="status" aria-hidden="true"></div>
+                            </div>
+                        </div>
+                    </transition>
+                </div>
+
+                <transition name="slide-fade">
+                    <div class="card" id="mapCard" v-if="mapCard">
+                        <div class="card-body text-center">
+                            <template v-if="isLoading">
+                                <div class="d-flex align-items-center">
+                                    <strong>Cargando...</strong>
+                                    <div class="spinner-border text-success ms-auto" role="status" aria-hidden="true"></div>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <Map :latitude="lat" :longitude="lng" />
+                            </template>
                         </div>
                     </div>
-                </div>
-                <div class="card" id="mapCard" v-if="mapCard">
-                    <div class="card-body text-center">
-                        <div class="d-flex align-items-center" v-if="isLoading">
-                            <strong>Cargando...</strong>
-                            <div class="spinner-border text-success ms-auto" role="status" aria-hidden="true"></div>
-                        </div>
-                        <Map :latitude="lat" :longitude="lng" v-else />
-                    </div>
-                </div>
+                </Transition>
             </div>
         </div>
     </div>
@@ -170,6 +204,33 @@ export default {
             const startIndex = (this.currentPage - 1) * this.pageSize
             const endIndex = startIndex + this.pageSize
             return this.responses.slice(startIndex, endIndex)
+        },
+        visiblePages() {
+            const surroundingPages = 2;
+            let pages = [];
+
+            pages.push(1);
+            pages.push(this.totalPages);
+
+            for (let i = this.currentPage - surroundingPages; i <= this.currentPage + surroundingPages; i++) {
+                if (i > 1 && i < this.totalPages) {
+                    pages.push(i);
+                }
+            }
+
+            pages = [...new Set(pages)].sort((a, b) => a - b);
+
+            const pagesWithEllipsis = [];
+            let previousPage = 0;
+            for (const page of pages) {
+                if (page - previousPage > 1) {
+                    pagesWithEllipsis.push(null);
+                }
+                pagesWithEllipsis.push(page);
+                previousPage = page;
+            }
+
+            return pagesWithEllipsis;
         }
     },
     methods: {
@@ -201,10 +262,17 @@ export default {
                     try {
                         const response = await axios.get(this.apiUrl, {
                             params: { ip: trimmedIp }
-                        })
-                        this.responses.push(response.data.data)
+                        });
+
+                        if (response.status === 200) {
+                            this.responses.push(response.data.data)
+                        } else {
+                            console.error(`Error al buscar la IP: ${trimmedIp}. Estado de la respuesta: ${response.status}`);
+                            this.showToast("Error al buscar la IP", { type: "error" });
+                        }
                     } catch (error) {
-                        console.error(`Error al buscar la IP: ${trimmedIp}`, error)
+                        console.error(`Error al buscar la IP: ${trimmedIp}`, error);
+                        this.showToast("Error al buscar la IP", { type: "error" });
                     }
                 } else {
                     console.error('Ingrese una dirección válida')

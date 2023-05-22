@@ -278,6 +278,10 @@ export default {
 
     },
 
+    beforeUnmount() {
+        clearInterval(this.updateInterval);
+    },
+
     computed: {
         languagePercentages() {
             const totalBytes = Object.values(this.languages).reduce((sum, value) => sum + value, 0);
@@ -385,10 +389,3 @@ export default {
     }
 };
 </script>
-
-<style>
-.logs-type {
-    border-left: solid 3px #8d8d8d !important;
-    padding: 20px 10px;
-}
-</style>

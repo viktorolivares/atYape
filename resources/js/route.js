@@ -18,10 +18,10 @@ import Login from "./components/modules/auth/login.vue";
 
 
 function verifyAcces(to, from, next) {
-    let authUser = JSON.parse(sessionStorage.getItem("authUser"));
+    let authUser = JSON.parse(localStorage.getItem("authUser"));
 
     if (authUser) {
-        let permissions = JSON.parse(sessionStorage.getItem("permissions"));
+        let permissions = JSON.parse(localStorage.getItem("permissions"));
         if (permissions.includes(to.name)) {
             next();
         } else {
@@ -189,7 +189,7 @@ const routes = [
         path: "/login",
         component: Login,
         beforeEnter: (to, from, next) => {
-            let authUser = JSON.parse(sessionStorage.getItem("authUser"));
+            let authUser = JSON.parse(localStorage.getItem("authUser"));
             if (authUser) {
                 next("/");
             } else {
