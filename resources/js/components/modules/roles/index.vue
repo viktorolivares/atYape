@@ -73,7 +73,7 @@
                         Roles
                     </div>
                     <div class="card-body" v-if="items.length > 0">
-                        <div class="table-responsive-sm">
+                        <div class="table-responsive">
                             <table class="table table-bordered table-centered table-hover table-sm">
                                 <thead>
                                     <tr>
@@ -118,7 +118,7 @@
                                 </transition-group>
                             </table>
                         </div>
-                        <nav class="">
+                        <nav class="mt-1">
                             <ul class="pagination pagination-rounded mb-0">
                                 <li class="page-item" :class="{ disabled: paginated.page === 1 }">
                                     <a class="page-link" href="#" @click.prevent="goToFirstPage()"

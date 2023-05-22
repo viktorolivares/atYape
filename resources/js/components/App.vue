@@ -1,12 +1,6 @@
 <template>
     <div>
-
-        <!-- ============================================================== -->
-        <!-- Start Page Content here -->
-        <!-- ============================================================== -->
-
         <Sidebar :route="route" :permissions="permissions" :user="authUser"></Sidebar>
-
         <div class="content-page">
             <div class="content">
                 <Navbar :route="route" :user="authUser" :permissions="permissions"></Navbar>
@@ -19,12 +13,7 @@
                 </div>
             </div>
         </div>
-
         <Footer></Footer>
-
-        <!-- ============================================================== -->
-        <!-- End Page content -->
-        <!-- ============================================================== -->
     </div>
 </template>
 

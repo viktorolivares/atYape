@@ -83,8 +83,8 @@
                     </div>
                     <div class="card-body" v-if="items.length > 0">
                         <div class="table-responsive-sm">
-                            <table class="table table-bordered table-centered table-hover table-sm">
-                                <thead>
+                            <table class="table table-centered table-hover table-sm">
+                                <thead class="table-light">
                                     <tr>
                                         <th>#</th>
                                         <th @click="toggleSort('firstname')">
@@ -160,7 +160,7 @@
                                 </transition-group>
                             </table>
                         </div>
-                        <nav class="">
+                        <nav class="mt-4">
                             <ul class="pagination pagination-rounded mb-0">
                                 <li class="page-item" :class="{ disabled: paginated.page === 1 }">
                                     <a class="page-link" href="#" @click.prevent="goToFirstPage()"

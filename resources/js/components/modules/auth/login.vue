@@ -19,7 +19,7 @@
                                     <h4 class="text-dark-50 text-center pb-3 fw-bold">Login</h4>
                                 </div>
 
-                                <form class="needs-validation" @submit.prevent="login" novalidate>
+                                <form class="needs-validation" @submit.prevent="performLogin" novalidate>
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input :class="['form-control', emailError ? 'is-invalid' : '']" v-model="email"
@@ -79,8 +79,9 @@
 
 <script>
 
-import axios from "axios";
 import toastMixin from "../mixins/toastMixin.js";
+import { mapActions } from 'vuex';
+
 
 export default {
 
@@ -102,58 +103,61 @@ export default {
 
     methods: {
 
-        async login() {
+        ...mapActions(['login']),
 
-            this.processing = true
+        async performLogin() {
+            this.processing = true;
+
+            const credentials = {
+                email: this.email,
+                password: this.password,
+                remember: this.remember,
+            };
 
             try {
-                const response = await axios.post("/api/login", {
-                    email: this.email,
-                    password: this.password,
-                    remember: this.remember,
+                const response = await this.login(credentials);
+
+
+                console.log(response)
+
+                this.getRolePermissions(response);
+                this.createActivityLog('connection', response.email);
+
+                var toastDuration = 2000;
+                this.processing = false;
+
+                this.showToast("¡Bienvenido!", {
+                    type: "success",
+                    duration: toastDuration,
+                    theme: 'colored',
                 });
 
-                if (response.status === 200) {
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, toastDuration);
 
-                    this.processing = false;
-                    this.getRolePermissions(response.data.authUser);
-
-                    var toastDuration = 2000;
-                    this.showToast("¡Bienvenido!", {
-                        type: "success",
-                        duration: toastDuration,
-                        theme: 'colored',
-                    });
-
-                    this.createActivityLog('connection', response.data.authUser.email)
-
-                    setTimeout(() => {
-                        window.location.href = "/";
-                    }, toastDuration);
-                }
             } catch (error) {
-                if (error.response && error.response.status === 422) {
-                    this.processing = false
 
-                    console.log(error.response)
+                if (error.response && error.response.status === 422) {
+                    this.processing = false;
+                    console.log(error.response);
 
                     this.showToast(error.response.data.message, {
-                        type: "error",
-                        position: "top-center",
+                        type: 'error',
+                        position: 'top-center',
                         theme: 'colored',
-
                     });
 
                     const errors = error.response.data.errors;
                     this.emailError = errors.email ? errors.email[0] : false;
                     this.passwordError = errors.password ? errors.password[0] : false;
-
                 } else {
                     console.error(error);
-                    this.processing = false
+                    this.processing = false;
                 }
             }
         },
+
 
         async getRolePermissions(authUser) {
             try {

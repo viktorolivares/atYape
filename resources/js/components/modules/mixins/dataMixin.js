@@ -72,7 +72,7 @@ export default {
         pagination: [],
         paginated: {
           page: 1,
-          perPage: 10,
+          perPage: 50,
           totalPages: 0,
           currentPage: 1,
           lastPage: 1,

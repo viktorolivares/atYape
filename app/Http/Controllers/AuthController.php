@@ -21,6 +21,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
 
             $user = Auth::user();
+            $this->setAuth($user);
 
             if ($user->state === 'active') {
                 return response()->json([
@@ -59,6 +60,20 @@ class AuthController extends Controller
     {
         Auth::logout();
 
+        $this->clearAuth();
+
         return response()->json(['message' => 'Logged out']);
+    }
+
+    private function setAuth($user)
+    {
+        session(['isAuthenticated' => true]);
+        session(['user' => $user]);
+    }
+
+    private function clearAuth()
+    {
+        session()->forget('isAuthenticated');
+        session()->forget('user');
     }
 }

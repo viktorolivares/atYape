@@ -15,6 +15,7 @@ import Dni from "./components/modules/dni/index.vue";
 import Ip from "./components/modules/ip/index.vue";
 import Logs from "./components/modules/logs/index.vue";
 import Login from "./components/modules/auth/login.vue";
+import Session from "./components/Session.vue";
 
 
 function verifyAcces(to, from, next) {
@@ -196,6 +197,11 @@ const routes = [
                 next();
             }
         },
+    },
+    {
+        path: "/sessions",
+        component: Session,
+        name: "session.index"
     },
     { path: "/:pathMatch(.*)*", component: NotFound },
 ];

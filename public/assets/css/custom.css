@@ -126,25 +126,32 @@ input:checked+.slider:before {
     max-height: calc(100vh - 500px);
 }
 
-.table-fixed-header {
-    position: relative;
-}
-
-.table-fixed-header>.table-responsive {
-    overflow-y: auto;
-    overflow-x: auto;
-    max-height: 600px;
-}
-
-.table-fixed-header thead {
+thead tr th {
     position: sticky;
     top: 0;
-    background-color: #f8f9fa;
     z-index: 1;
 }
 
-.table-fixed-header thead th {
-    border-bottom: 2px solid #ddd;
-  }
+.table-responsive-sm {
+    height: 500px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
 
+.table-responsive-sm::-webkit-scrollbar {
+    width: 12px;
+}
 
+.table-responsive-sm::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+.table-responsive-sm::-webkit-scrollbar-thumb {
+    background-color: #727cf5;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+
+.table-responsive-sm::-webkit-scrollbar-thumb:hover {
+    background-color: #0acf97;
+}

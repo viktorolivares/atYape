@@ -90,6 +90,7 @@
                                         <option :value="20">20</option>
                                         <option :value="50">50</option>
                                         <option :value="100">100</option>
+                                        <option :value="200">200</option>
                                     </select>
                                 </div>
                             </div>
@@ -105,9 +106,9 @@
                         </div>
                     </div>
                     <div class="card-body table-fixed-header" v-if="items.length > 0">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-centered table-hover table-sm">
-                                <thead >
+                        <div class="table-responsive-sm">
+                            <table class="table table-centered table-hover table-sm">
+                                <thead class="table-light">
                                     <tr>
                                         <th @click="toggleSort('description')">
                                             <span>Yape!</span>
@@ -176,7 +177,7 @@
                                 </transition-group>
                             </table>
                         </div>
-                        <nav class="">
+                        <nav class="mt-4">
                             <ul class="pagination pagination-rounded mb-0">
                                 <li class="page-item" :class="{ disabled: paginated.page === 1 }">
                                     <a class="page-link" href="#" @click.prevent="goToFirstPage()"
@@ -407,18 +408,3 @@ export default {
 };
 
 </script>
-
-<style type="text/css">
-thead tr th{
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background-color: #ffffff;
-}
-
-.table-responsive {
-  height: 500px;
-  overflow:scroll;
-}
-
-</style>

@@ -79,7 +79,7 @@
                         </router-link>
 
                         <!-- item-->
-                        <button type="button" @click.prevent="logout" class="dropdown-item notify-item">
+                        <button type="button" @click.prevent="performLogout" class="dropdown-item notify-item">
                             <i class="mdi mdi-logout me-1"></i>
                             <span>Logout</span>
                         </button>
@@ -100,6 +100,7 @@
 <script>
 
 import toastMixin from "../modules/mixins/toastMixin";
+import { mapActions } from 'vuex';
 
 export default {
 
@@ -108,14 +109,17 @@ export default {
     mixins: [toastMixin],
 
     methods: {
-        logout() {
+
+        ...mapActions(['logout']),
+
+        performLogout() {
 
             this.createActivityLog('disconnection', this.user.email)
 
-            axios.post('/api/logout')
-                .then(response => {
+            this.logout()
+                .then(() => {
 
-                    var toastDuration = 2000
+                    var toastDuration = 2000;
 
                     this.showToast("¡Hasta Pronto!", {
                         position: "top-center",
@@ -128,9 +132,8 @@ export default {
                     setTimeout(() => {
                         window.location.href = "/login";
                     }, toastDuration);
-
                 })
-                .catch(error => console.log(error))
+                .catch(error => console.log(error));
         },
 
         createActivityLog(type, email) {

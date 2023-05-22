@@ -183,7 +183,7 @@ export default {
             ips: '',
             responses: [],
             flagImages: {},
-            apiUrl: '/api/ip',
+            apiUrl: '/api/ip/query',
             isFetching: false,
             isLoading: false,
             loading: false,

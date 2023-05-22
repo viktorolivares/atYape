@@ -15,6 +15,8 @@ use App\Http\Controllers\IpController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\SessionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,7 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/', [AuthController::class, 'login']);
+Route::get('/sessions/list', [SessionController::class, 'index']);
 
 Route::group(['prefix' => 'api'], function () {
 
@@ -110,10 +113,13 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('/files/preloaded', [FileController::class, 'getPreloadedImages']);
 
         /*Consulta IP*/
-        Route::get('/ip', [IpController::class, 'ipConsult']);
+        Route::get('/ip/query', [IpController::class, 'ipConsult']);
 
         /*Domain*/
         Route::get('/domain/list', [DomainController::class, 'index']);
+
+
+
     });
 });
 
