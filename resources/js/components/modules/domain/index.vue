@@ -278,7 +278,7 @@ export default {
             showTable: false,
             currentPage: 1,
             pageSize: 5,
-            score: 70,
+            score: 0,
             credits: 0,
             loading: false
         }
@@ -305,17 +305,18 @@ export default {
                 return
             }
             const domainArray = this.domains.split('\n')
-            if (domainArray.length > 100) {
+            if (domainArray.length > 10) {
                 this.showToast("Por favor, introduce hasta 100 Dominios", {
                     type: "warning"
                 })
                 return
             }
-            this.responses = []
-            this.isFetching = true
-            this.fetchProgress = 0
-            this.showTable = false
+            this.responses = [];
+            this.isFetching = true;
+            this.fetchProgress = 0;
+            this.showTable = false;
             this.loading = true;
+            this.currentPage = 1;
 
             const totalDomains = domainArray.length;
             let completedDomains = 0;

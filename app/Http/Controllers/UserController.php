@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Services\ActivityLogService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Services\ActivityLogService;
 use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\User;
@@ -58,6 +58,12 @@ class UserController extends Controller
 
     public function updateState(Request $request, $id)
     {
+        if ($id == 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No tienes permiso para cambiar el estado de este usuario.',
+            ], Response::HTTP_FORBIDDEN);
+        }
 
         $user = User::find($id);
 
@@ -133,6 +139,13 @@ class UserController extends Controller
 
     public function updateUser(Request $request, $id)
     {
+        if ($id == 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No tienes permiso para modificar este usuario.',
+            ], Response::HTTP_FORBIDDEN);
+        }
+
         $user = User::find($id);
 
         if (!$user) {

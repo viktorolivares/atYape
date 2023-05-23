@@ -140,7 +140,7 @@
                                             &nbsp;
                                             <i class="mdi" :class="getSortIconClass('state')"></i>
                                         </th>
-                                        <th>Observaciones</th>
+                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <transition-group name="fade" tag="tbody" mode="in-out">
@@ -172,9 +172,17 @@
                                         </td>
                                         <td class="table-action text-center">
                                             <button type="button" class="btn action-icon" data-bs-toggle="modal"
+                                                data-bs-target="#transactionSaveModal" @click="openModalEdit(transaction)">
+                                                <i class="mdi mdi-lead-pencil"></i>
+                                            </button>
+                                            <button type="button" class="btn action-icon" data-bs-toggle="modal"
                                                 data-bs-target="#transactionDetailsModal"
                                                 @click="openModalDetails(transaction)" :title="transaction.details">
                                                 <i class="mdi mdi-eye-check"></i>
+                                            </button>
+                                            <button type="button" class="btn action-icon"
+                                                @click="deleteTransaction(transaction)">
+                                                <i class="mdi mdi-delete"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -264,9 +272,9 @@
                     <form @submit.prevent="saveTransaction">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="registerDate" class="form-label">Fecha de Registro</label>
-                                <input type="datetime-local" class="form-control" id="registerDate"
-                                    v-model="transactionData.registerDate" required>
+                                <label for="register_date" class="form-label">Fecha de Registro</label>
+                                <input type="datetime-local" class="form-control" id="register_date"
+                                    v-model="transactionData.register_date" required>
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Yape!</label>
@@ -302,7 +310,7 @@
 
 <script>
 
-import { format, subDays } from 'date-fns';
+import { format, subDays, parseISO } from 'date-fns';
 import dataMixin from "../mixins/dataMixin.js";
 import toastMixin from "../mixins/toastMixin.js";
 
@@ -324,7 +332,7 @@ export default {
                 perPage: 100,
             },
             transactionData: {
-                registerDate: '',
+                register_date: '',
                 description: '',
                 person: '',
                 amount: ''
@@ -404,10 +412,17 @@ export default {
 
         async updateDetails() {
             try {
+                if (!this.selectedTransaction.details) {
+                    console.log("No se ha ingresado ningún dato");
+                    this.closeModalDetails();
+                    return
+                }
+
                 await axios.put(`/api/transactions/${this.selectedTransaction.id}/details`, {
                     details: this.selectedTransaction.details,
                     id: this.user.id
                 });
+
                 this.showToast("Success, Actualizado!", {
                     type: "success"
                 });
@@ -465,13 +480,11 @@ export default {
 
         openModalTransaction() {
             this.transactionData = {
-                registerDate: '',
+                register_date: '',
                 description: '',
                 person: '',
                 amount: ''
             };
-
-            console.log('Open Modal')
 
             const modalElement = document.getElementById('transactionSaveModal');
             const modal = bootstrap.Modal.getInstance(modalElement);
@@ -490,7 +503,10 @@ export default {
 
         saveTransaction() {
 
-            axios.post('/api/transactions/save', this.transactionData)
+            const url = this.transactionData.id ? `/api/transactions/update/${this.transactionData.id}` : '/api/transactions/save';
+            const method = this.transactionData.id ? 'put' : 'post';
+
+            axios({ method, url, data: this.transactionData })
                 .then(response => {
                     console.log(response.data);
                     if (response.data.success === true) {
@@ -498,6 +514,7 @@ export default {
                             type: "success"
                         });
                         this.fetchData();
+                        this.transactionData = {};
                     }
                 })
                 .catch(error => {
@@ -505,6 +522,37 @@ export default {
                 });
 
             this.closeModalTransaction();
+        },
+
+        deleteTransaction(transaction) {
+            this.$swal({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#727cf5',
+                cancelButtonColor: '#fa5c7c',
+                confirmButtonText: '¡Sí, bórralo!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/transactions/delete/${transaction.id}`)
+                        .then(response => {
+                            this.fetchData();
+                            this.$swal('¡Eliminado!', 'La transacción ha sido eliminada.', 'success');
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            this.$swal('¡Error!', 'Hubo un problema al eliminar la transacción.', 'error');
+                        });
+                }
+            });
+        },
+
+        openModalEdit(transaction) {
+            this.transactionData = JSON.parse(JSON.stringify(transaction));
+            this.transactionData.register_date = format(new Date(this.transactionData.register_date), 'yyyy-MM-dd\'T\'HH:mm');
+
         },
 
     }

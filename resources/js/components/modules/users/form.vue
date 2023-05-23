@@ -108,7 +108,7 @@
                                         <label for="image" class="form-label">Selecciona una imagen</label>
                                         <div class="d-flex flex-wrap bg-dark-lighten">
                                             <span v-for="image in preloadedImages" :key="image.filename"
-                                                class="card mx-1 my-1 avatar-sm" style="cursor: pointer;"
+                                                class="card mx-1 my-1 avatar-md" style="cursor: pointer;"
                                                 :class="{ 'border border-success border-4': selectedImage && selectedImage.url === image.url }"
                                                 @click="selectedImage = image">
                                                 <img :src="image.url" class="card-img-top p-1" :alt="image.filename" />
@@ -307,5 +307,5 @@ export default {
         this.loadAllRoles();
         this.getPreloadedImages();
     },
-};
+}
 </script>

@@ -24,8 +24,8 @@ class TransactionController extends Controller
         $sortDirection = $request->sort_direction;
 
         if (empty($startDate) && empty($endDate)) {
-           $startDate = Carbon::now()->subDays(7)->format('Y-m-d H:i:s');
-           $endDate = Carbon::now()->format('Y-m-d H:i:s');
+            $startDate = Carbon::now()->subDays(7)->format('Y-m-d H:i:s');
+            $endDate = Carbon::now()->format('Y-m-d H:i:s');
         }
 
         $transactions = Transaction::whereBetween('created_at', [$startDate, $endDate])
@@ -65,7 +65,7 @@ class TransactionController extends Controller
         $description = $request->description;
         $person = $request->person;
         $amount = $request->amount;
-        $message = 'Yape!'." ".$person." ".'te envió un pago por S/'." ".$amount;
+        $message = 'Yape!' . " " . $person . " " . 'te envió un pago por S/' . " " . $amount;
 
         $data = [
             'register_date' => $registerDate,
@@ -144,8 +144,8 @@ class TransactionController extends Controller
         $sortDirection = $request->sort_direction;
 
         if (empty($startDate) && empty($endDate)) {
-           $startDate = Carbon::now()->subDays(7)->format('Y-m-d H:i:s');
-           $endDate = Carbon::now()->format('Y-m-d H:i:s');
+            $startDate = Carbon::now()->subDays(7)->format('Y-m-d H:i:s');
+            $endDate = Carbon::now()->format('Y-m-d H:i:s');
         }
 
         $transactions = Transaction::whereBetween('created_at', [$startDate, $endDate])
@@ -176,5 +176,52 @@ class TransactionController extends Controller
             'data' => $transactions,
             Response::HTTP_OK
         ]);
+    }
+
+    public function updateTransaction(Request $request)
+    {
+        $transactionId = $request->id;
+
+        $transaction = Transaction::findOrFail($transactionId);
+
+        $validator = Validator::make($request->all(), [
+            'description' => 'required',
+            'person' => 'required',
+            'amount' => 'required|numeric',
+            'register_date' => 'required|date',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->messages(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $transaction->description = $request->input('description');
+        $transaction->person = $request->input('person');
+        $transaction->amount = $request->input('amount');
+        $transaction->register_date = $request->input('register_date');
+        $transaction->updated_by = Auth::id();
+        $transaction->save();
+
+        return response()->json([
+            'success' => true,
+            'transaction' => $transaction,
+        ], Response::HTTP_OK);
+    }
+
+    public function deleteTransaction(Request $request)
+    {
+        $transactionId = $request->id;
+
+        $transaction = Transaction::findOrFail($transactionId);
+
+        $transaction->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Transacción eliminada correctamente.',
+        ], Response::HTTP_OK);
     }
 }

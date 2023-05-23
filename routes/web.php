@@ -86,6 +86,8 @@ Route::group(['prefix' => 'api'], function () {
             Route::put('/transactions/{id}/state', 'updateState');
             Route::put('/transactions/{id}/details', 'updateDetails');
             Route::post('/transactions/save', 'saveTransaction');
+            Route::put('/transactions/update/{id}', 'updateTransaction');
+            Route::delete('/transactions/delete/{id}', 'deleteTransaction');
             Route::get('/transactions/description/{description}', 'listByDescription');
         });
 

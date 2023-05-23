@@ -248,14 +248,17 @@ export default {
                 })
                 return
             }
-            this.responses = []
-            this.isFetching = true
-            this.loading = true
-            this.mapCard = false
-            this.fetchProgress = 0
-            this.showTable = false
-            const totalIps = ipArray.length
-            let completedIps = 0
+            this.responses = [];
+            this.isFetching = true;
+            this.loading = true;
+            this.mapCard = false;
+            this.fetchProgress = 0;
+            this.showTable = false;
+            this.currentPage = 1;
+
+            const totalIps = ipArray.length;
+            let completedIps = 0;
+            
             for (const ip of ipArray) {
                 const trimmedIp = ip.trim()
                 if (trimmedIp.length > 0 && this.isValidIp(trimmedIp)) {

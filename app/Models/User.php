@@ -12,7 +12,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
 
-
     protected $fillable = [
         'firstname',
         'lastname',
@@ -55,7 +54,6 @@ class User extends Authenticatable
             ->distinct();
     }
 
-
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
@@ -64,5 +62,20 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return "{$this->firstname} {$this->lastname}";
+    }
+
+    public function setFirstnameAttribute($value)
+    {
+        $this->attributes['firstname'] = strtoupper($value);
+    }
+
+    public function setLastnameAttribute($value)
+    {
+        $this->attributes['lastname'] = strtoupper($value);
+    }
+
+        public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
     }
 }

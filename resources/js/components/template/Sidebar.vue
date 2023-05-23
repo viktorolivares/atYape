@@ -157,7 +157,7 @@
                           </div>
                         </li>
                       </ul>
-                    <p class="mt-3">Desarrollado por PF-Online⚡</p>
+                    <p class="mt-3">Desarrollado por Prevención de Fraude [Online]⚡</p>
                 </div>
                 <!-- end Users online -->
                 <!-- End Sidebar -->

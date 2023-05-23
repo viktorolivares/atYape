@@ -57,7 +57,7 @@
             </div>
             <div class="col-md-1 d-grid gap-2">
                 <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
-                    <i class="mdi mdi-search-web"></i>
+                    <i class="uil-search"></i>
                 </button>
             </div>
             <div class="col-md-1 d-grid gap-2">
@@ -125,8 +125,8 @@
                                             <template v-if="getPermissions.includes('users.edit')">
                                                 <label class="switch" aria-label="Cambiar estado">
                                                     <input type="checkbox" :checked="user.state === 'active'"
-                                                        @change="toggleStatus(user)"
-                                                        aria-checked="user.state === 'active'" />
+                                                        @change="toggleStatus(user)" aria-checked="user.state === 'active'"
+                                                        :disabled="user.id === 1" />
                                                     <span class="slider round"></span>
                                                 </label>
                                             </template>

@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="col-md-1 d-grid gap-2">
-                <button type="submit" class="btn btn-sm btn-primary" aria-label="Buscar transacciones">
+                <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
                     <i class="uil-search"></i>
                 </button>
             </div>
@@ -259,6 +259,7 @@ export default {
             updateInterval: null,
         }
     },
+
     mounted() {
 
         this.fetchData();
@@ -269,6 +270,7 @@ export default {
         }, 5000);
 
     },
+
     beforeUnmount() {
         clearInterval(this.updateInterval);
     },
@@ -387,6 +389,13 @@ export default {
 
         async updateDetails() {
             try {
+
+                if (!this.selectedTransaction.details) {
+                    console.log("No se ha ingresado ningún dato");
+                    this.closeModal();
+                    return
+                }
+
                 await axios.put(`/api/transactions/${this.selectedTransaction.id}/details`, {
                     details: this.selectedTransaction.details,
                     id: this.user.id
@@ -404,7 +413,6 @@ export default {
                 console.error('Error al actualizar los detalles de la transacción:', error);
             }
         },
-
     }
 
 };

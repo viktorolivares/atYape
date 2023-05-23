@@ -49,7 +49,7 @@
             </div>
             <div class="col-md-1 d-grid gap-2">
                 <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
-                    <i class="mdi mdi-search-web"></i>
+                    <i class="uil-search"></i>
                 </button>
             </div>
             <div class="col-md-1 d-grid gap-2">

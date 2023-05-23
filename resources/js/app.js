@@ -10,6 +10,8 @@ import App from './components/App.vue';
 import Auth from './components/Auth.vue';
 import router from './route'
 import eventBus from './eventBus';
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -25,6 +27,7 @@ app.config.globalProperties.$eventBus = eventBus;
 
 app.component('app', App);
 app.component('auth', Auth);
+app.use(VueSweetalert2);
 app.use(router);
 
 app.mount('#app');
