@@ -226,6 +226,9 @@ export default {
                 state: '',
                 name: '',
             },
+            paginated: {
+                perPage: 10,
+            },
             getPermissions: JSON.parse(localStorage.getItem('permissions'))
         };
     },

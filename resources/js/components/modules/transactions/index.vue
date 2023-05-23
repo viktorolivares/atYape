@@ -19,7 +19,7 @@
         <!-- Formulario de filtro -->
         <form class="row g-1 mb-1" @submit.prevent="fetchData">
             <div class="col-md-2">
-                <div class="input-group">
+                <div class="input-group input-group-sm">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Estado</small>
                     </span>
@@ -31,8 +31,8 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="input-group">
+            <div class="col-md-2">
+                <div class="input-group input-group-sm">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Yape!</small>
                     </span>
@@ -64,9 +64,15 @@
                         aria-label="Filtrar por fecha de fin">
                 </div>
             </div>
-            <div class="col-md-1 d-grid gap-2">
-                <button type="submit" class="btn btn-sm btn-primary" aria-label="Buscar transacciones">
+            <div class="col-md-1 d-grid">
+                <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
                     <i class="uil-search"></i>
+                </button>
+            </div>
+            <div class="col-md-1 d-grid">
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#transactionSaveModal" @click.prevent="openModalTransaction">
+                    <i class=" uil-plus"></i>
                 </button>
             </div>
         </form>
@@ -85,12 +91,10 @@
                                     <select id="perPage" v-model="paginated.perPage" class="form-select form-select-sm"
                                         @change="changeItemsPerPage(paginated.perPage)"
                                         aria-label="Mostrar resultados por página">
-                                        <option :value="5">5</option>
                                         <option :value="10">10</option>
                                         <option :value="20">20</option>
                                         <option :value="50">50</option>
                                         <option :value="100">100</option>
-                                        <option :value="200">200</option>
                                     </select>
                                 </div>
                             </div>
@@ -168,8 +172,8 @@
                                         </td>
                                         <td class="table-action text-center">
                                             <button type="button" class="btn action-icon" data-bs-toggle="modal"
-                                                data-bs-target="#transactionModal" @click="openModal(transaction)"
-                                                :title="transaction.details" data-toggle="tooltip" data-placement="top">
+                                                data-bs-target="#transactionDetailsModal"
+                                                @click="openModalDetails(transaction)" :title="transaction.details">
                                                 <i class="mdi mdi-eye-check"></i>
                                             </button>
                                         </td>
@@ -225,26 +229,71 @@
             </div>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel"
+        <!-- Modal Details -->
+        <div class="modal fade" id="transactionDetailsModal" tabindex="-1" aria-labelledby="transactionDetailsModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="transactionModalLabel">Modificar Detalles de Transacción</h5>
+                    <div class="modal-header modal-colored-header bg-success">
+                        <h5 class="modal-title" id="transactionDetailsModalLabel">Detalles de Transacción</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="transactionDetails">Detalles de la Transacción:</label>
                             <textarea class="form-control" id="transactionDetails"
                                 v-model="selectedTransaction.details"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" @click="updateDetails(transaction)">Guardar</button>
+                        <button type="button" class="btn btn-success" @click="updateDetails(transaction)">Guardar</button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Transaction -->
+        <div class="modal fade" id="transactionSaveModal" tabindex="-1" aria-labelledby="transactionSaveModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-colored-header bg-primary">
+                        <h5 class="modal-title" id="transactionSaveModalLabel">Guardar Transacción</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form @submit.prevent="saveTransaction">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="registerDate" class="form-label">Fecha de Registro</label>
+                                <input type="datetime-local" class="form-control" id="registerDate"
+                                    v-model="transactionData.registerDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Yape!</label>
+                                <select id="description" v-model="transactionData.description" class="form-select">
+                                    <option :value="''" disabled>Seleccionar</option>
+                                    <option :value="'Business'">Business</option>
+                                    <option :value="'Mulfood'">Mulfood</option>
+                                    <option :value="'Televentas'">Televentas</option>
+                                    <option :value="'Teleservicios'">Teleservicios</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="person" class="form-label">Persona</label>
+                                <input type="text" class="form-control" id="person" v-model="transactionData.person"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="amount" class="form-label">Monto</label>
+                                <input type="number" class="form-control" id="amount" v-model="transactionData.amount"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -270,6 +319,15 @@ export default {
                 description: '',
                 state: '',
                 person: '',
+            },
+            paginated: {
+                perPage: 100,
+            },
+            transactionData: {
+                registerDate: '',
+                description: '',
+                person: '',
+                amount: ''
             },
             selectedTransaction: {},
             updateInterval: null,
@@ -354,7 +412,7 @@ export default {
                     type: "success"
                 });
 
-                this.closeModal();
+                this.closeModalDetails();
 
                 this.createActivityLog(`update-transaction-details: [Transaction: ${this.selectedTransaction.id}, Details: ${this.selectedTransaction.details}]`, this.user.email);
             } catch (error) {
@@ -372,7 +430,9 @@ export default {
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            this.showToast("Texto copiado al portapapeles: " + text);
+            this.showToast("Texto copiado: " + text, {
+                type: "info"
+            });
 
         },
 
@@ -382,7 +442,7 @@ export default {
         },
 
         createActivityLog(type, email) {
-            axios.post('/api/logs', { type: type, email: email })
+            axios.post('/api/logs/save', { type: type, email: email })
                 .then(response => {
                     console.log(response.data)
                 })
@@ -391,16 +451,60 @@ export default {
                 });
         },
 
-        openModal(transaction) {
+        openModalDetails(transaction) {
             this.selectedTransaction = JSON.parse(JSON.stringify(transaction));
         },
 
-        closeModal() {
-            const modalElement = document.getElementById('transactionModal');
+        closeModalDetails() {
+            const modalElement = document.getElementById('transactionDetailsModal');
             const modal = bootstrap.Modal.getInstance(modalElement);
             if (modal) {
                 modal.hide();
             }
+        },
+
+        openModalTransaction() {
+            this.transactionData = {
+                registerDate: '',
+                description: '',
+                person: '',
+                amount: ''
+            };
+
+            console.log('Open Modal')
+
+            const modalElement = document.getElementById('transactionSaveModal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+                modal.show();
+            }
+        },
+
+        closeModalTransaction() {
+            const modalElement = document.getElementById('transactionSaveModal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+                modal.hide();
+            }
+        },
+
+        saveTransaction() {
+
+            axios.post('/api/transactions/save', this.transactionData)
+                .then(response => {
+                    console.log(response.data);
+                    if (response.data.success === true) {
+                        this.showToast("Se guardó la transacción", {
+                            type: "success"
+                        });
+                        this.fetchData();
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+
+            this.closeModalTransaction();
         },
 
     }

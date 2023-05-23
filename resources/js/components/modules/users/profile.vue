@@ -190,6 +190,7 @@ export default {
 
                 const response = await axios.put('/api/users/profile', this.formData);
                 this.onUserUpdatedOrCreate(response.data);
+
                 this.getAuthUser();
 
             } catch (error) {

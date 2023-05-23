@@ -29,16 +29,12 @@ use App\Http\Controllers\SessionController;
 |
 */
 
-Route::post('/', [AuthController::class, 'login']);
-Route::get('/sessions/list', [SessionController::class, 'index']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::group(['prefix' => 'api'], function () {
 
-    Route::post('/login', [AuthController::class, 'login']);
-
     Route::group(['middleware' => ['auth']], function () {
-
-        Route::post('/logout', [AuthController::class, 'logout']);
 
         /*Funciones Extras*/
         Route::get('/refresh/auth', function () {
@@ -71,7 +67,7 @@ Route::group(['prefix' => 'api'], function () {
             Route::put('/users/{id}', 'updateUser');
             Route::get('/users/{id}', 'getUser');
             Route::get('/users/roles/permissions', 'getRolePermissions');
-            Route::post('/logs', 'logs');
+            Route::post('/logs/save', 'logs');
         });
 
         /*Roles*/
@@ -117,8 +113,6 @@ Route::group(['prefix' => 'api'], function () {
 
         /*Domain*/
         Route::get('/domain/list', [DomainController::class, 'index']);
-
-
 
     });
 });

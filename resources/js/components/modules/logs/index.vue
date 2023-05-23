@@ -23,7 +23,7 @@
                 <div class="card">
                     <div class="mt-3 mx-3">
                         <div class="row justify-content-between">
-                            <div class="col-2">
+                            <div class="col-3">
                                 <div class="input-group">
                                     <span class="input-group-text bg-primary border-primary text-white">
                                         <small>Mostrar</small>
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="card-body" v-if="items.length > 0">
-                        <div class="table-responsive">
+                        <div class="table-responsive-sm">
                             <table class="table table-centered table-hover table-sm">
                                 <thead class="table-light">
                                     <tr>
@@ -165,7 +165,7 @@
                                 </div>
                                 <div class="col-12 d-grid gap-2">
                                     <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
-                                        <i class="mdi mdi-search-web"></i>
+                                        <i class="uil-search"></i>
                                     </button>
                                 </div>
                             </form>
@@ -263,6 +263,9 @@ export default {
             apiUrl: "/api/logs/list",
             filter: {
                 email: '',
+            },
+            paginated: {
+                perPage: 20,
             },
         };
     },

@@ -21,7 +21,6 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
 
             $user = Auth::user();
-            $this->setAuth($user);
 
             if ($user->state === 'active') {
                 return response()->json([
@@ -29,7 +28,6 @@ class AuthController extends Controller
                     'authUser' => $user,
                 ]);
             } else {
-
                 throw ValidationException::withMessages([
                     'credentials' => ['El estado de tu cuenta no está activo.'],
                 ]);
@@ -42,38 +40,24 @@ class AuthController extends Controller
             if (!$request->has('email')) {
                 $errors['email'] = ['El campo de correo electrónico es requerido.'];
             }
-
             if (!$request->has('password')) {
                 $errors['password'] = ['El campo de contraseña es requerido.'];
             }
-
             throw ValidationException::withMessages([
                 'credentials' => ['Las credenciales proporcionadas son incorrectas.'],
             ]);
-
-
         }
 
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
 
-        $this->clearAuth();
+        return response()->json([
+            'code' => 204
+        ]);
 
-        return response()->json(['message' => 'Logged out']);
     }
 
-    private function setAuth($user)
-    {
-        session(['isAuthenticated' => true]);
-        session(['user' => $user]);
-    }
-
-    private function clearAuth()
-    {
-        session()->forget('isAuthenticated');
-        session()->forget('user');
-    }
 }

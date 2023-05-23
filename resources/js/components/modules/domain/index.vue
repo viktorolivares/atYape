@@ -176,75 +176,89 @@
                             <li class="list-group-item d-flex justify-content-between align-items-start">
                                 <div class="ms-2 me-auto">
                                     Puntajes de riesgo = 100 + Phishing o Malware: indica malware confirmado o actividad de
-                                    phishing en las últimas 24 a 48 horas.
+                                    phishing en las
+                                    últimas 24 a 48 horas.
                                 </div>
                                 <span class="badge bg-danger rounded-pill">100</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-start">
                                 <div class="ms-2 me-auto">
                                     Las URL sospechosas marcadas con Sospechoso indicarán dominios con una alta probabilidad
-                                    de
-                                    estar involucrados en un comportamiento abusivo.
-                                </div>
-                            </li>
-                        </ol>
-
-                    </div>
-
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="card-title">Categorías:</h6>
-                    </div>
-                    <div class="card-body">
-                        <ol class="list-group list-group-numbered shadow">
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Inseguro:</div>
-                                    Sospecha de dominio no es seguro debido a suplantación de identidad, malware, spam o
-                                    comportamiento abusivo.
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Sospechoso:</div>
-                                    Sospecha de URL maliciosa o se usa para phishing.
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Suplantación de identidad:</div>
-                                    URL asociada con un comportamiento de phishing malicioso.
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Malware:</div>
-                                    URL está asociada con malware o virus.
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Email temporal:</div>
-                                    URL actualmente estacionado con un aviso de venta.
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Spam:</div>
-                                    Dominio de URL asociado con correo electrónico SPAM o direcciones de correo electrónico
-                                    abusivas.
+                                    de estar
+                                    involucrados en un comportamiento abusivo.
                                 </div>
                             </li>
                         </ol>
                     </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-sm btn-primary float-end" data-bs-toggle="modal"
+                            data-bs-target="#modalCategory">
+                            <i class="uil-info-circle"></i>
+                            Categorías
+                        </button>
+                    </div>
                 </div>
+
+                <!-- Modal: Categorías -->
+                <div class="modal fade" id="modalCategory" tabindex="-1" role="dialog"
+                    aria-labelledby="modalCategoryLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header modal-colored-header bg-info">
+                                <h5 class="modal-title" id="modalCategoryLabel">Categorías</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <ol class="list-group list-group-numbered shadow">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Inseguro:</div>
+                                            Sospecha de dominio no es seguro debido a suplantación de identidad, malware,
+                                            spam o comportamiento
+                                            abusivo.
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Sospechoso:</div>
+                                            Sospecha de URL maliciosa o se usa para phishing.
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Suplantación de identidad:</div>
+                                            URL asociada con un comportamiento de phishing malicioso.
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Malware:</div>
+                                            URL está asociada con malware o virus.
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Email temporal:</div>
+                                            URL actualmente estacionado con un aviso de venta.
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Spam:</div>
+                                            Dominio de URL asociado con correo electrónico SPAM o direcciones de correo
+                                            electrónico abusivas.
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Modal: Categorías -->
             </div>
         </div>
     </div>
 </template>
-
 <script>
 
 import toastMixin from "../mixins/toastMixin.js"
@@ -391,6 +405,6 @@ export default {
                 (score >= 85 && score <= 100 ? '<span class="badge bg-danger">Very High</span> ' : '')
             );
         },
-    }
+    },
 }
 </script>

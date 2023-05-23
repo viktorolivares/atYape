@@ -19,7 +19,7 @@
         <!-- Formulario de filtro -->
         <form class="row g-1 mb-2" @submit.prevent="fetchData">
             <div class="col-md-3">
-                <div class="input-group">
+                <div class="input-group input-group-sm">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Estado</small>
                     </span>
@@ -70,7 +70,6 @@
                                     <select id="perPage" v-model="paginated.perPage" class="form-select form-select-sm"
                                         @change="changeItemsPerPage(paginated.perPage)"
                                         aria-label="Mostrar resultados por página">
-                                        <option :value="5">5</option>
                                         <option :value="10">10</option>
                                         <option :value="20">20</option>
                                         <option :value="50">50</option>
@@ -214,20 +213,19 @@
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="transactionModalLabel">Modificar Detalles de Transacción</h5>
+                    <div class="modal-header modal-colored-header bg-success">
+                        <h5 class="modal-title" id="transactionModalLabel">Detalles de Transacción</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="transactionDetails">Detalles de la Transacción:</label>
                             <textarea class="form-control" id="transactionDetails"
                                 v-model="selectedTransaction.details"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" @click="updateDetails(transaction)">Guardar</button>
+                        <button type="button" class="btn btn-success" @click="updateDetails(transaction)">Guardar</button>
                     </div>
                 </div>
             </div>
@@ -253,6 +251,9 @@ export default {
                 description: '',
                 state: '',
                 person: '',
+            },
+            paginated: {
+                perPage: 100,
             },
             selectedTransaction: {},
             updateInterval: null,
@@ -363,7 +364,7 @@ export default {
         },
 
         createActivityLog(type, email) {
-            axios.post('/api/logs', { type: type, email: email })
+            axios.post('/api/logs/save', { type: type, email: email })
                 .then(response => {
                     console.log(response.data)
                 })

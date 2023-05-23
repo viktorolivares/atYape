@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->enum('state', ['validated', 'pending'])->default('pending');
             $table->text('details')->nullable();
+            $table->timestamp('register_date');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
 

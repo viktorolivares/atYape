@@ -128,7 +128,6 @@
 
 
 <script>
-import axios from 'axios';
 import toastMixin from "../mixins/toastMixin.js";
 
 export default {
@@ -281,7 +280,6 @@ export default {
                 this.loadUserData();
             }
         },
-
 
     },
 

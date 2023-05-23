@@ -6,19 +6,17 @@
 
     <body class="{{ Auth::check() ? 'small' : 'authentication-bg' }}">
 
+    <div class="wrapper" id="app">
         @if(Auth::check())
-        <div class="wrapper" id="app">
             <app route="{{ route('basepath') }}" :user="{{ Auth::user()->load('file') }}"></app>
-        </div>
+
         @else
-        <div class="wrapper" id="app">
             <auth route="{{ route('basepath') }}"></auth>
-        </div>
         @endif
+    </div>
 
         @include('layouts.script')
 
     </body>
-
 
 </html>

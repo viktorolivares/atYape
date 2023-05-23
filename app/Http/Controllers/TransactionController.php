@@ -60,13 +60,15 @@ class TransactionController extends Controller
 
     public function saveTransaction(Request $request)
     {
+        $registerDate = $request->registerDate;
+        $transaction = Str::uuid()->toString();
         $description = $request->description;
         $person = $request->person;
         $amount = $request->amount;
-        $transaction = Str::uuid()->toString();
         $message = 'Yape!'." ".$person." ".'te envió un pago por S/'." ".$amount;
 
         $data = [
+            'register_date' => $registerDate,
             'description' => $description,
             'transaction' => $transaction,
             'message' => $message,

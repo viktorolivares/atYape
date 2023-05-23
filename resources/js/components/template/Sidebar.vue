@@ -141,16 +141,22 @@
                 </ul>
 
                 <!-- Users online -->
-                <div class="help-box text-white text-center mt-4">
+                <div class="help-box text-white text-center mt-3">
                     <img :src="route + '/assets/images/rocket.svg'" height="40" alt="Helper Icon Image">
                     <h5 class="mt-3">🔌Usuarios conectados</h5>
+                    <div v-if="isLoading" class="spinner-border text-light" role="status"></div>
                     <ul class="list-group text-start">
-                        <li v-if="isLoading" class="list-group-item text-muted">Cargando...</li>
-                        <li v-else v-for="user in connectedUsers" :key="user.id" class="list-group-item p-1">
-                            <span class="mdi mdi-checkbox-blank-circle text-success"></span>
-                            <span class="m-1">{{ user.id === this.user.id ? 'Tú' : user.name }}</span>
+                        <li v-for="user in connectedUsers" :key="user.id" class="list-group-item p-1">
+                          <div class="row align-items-center">
+                            <div class="col-1">
+                              <i class="mdi mdi-checkbox-blank-circle text-success"></i>
+                            </div>
+                            <div class="col-10">
+                              {{ user.id === this.user.id ? 'Tú' : user.name }}
+                            </div>
+                          </div>
                         </li>
-                    </ul>
+                      </ul>
                     <p class="mt-3">Desarrollado por PF-Online⚡</p>
                 </div>
                 <!-- end Users online -->

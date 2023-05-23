@@ -1,24 +1,23 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 /* Guest Component */
-import NotFound from "./components/NotFound.vue";
-import Transaction from "./components/modules/transactions/index.vue";
 import Description from "./components/modules/transactions/description.vue";
+import Transaction from "./components/modules/transactions/index.vue";
 import Dashboard from "./components/modules/dashboard/index.vue";
-import Domain from "./components/modules/domain/index.vue";
-import Users from "./components/modules/users/index.vue";
-import UserForm from "./components/modules/users/form.vue";
 import Profile from "./components/modules/users/profile.vue";
-import Roles from "./components/modules/roles/index.vue";
+import Domain from "./components/modules/domain/index.vue";
+import UserForm from "./components/modules/users/form.vue";
 import RoleForm from "./components/modules/roles/form.vue";
+import Users from "./components/modules/users/index.vue";
+import Roles from "./components/modules/roles/index.vue";
+import Login from "./components/modules/auth/login.vue";
+import Logs from "./components/modules/logs/index.vue";
 import Dni from "./components/modules/dni/index.vue";
 import Ip from "./components/modules/ip/index.vue";
-import Logs from "./components/modules/logs/index.vue";
-import Login from "./components/modules/auth/login.vue";
-import Session from "./components/Session.vue";
-
+import NotFound from "./components/NotFound.vue";
 
 function verifyAcces(to, from, next) {
+
     let authUser = JSON.parse(localStorage.getItem("authUser"));
 
     if (authUser) {
@@ -197,11 +196,6 @@ const routes = [
                 next();
             }
         },
-    },
-    {
-        path: "/sessions",
-        component: Session,
-        name: "session.index"
     },
     { path: "/:pathMatch(.*)*", component: NotFound },
 ];

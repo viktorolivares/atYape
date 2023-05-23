@@ -16,10 +16,10 @@
 
                             <div class="card-body p-3">
                                 <div class="text-center w-75 m-auto">
-                                    <h4 class="text-dark-50 text-center pb-3 fw-bold">Login</h4>
+                                    <h4 class="text-dark-50 text-center pb-3 fw-bold">Inicio de Sesión</h4>
                                 </div>
 
-                                <form class="needs-validation" @submit.prevent="performLogin" novalidate>
+                                <form class="needs-validation" @submit.prevent="login" novalidate>
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input :class="['form-control', emailError ? 'is-invalid' : '']" v-model="email"
@@ -58,7 +58,7 @@
 
                                     <div class="mb-3 mb-0 text-center">
                                         <button type="submit" :disabled="processing" class="btn btn-primary btn-block px-4">
-                                            {{ processing ? "Please wait" : "Login" }}
+                                            {{ processing ? "Espere por favor..." : "Login" }}
                                         </button>
                                     </div>
 
@@ -79,9 +79,8 @@
 
 <script>
 
+import axios from "axios";
 import toastMixin from "../mixins/toastMixin.js";
-import { mapActions } from 'vuex';
-
 
 export default {
 
@@ -103,61 +102,60 @@ export default {
 
     methods: {
 
-        ...mapActions(['login']),
+        async login() {
 
-        async performLogin() {
-            this.processing = true;
-
-            const credentials = {
-                email: this.email,
-                password: this.password,
-                remember: this.remember,
-            };
+            this.processing = true
 
             try {
-                const response = await this.login(credentials);
-
-
-                console.log(response)
-
-                this.getRolePermissions(response);
-                this.createActivityLog('connection', response.email);
-
-                var toastDuration = 2000;
-                this.processing = false;
-
-                this.showToast("¡Bienvenido!", {
-                    type: "success",
-                    duration: toastDuration,
-                    theme: 'colored',
+                const response = await axios.post("/login", {
+                    email: this.email,
+                    password: this.password,
+                    remember: this.remember,
                 });
 
-                setTimeout(() => {
-                    window.location.href = "/";
-                }, toastDuration);
+                if (response.status === 200) {
 
+                    const email = response.data.authUser.email
+                    const user = response.data.authUser
+
+                    this.getRolePermissions(user);
+                    this.createActivityLog('connection', email)
+
+                    var toastDuration = 2000;
+                    this.showToast("¡Bienvenido!", {
+                        type: "success",
+                        duration: toastDuration,
+                        theme: 'colored',
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = "/";
+                        this.processing = false;
+                    }, toastDuration);
+                }
             } catch (error) {
-
                 if (error.response && error.response.status === 422) {
-                    this.processing = false;
-                    console.log(error.response);
+                    this.processing = false
+
+                    console.log(error.response)
 
                     this.showToast(error.response.data.message, {
-                        type: 'error',
-                        position: 'top-center',
+                        type: "error",
+                        position: "top-center",
                         theme: 'colored',
+
                     });
 
                     const errors = error.response.data.errors;
                     this.emailError = errors.email ? errors.email[0] : false;
                     this.passwordError = errors.password ? errors.password[0] : false;
+
                 } else {
                     console.error(error);
-                    this.processing = false;
+                    this.processing = false
                 }
             }
         },
-
 
         async getRolePermissions(authUser) {
             try {
@@ -165,10 +163,8 @@ export default {
                     params: {
                         "userId": authUser.id
                     }
-                });
+                })
                 if (response.status === 200) {
-
-                    console.log(response.data)
                     localStorage.setItem('permissions', JSON.stringify(response.data));
                     localStorage.setItem('authUser', JSON.stringify(authUser))
                 }
@@ -182,7 +178,7 @@ export default {
         },
 
         createActivityLog(type, email) {
-            axios.post('/api/logs', { type: type, email: email })
+            axios.post('/api/logs/save', { type: type, email: email })
                 .then(response => {
                     console.log(response.data)
                 })

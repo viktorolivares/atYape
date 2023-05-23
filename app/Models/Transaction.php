@@ -17,6 +17,7 @@ class Transaction extends Model
         'amount',
         'state',
         'details',
+        'register_date',
         'created_by',
         'updated_by',
     ];

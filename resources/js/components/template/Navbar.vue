@@ -79,7 +79,7 @@
                         </router-link>
 
                         <!-- item-->
-                        <button type="button" @click.prevent="performLogout" class="dropdown-item notify-item">
+                        <button type="button" @click.prevent="logout" class="dropdown-item notify-item">
                             <i class="mdi mdi-logout me-1"></i>
                             <span>Logout</span>
                         </button>
@@ -100,7 +100,6 @@
 <script>
 
 import toastMixin from "../modules/mixins/toastMixin";
-import { mapActions } from 'vuex';
 
 export default {
 
@@ -110,34 +109,28 @@ export default {
 
     methods: {
 
-        ...mapActions(['logout']),
+        logout() {
+            const email = this.user.email;
+            this.createActivityLog('disconnection', email);
+            this.showToast("¡Hasta Pronto!", {
+                position: "top-center",
+                type : 'info'
+            });
 
-        performLogout() {
-
-            this.createActivityLog('disconnection', this.user.email)
-
-            this.logout()
-                .then(() => {
-
-                    var toastDuration = 2000;
-
-                    this.showToast("¡Hasta Pronto!", {
-                        position: "top-center",
-                        duration: toastDuration,
-                        type: "success"
-                    });
-
-                    localStorage.clear();
-
-                    setTimeout(() => {
-                        window.location.href = "/login";
-                    }, toastDuration);
-                })
-                .catch(error => console.log(error));
+            setTimeout(() => {
+                axios.post('/logout')
+                    .then(response => {
+                        if (response.data.code === 204) {
+                            window.location.href = "/login";
+                            localStorage.clear();
+                        }
+                    })
+                    .catch(error => console.log(error));
+            }, 2000);
         },
 
         createActivityLog(type, email) {
-            axios.post('/api/logs', { type: type, email: email })
+            axios.post('/api/logs/save', { type: type, email: email })
                 .then(response => {
                     console.log(response.data)
                 })

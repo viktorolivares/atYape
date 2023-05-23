@@ -10,7 +10,6 @@ import App from './components/App.vue';
 import Auth from './components/Auth.vue';
 import router from './route'
 import eventBus from './eventBus';
-import store from './store';
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -27,7 +26,6 @@ app.config.globalProperties.$eventBus = eventBus;
 app.component('app', App);
 app.component('auth', Auth);
 app.use(router);
-app.use(store);
 
 app.mount('#app');
 

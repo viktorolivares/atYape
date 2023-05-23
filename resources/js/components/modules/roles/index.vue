@@ -74,8 +74,8 @@
                     </div>
                     <div class="card-body" v-if="items.length > 0">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-centered table-hover table-sm">
-                                <thead>
+                            <table class="table table-centered table-hover table-sm">
+                                <thead class="table-light">
                                     <tr>
                                         <th>#</th>
                                         <th @click="toggleSort('name')">
@@ -184,6 +184,9 @@ export default {
             filter: {
                 name : '',
                 slug : ''
+            },
+            paginated: {
+                perPage: 10,
             },
             getPermissions: JSON.parse(localStorage.getItem('permissions'))
         };
