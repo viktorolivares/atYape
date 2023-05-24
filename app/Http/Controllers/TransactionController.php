@@ -60,7 +60,7 @@ class TransactionController extends Controller
 
     public function saveTransaction(Request $request)
     {
-        $registerDate = $request->registerDate;
+        $registerDate = $request->register_date;
         $transaction = Str::uuid()->toString();
         $description = $request->description;
         $person = $request->person;
@@ -74,6 +74,8 @@ class TransactionController extends Controller
             'message' => $message,
             'person' => $person,
             'amount' => $amount,
+            'state' => 'validated',
+            'system' => 'Web',
             'created_by' => Auth::id(),
             'updated_by' => Auth::id()
         ];
@@ -136,17 +138,13 @@ class TransactionController extends Controller
     public function listByDescription($description, Request $request)
     {
         $person = $request->person;
-        $startDate = $request->startDate;
-        $endDate = $request->endDate;
         $state = $request->state;
         $perPage = $request->perPage;
         $sortField = $request->sort_field;
         $sortDirection = $request->sort_direction;
 
-        if (empty($startDate) && empty($endDate)) {
-            $startDate = Carbon::now()->subDays(7)->format('Y-m-d H:i:s');
-            $endDate = Carbon::now()->format('Y-m-d H:i:s');
-        }
+        $startDate = Carbon::now()->subDays(2)->format('Y-m-d H:i:s');
+        $endDate = Carbon::now()->format('Y-m-d H:i:s');
 
         $transactions = Transaction::whereBetween('created_at', [$startDate, $endDate])
             ->when($description, function ($query, $description) {
@@ -178,11 +176,16 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function updateTransaction(Request $request)
+    public function updateTransaction(Request $request, $id)
     {
-        $transactionId = $request->id;
+        $transaction = Transaction::findOrFail($id);
 
-        $transaction = Transaction::findOrFail($transactionId);
+        if ($transaction->system === 'APK') {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se puede editar esta transacción',
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         $validator = Validator::make($request->all(), [
             'description' => 'required',
@@ -198,10 +201,10 @@ class TransactionController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $transaction->description = $request->input('description');
-        $transaction->person = $request->input('person');
-        $transaction->amount = $request->input('amount');
-        $transaction->register_date = $request->input('register_date');
+        $transaction->description = $request->description;
+        $transaction->person = $request->person;
+        $transaction->amount = $request->amount;
+        $transaction->register_date = $request->register_date;
         $transaction->updated_by = Auth::id();
         $transaction->save();
 
@@ -211,11 +214,16 @@ class TransactionController extends Controller
         ], Response::HTTP_OK);
     }
 
-    public function deleteTransaction(Request $request)
+    public function deleteTransaction(Request $request, $id)
     {
-        $transactionId = $request->id;
+        $transaction = Transaction::findOrFail($id);
 
-        $transaction = Transaction::findOrFail($transactionId);
+        if ($transaction->system === 'APK') {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se puede eliminar esta transacción',
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         $transaction->delete();
 
@@ -223,5 +231,31 @@ class TransactionController extends Controller
             'success' => true,
             'message' => 'Transacción eliminada correctamente.',
         ], Response::HTTP_OK);
+    }
+
+    public function searchPending(Request $request)
+    {
+        sleep(2);
+
+        try {
+            $request->validate([
+                'person' => 'required',
+                'amount' => 'required|numeric',
+                'register_date' => 'required|date',
+            ]);
+
+            $date = Carbon::parse($request->register_date);
+
+            $transactions = Transaction::where('state', 'pending')
+                ->where('description', $request->description)
+                ->where('person', $request->person)
+                ->where('amount', $request->amount)
+                ->whereDate('register_date', $date)
+                ->get();
+
+            return response()->json($transactions);
+        } catch (ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 422);
+        }
     }
 }

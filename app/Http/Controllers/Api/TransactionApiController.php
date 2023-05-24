@@ -32,6 +32,7 @@ class TransactionApiController extends Controller
             'message' => $message,
             'person' => $person,
             'amount' => $amount,
+            'system' => 'APK',
             'register_date' => now(),
             'created_by' => 1,
             'updated_by' => 1

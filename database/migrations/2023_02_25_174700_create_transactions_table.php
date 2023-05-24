@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('description');
             $table->string('transaction')->unique();
+            $table->string('description');
             $table->text('message');
             $table->text('person');
+            $table->text('system');
             $table->decimal('amount', 10, 2);
             $table->enum('state', ['validated', 'pending'])->default('pending');
             $table->text('details')->nullable();

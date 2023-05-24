@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PermissionController;
@@ -14,8 +13,6 @@ use App\Http\Controllers\LogsController;
 use App\Http\Controllers\IpController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-
-use App\Http\Controllers\SessionController;
 
 
 /*
@@ -88,6 +85,7 @@ Route::group(['prefix' => 'api'], function () {
             Route::post('/transactions/save', 'saveTransaction');
             Route::put('/transactions/update/{id}', 'updateTransaction');
             Route::delete('/transactions/delete/{id}', 'deleteTransaction');
+            Route::get('/transactions/pendings', 'searchPending');
             Route::get('/transactions/description/{description}', 'listByDescription');
         });
 

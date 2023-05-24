@@ -19,7 +19,21 @@
         <!-- Formulario de filtro -->
         <form class="row g-1 mb-2" @submit.prevent="fetchData">
             <div class="col-md-3">
-                <div class="input-group input-group-sm">
+                <div class="input-group">
+                    <span class="input-group-text bg-primary border-primary text-white">
+                        <small>Mostrar</small>
+                    </span>
+                    <select id="perPage" v-model="paginated.perPage" class="form-select form-select-sm"
+                        @change="changeItemsPerPage(paginated.perPage)" aria-label="Mostrar resultados por página">
+                        <option :value="10">10</option>
+                        <option :value="20">20</option>
+                        <option :value="50">50</option>
+                        <option :value="100">100</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Estado</small>
                     </span>
@@ -32,62 +46,33 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="input-group input-group-sm">
+                <div class="input-group">
                     <span class="input-group-text bg-primary border-primary text-white">
-                        <small>Desde</small>
+                        <small>Persona</small>
                     </span>
-                    <input type="datetime-local" class="form-control" id="startDate" v-model="filter.startDate"
-                        aria-label="Filtrar por fecha de inicio">
+                    <input type="text" class="form-control" v-model="filter.person" @input="fetchData"
+                        aria-label="Filtrar por persona">
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-text bg-primary border-primary text-white">
-                        <small>Hasta</small>
-                    </span>
-                    <input type="datetime-local" class="form-control" id="endDate" v-model="filter.endDate"
-                        aria-label="Filtrar por fecha de fin">
-                </div>
+            <div class="col-md-1 d-grid">
+                <button type="button" class="btn btn-sm btn-primary" @click.prevent="reset">
+                    <i class="mdi mdi-refresh"></i>
+                    Reset
+                </button>
             </div>
-            <div class="col-md-1 d-grid gap-2">
-                <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
+            <div class="col-md-1 d-grid">
+                <button type="button" @click.prevent="openModalPendings" class="btn btn-sm btn-warning"
+                    data-bs-toggle="modal" data-bs-target="#searchModal">
                     <i class="uil-search"></i>
+                    Pendientes
                 </button>
             </div>
         </form>
 
         <!-- Tabla de resultados -->
         <div class="row">
-            <div class="col-md-12 mt-1">
+            <div class="col-md-12">
                 <div class="card">
-                    <div class="mt-3 mx-3">
-                        <div class="row justify-content-between">
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <span class="input-group-text bg-primary border-primary text-white">
-                                        <small>Mostrar</small>
-                                    </span>
-                                    <select id="perPage" v-model="paginated.perPage" class="form-select form-select-sm"
-                                        @change="changeItemsPerPage(paginated.perPage)"
-                                        aria-label="Mostrar resultados por página">
-                                        <option :value="10">10</option>
-                                        <option :value="20">20</option>
-                                        <option :value="50">50</option>
-                                        <option :value="100">100</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text bg-primary border-primary text-white">
-                                        <small>Persona</small>
-                                    </span>
-                                    <input type="text" class="form-control" v-model="filter.person" @input="fetchData"
-                                        aria-label="Filtrar por persona">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="card-body" v-if="items.length > 0">
                         <div class="table-responsive-sm">
                             <table class="table table-centered table-hover table-sm">
@@ -119,7 +104,7 @@
                                             &nbsp;
                                             <i class="mdi" :class="getSortIconClass('state')"></i>
                                         </th>
-                                        <th>Observaciones</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <transition-group name="fade" tag="tbody" mode="in-out">
@@ -133,7 +118,7 @@
                                         </td>
                                         <td>{{ transaction.amount }}</td>
                                         <td>{{ transaction.formatted_date }}</td>
-                                        <td class="table-action text-center">
+                                        <td class="table-action">
                                             <button class="btn btn-sm"
                                                 :class="transaction.state === 'validated' ? 'btn-light text-muted' : 'btn-success'"
                                                 :disabled="transaction.state === 'validated'"
@@ -150,10 +135,10 @@
                                             </span>
                                         </td>
                                         <td class="table-action text-center">
-                                            <button type="button" class="btn action-icon" data-bs-toggle="modal"
+                                            <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
                                                 data-bs-target="#transactionModal" @click="openModal(transaction)"
                                                 :title="transaction.details">
-                                                <i class="mdi mdi-eye-check"></i>
+                                                <i class="mdi mdi-comment-text-outline"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -208,7 +193,7 @@
             </div>
         </div>
 
-        <!-- Modal -->
+        <!-- Modal Details-->
         <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -230,12 +215,83 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Pendientes -->
+        <div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header modal-colored-header bg-warning">
+                        <h5 class="modal-title">Buscar transacciones pendientes</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form @submit.prevent="searchPendingTransactions">
+                            <div class="mb-3">
+                                <label>Persona</label>
+                                <input v-model="searchPending.person" type="text"
+                                    :class="['form-control', errors.person ? 'is-invalid' : '']" />
+                                <span v-if="errors.person" class="invalid-feedback" role="alert">
+                                    {{ errors.person }}
+                                </span>
+                            </div>
+                            <div class="mb-3">
+                                <label>Monto</label>
+                                <input v-model="searchPending.amount" type="number"
+                                    :class="['form-control', errors.amount ? 'is-invalid' : '']" />
+                                <span v-if="errors.amount" class="invalid-feedback" role="alert">
+                                    {{ errors.amount }}
+                                </span>
+                            </div>
+                            <div class="mb-3">
+                                <label>Fecha</label>
+                                <input v-model="searchPending.register_date" type="date"
+                                    :class="['form-control', errors.register_date ? 'is-invalid' : '']" />
+                                <span v-if="errors.register_date" class="invalid-feedback" role="alert">
+                                    {{ errors.register_date }}
+                                </span>
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary d-grid btn-block">Buscar</button>
+                            </div>
+                        </form>
+                        <div class="mt-3">
+                            <div v-if="isLoading" class="d-flex align-items-center">
+                                <strong>Cargando...</strong>
+                                <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+                            </div>
+                            <div v-else>
+                                <table class="table table-striped table-sm table-nowrap table-centered">
+                                    <tbody>
+                                        <tr v-for="transaction in pendings">
+                                            <td>
+                                                <h5 class="font-15 mb-1 fw-normal">{{ transaction.person }}</h5>
+                                                <span class="text-muted font-13">{{ transaction.register_date }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-success fw-bold pe-2">S/ {{ transaction.amount }}</span>
+                                            </td>
+                                            <td class="table-action">
+                                                <button class="btn btn-sm"
+                                                    :class="transaction.state === 'validated' ? 'btn-light text-muted' : 'btn-success'"
+                                                    :disabled="transaction.state === 'validated'"
+                                                    @click="toggleStatus(transaction)">
+                                                    {{ transaction.state === 'validated' ? 'Validado' : 'Validar' }}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 
-import { format, subDays } from 'date-fns';
 import dataMixin from "../mixins/dataMixin.js";
 import toastMixin from "../mixins/toastMixin.js";
 
@@ -255,15 +311,27 @@ export default {
             paginated: {
                 perPage: 100,
             },
+            searchPending: {
+                person: '',
+                amount: '',
+                register_date: '',
+            },
             selectedTransaction: {},
             updateInterval: null,
+            pendings: {},
+            isLoading: false,
+            errors: {
+                person: '',
+                amount: '',
+                register_date: ''
+            }
+
         }
     },
 
     mounted() {
 
         this.fetchData();
-        this.setDefaultDates();
 
         this.updateInterval = setInterval(() => {
             this.fetchData();
@@ -304,25 +372,11 @@ export default {
 
         getFilterParams() {
             return {
-                startDate: this.filter.startDate,
-                endDate: this.filter.endDate,
                 person: this.filter.person,
                 state: this.filter.state,
                 page: this.paginated.page,
                 perPage: this.paginated.perPage,
             };
-        },
-
-        setDefaultDates() {
-
-            const endDate = new Date();
-            const startDate = subDays(endDate, 7);
-
-            endDate.setDate(endDate.getDate() + 1);
-            endDate.setHours(0, 0, 0, 0);
-
-            this.filter.startDate = format(startDate, 'yyyy-MM-dd hh:mm');
-            this.filter.endDate = format(endDate, 'yyyy-MM-dd HH:mm');
         },
 
         async toggleStatus(transaction) {
@@ -379,14 +433,6 @@ export default {
             this.selectedTransaction = JSON.parse(JSON.stringify(transaction));
         },
 
-        closeModal() {
-            const modalElement = document.getElementById('transactionModal');
-            const modal = bootstrap.Modal.getInstance(modalElement);
-            if (modal) {
-                modal.hide();
-            }
-        },
-
         async updateDetails() {
             try {
 
@@ -413,6 +459,80 @@ export default {
                 console.error('Error al actualizar los detalles de la transacción:', error);
             }
         },
+
+        reset() {
+            this.filter = {
+                state: '',
+                person: ''
+            };
+            this.fetchData();
+        },
+
+        searchPendingTransactions() {
+            this.isLoading = true;
+            this.errors = {};
+            axios.get('/api/transactions/pendings', {
+                params: {
+                    person: this.searchPending.person,
+                    amount: this.searchPending.amount,
+                    register_date: this.searchPending.register_date,
+                    description: this.description
+                }
+            })
+                .then(response => {
+
+                    this.pendings = response.data;
+
+                    if (this.pendings && this.pendings.length > 0) {
+                        this.showToast('Success', {
+                            type: "success",
+                            position: "top-center",
+                            theme: 'colored',
+                        });
+                    } else {
+                        this.showToast('No se encontraron resultados', {
+                            type: "error",
+                            position: "top-center",
+                            theme: 'colored',
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    if (error.response && error.response.status === 422) {
+                        this.isLoading = false
+
+                        this.showToast(error.response.data.message, {
+                            type: "error",
+                            position: "top-center",
+                            theme: 'colored',
+
+                        });
+
+                        const errors = error.response.data.errors;
+                        this.errors.person = errors.person ? errors.person[0] : false;
+                        this.errors.amount = errors.amount ? errors.amount[0] : false;
+                        this.errors.register_date = errors.register_date ? errors.register_date[0] : false;
+
+                        console.log(errors)
+
+                    } else {
+                        console.error(error);
+                        this.isLoading = false
+                    }
+                }).finally(() => {
+                    this.isLoading = false;
+                });
+        },
+
+        openModalPendings() {
+            this.searchPending = {
+                person: '',
+                amount: '',
+                register_date: '',
+            };
+            this.pendings = {}
+        }
     }
 
 };

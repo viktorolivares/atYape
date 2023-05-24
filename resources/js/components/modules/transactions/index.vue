@@ -17,65 +17,68 @@
         <!-- end page title -->
 
         <!-- Formulario de filtro -->
-        <form class="row g-1 mb-1" @submit.prevent="fetchData">
-            <div class="col-md-2">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-text bg-primary border-primary text-white">
-                        <small>Estado</small>
-                    </span>
-                    <select id="state" v-model="filter.state" class="form-select form-select-sm" @change="fetchData"
-                        aria-label="Filtrar por estado">
-                        <option :value="''">Todos</option>
-                        <option :value="'validated'">Validados</option>
-                        <option :value="'pending'">Pendientes</option>
-                    </select>
+        <div>
+            <form class="row g-1 mb-1" @submit.prevent="fetchData">
+                <div class="col-md-2">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-primary border-primary text-white">
+                            <small>Estado</small>
+                        </span>
+                        <select id="state" v-model="filter.state" class="form-select form-select-sm" @change="fetchData"
+                            aria-label="Filtrar por estado">
+                            <option :value="''">Todos</option>
+                            <option :value="'validated'">Validados</option>
+                            <option :value="'pending'">Pendientes</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-text bg-primary border-primary text-white">
-                        <small>Yape!</small>
-                    </span>
-                    <select id="description" v-model="filter.description" class="form-select form-select-sm"
-                        @change="fetchData" aria-label="Filtrar por Yape">
-                        <option :value="''">Todos</option>
-                        <option :value="'Business'">Business</option>
-                        <option :value="'Mulfood'">Mulfood</option>
-                        <option :value="'Televentas'">Televentas</option>
-                        <option :value="'Teleservicios'">Teleservicios</option>
-                    </select>
+                <div class="col-md-2">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-primary border-primary text-white">
+                            <small>Yape!</small>
+                        </span>
+                        <select id="description" v-model="filter.description" class="form-select form-select-sm"
+                            @change="fetchData" aria-label="Filtrar por Yape">
+                            <option :value="''">Todos</option>
+                            <option :value="'Business'">Business</option>
+                            <option :value="'Mulfood'">Mulfood</option>
+                            <option :value="'Televentas'">Televentas</option>
+                            <option :value="'Teleservicios'">Teleservicios</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-text bg-primary border-primary text-white">
-                        <small>Desde</small>
-                    </span>
-                    <input type="datetime-local" class="form-control" id="startDate" v-model="filter.startDate"
-                        aria-label="Filtrar por fecha de inicio">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-primary border-primary text-white">
+                            <small>Desde</small>
+                        </span>
+                        <input type="datetime-local" class="form-control" id="startDate" v-model="filter.startDate"
+                            aria-label="Filtrar por fecha de inicio">
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-text bg-primary border-primary text-white">
-                        <small>Hasta</small>
-                    </span>
-                    <input type="datetime-local" class="form-control" id="endDate" v-model="filter.endDate"
-                        aria-label="Filtrar por fecha de fin">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-primary border-primary text-white">
+                            <small>Hasta</small>
+                        </span>
+                        <input type="datetime-local" class="form-control" id="endDate" v-model="filter.endDate"
+                            aria-label="Filtrar por fecha de fin">
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-1 d-grid">
-                <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
-                    <i class="uil-search"></i>
-                </button>
-            </div>
-            <div class="col-md-1 d-grid">
-                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#transactionSaveModal" @click.prevent="openModalTransaction">
-                    <i class=" uil-plus"></i>
-                </button>
-            </div>
-        </form>
+                <div class="col-md-1 d-grid">
+                    <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
+                        <i class="uil-search"></i>
+                    </button>
+                </div>
+                <div class="col-md-1 d-grid">
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#transactionSaveModal" @click.prevent="openModalTransaction">
+                        <i class=" uil-plus"></i>
+                    </button>
+                </div>
+            </form>
+
+        </div>
 
         <!-- Tabla de resultados -->
         <div class="row">
@@ -140,7 +143,7 @@
                                             &nbsp;
                                             <i class="mdi" :class="getSortIconClass('state')"></i>
                                         </th>
-                                        <th>Acciones</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <transition-group name="fade" tag="tbody" mode="in-out">
@@ -170,20 +173,39 @@
                                                 <i class="mdi mdi-circle text-warning"></i> Pendiente
                                             </span>
                                         </td>
-                                        <td class="table-action text-center">
-                                            <button type="button" class="btn action-icon" data-bs-toggle="modal"
-                                                data-bs-target="#transactionSaveModal" @click="openModalEdit(transaction)">
-                                                <i class="mdi mdi-lead-pencil"></i>
-                                            </button>
-                                            <button type="button" class="btn action-icon" data-bs-toggle="modal"
+                                        <td class="table-action text-center" v-if="transaction.system == 'Web'">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    <i class="mdi mdi-menu"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#transactionSaveModal"
+                                                        @click="openModalEdit(transaction)">
+                                                        <i class="mdi mdi-lead-pencil"></i>
+                                                        Editar
+                                                    </a>
+                                                    <a type="button" class="dropdown-item"
+                                                        @click="deleteTransaction(transaction)">
+                                                        <i class="mdi mdi-delete"></i>
+                                                        Eliminar
+                                                    </a>
+                                                    <a type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#transactionDetailsModal"
+                                                        @click="openModalDetails(transaction)" :title="transaction.details">
+                                                        <i class="mdi mdi-comment-text-outline"></i>
+                                                        Detalles
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="table-action text-center" v-else>
+                                            <a type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
                                                 data-bs-target="#transactionDetailsModal"
                                                 @click="openModalDetails(transaction)" :title="transaction.details">
-                                                <i class="mdi mdi-eye-check"></i>
-                                            </button>
-                                            <button type="button" class="btn action-icon"
-                                                @click="deleteTransaction(transaction)">
-                                                <i class="mdi mdi-delete"></i>
-                                            </button>
+                                                <i class="mdi mdi-comment-text-outline"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 </transition-group>
@@ -278,7 +300,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Yape!</label>
-                                <select id="description" v-model="transactionData.description" class="form-select">
+                                <select id="description" v-model="transactionData.description" class="form-select" required>
                                     <option :value="''" disabled>Seleccionar</option>
                                     <option :value="'Business'">Business</option>
                                     <option :value="'Mulfood'">Mulfood</option>
@@ -305,6 +327,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -323,6 +346,8 @@ export default {
     data() {
         return {
             apiUrl: "/api/transactions/list",
+            selectedTransaction: {},
+            updateInterval: null,
             filter: {
                 description: '',
                 state: '',
@@ -335,10 +360,8 @@ export default {
                 register_date: '',
                 description: '',
                 person: '',
-                amount: ''
+                amount: '',
             },
-            selectedTransaction: {},
-            updateInterval: null,
         }
     },
 
@@ -470,14 +493,6 @@ export default {
             this.selectedTransaction = JSON.parse(JSON.stringify(transaction));
         },
 
-        closeModalDetails() {
-            const modalElement = document.getElementById('transactionDetailsModal');
-            const modal = bootstrap.Modal.getInstance(modalElement);
-            if (modal) {
-                modal.hide();
-            }
-        },
-
         openModalTransaction() {
             this.transactionData = {
                 register_date: '',
@@ -485,20 +500,6 @@ export default {
                 person: '',
                 amount: ''
             };
-
-            const modalElement = document.getElementById('transactionSaveModal');
-            const modal = bootstrap.Modal.getInstance(modalElement);
-            if (modal) {
-                modal.show();
-            }
-        },
-
-        closeModalTransaction() {
-            const modalElement = document.getElementById('transactionSaveModal');
-            const modal = bootstrap.Modal.getInstance(modalElement);
-            if (modal) {
-                modal.hide();
-            }
         },
 
         saveTransaction() {
@@ -552,11 +553,8 @@ export default {
         openModalEdit(transaction) {
             this.transactionData = JSON.parse(JSON.stringify(transaction));
             this.transactionData.register_date = format(new Date(this.transactionData.register_date), 'yyyy-MM-dd\'T\'HH:mm');
-
         },
-
     }
-
 };
 
 </script>

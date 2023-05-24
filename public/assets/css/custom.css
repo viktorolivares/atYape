@@ -140,6 +140,7 @@ thead tr th {
 
 .table-responsive-sm::-webkit-scrollbar {
     width: 12px;
+    height: 12px;
 }
 
 .table-responsive-sm::-webkit-scrollbar-track {

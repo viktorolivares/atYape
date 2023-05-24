@@ -4,81 +4,88 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-xxl-4 col-lg-5">
-                        <div class="card">
-                            <!-- Logo -->
-                            <div class="card-header pt-3 pb-3 text-center bg-dark">
-                                <a href="#">
-                                    <span>
-                                        <img :src="route + '/assets/images/logo_2.png'" alt="Login" height="40" />
-                                    </span>
-                                </a>
-                            </div>
-
-                            <div v-if="showCard">
-                                <div class="card-body">
-                                    <h5 class="card-title">Recuperación de contraseña</h5>
-                                    <p class="card-text">
-                                        Para recuperar tu contraseña, por favor comunícate con el administrador.
-                                    </p>
-                                    <p class="card-text">
-                                        Puedes enviar un correo electrónico o utilizar el medio de comunicación
-                                        proporcionado por el administrador.
-                                    </p>
-                                    <button class="btn btn-primary btn-sm float-end my-3" @click="showLoginForm">Volver</button>
-                                </div>
-                            </div>
-
-                            <div v-else class="card-body p-3">
-                                <div class="text-center w-75 m-auto">
-                                    <h4 class="text-dark-50 text-center pb-3 fw-bold">Inicio de Sesión</h4>
-                                </div>
-                                <form class="needs-validation" @submit.prevent="login" novalidate>
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input :class="['form-control', emailError ? 'is-invalid' : '']" v-model="email"
-                                            type="email" id="email" required autofocus />
-                                        <span v-if="emailError" class="invalid-feedback" role="alert">
-                                            {{ emailError }}
+                        <Transition name="slide-fade" mode="out-in">
+                            <div class="card" v-if="showCard">
+                                <!-- Logo -->
+                                <div class="card-header pt-3 pb-3 text-center bg-light">
+                                    <a href="#">
+                                        <span>
+                                            <img :src="route + '/assets/images/logo_1.png'" alt="Login" height="40" />
                                         </span>
-                                    </div>
-                                    <div class="mb-3">
-                                        <a href="#" class="text-primary float-end" @click.prevent="showCard = true">
-                                            <small>Olvidaste tu contraseña</small>
-                                        </a>
-
-                                        <label for="password" class="form-label">Password</label>
-                                        <div class="input-group input-group-merge">
-                                            <input :type="showPassword ? 'text' : 'password'" id="password"
-                                                v-model="password"
-                                                :class="['form-control', passwordError ? 'is-invalid' : '']" required />
-                                            <div class="input-group-text" @click="togglePasswordVisibility">
-                                                <span class="mdi" :class="showPassword ? 'mdi-eye-off' : 'mdi-eye'"></span>
-                                            </div>
-                                            <span v-if="passwordError" class="invalid-feedback" role="alert">
-                                                {{ passwordError }}
-                                            </span>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="mb-3 mb-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" v-model="remember"
-                                                id="remember" />
-                                            <label class="form-check-label" for="remember">Remember Me</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3 mb-0 text-center">
-                                        <button type="submit" :disabled="processing" class="btn btn-primary btn-block px-4">
-                                            {{ processing ? "Espere por favor..." : "Login" }}
+                                    </a>
+                                </div>
+                                <div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Recuperación de contraseña</h5>
+                                        <p class="card-text">
+                                            No te preocupes, a todos nos pasa.
+                                            Para recuperar tu contraseña, por favor comunícate con el administrador.
+                                        </p>
+                                        <button class="btn btn-primary btn-sm float-end my-3"
+                                            @click="showLoginForm">
+                                            <i class="mdi mdi-arrow-left"></i>
+                                            Volver
                                         </button>
                                     </div>
-
-                                </form>
+                                </div>
+                                <!-- End card-body -->
                             </div>
-                            <!-- End card-body -->
-                        </div>
+                            <div class="card" v-else>
+                                <!-- Logo -->
+                                <div class="card-header pt-3 pb-3 text-center bg-dark">
+                                    <a href="#">
+                                        <span>
+                                            <img :src="route + '/assets/images/logo_2.png'" alt="Login" height="40" />
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="text-center w-75 m-auto">
+                                        <h4 class="text-dark-50 text-center pb-3 fw-bold">Inicio de Sesión</h4>
+                                    </div>
+                                    <form class="needs-validation" @submit.prevent="login" novalidate>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input :class="['form-control', emailError ? 'is-invalid' : '']" v-model="email"
+                                                type="email" id="email" required autofocus />
+                                            <span v-if="emailError" class="invalid-feedback" role="alert">
+                                                {{ emailError }}
+                                            </span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <a href="#" class="text-primary float-end" @click.prevent="showCard = true">
+                                                <small>Olvidaste tu contraseña</small>
+                                            </a>
+
+                                            <label for="password" class="form-label">Password</label>
+                                            <div class="input-group input-group-merge">
+                                                <input :type="showPassword ? 'text' : 'password'" id="password"
+                                                    v-model="password"
+                                                    :class="['form-control', passwordError ? 'is-invalid' : '']" required />
+                                                <div class="input-group-text" @click="togglePasswordVisibility">
+                                                    <span class="mdi" :class="showPassword ? 'mdi-eye-off' : 'mdi-eye'"></span>
+                                                </div>
+                                                <span v-if="passwordError" class="invalid-feedback" role="alert">
+                                                    {{ passwordError }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" v-model="remember"
+                                                    id="remember" />
+                                                <label class="form-check-label" for="remember">Remember Me</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 mb-0 text-center">
+                                            <button type="submit" :disabled="processing" class="btn btn-primary btn-block px-4">
+                                                {{ processing ? "Espere por favor..." : "Login" }}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </transition>
                         <!-- End card -->
                     </div>
                     <!-- End col -->

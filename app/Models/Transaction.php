@@ -16,6 +16,7 @@ class Transaction extends Model
         'transaction',
         'message',
         'person',
+        'system',
         'amount',
         'state',
         'details',
@@ -48,5 +49,5 @@ class Transaction extends Model
     {
         $this->attributes['message'] = strtoupper($value);
     }
-    
+
 }
