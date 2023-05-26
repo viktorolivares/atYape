@@ -27,7 +27,7 @@ export default {
             setTimeout(() => {
                 axios.post('/logout')
                     .then(response => {
-                        if (response.data.code === 204) {
+                        if (response.data.success === true) {
                             window.location.href = "/logout";
                             localStorage.clear();
                         }

@@ -64,7 +64,6 @@ Route::group(['prefix' => 'api'], function () {
             Route::put('/users/{id}', 'updateUser');
             Route::get('/users/{id}', 'getUser');
             Route::get('/users/roles/permissions', 'getRolePermissions');
-            Route::post('/logs/save', 'logs');
         });
 
         /*Roles*/
@@ -91,15 +90,16 @@ Route::group(['prefix' => 'api'], function () {
 
         /*DNI Deceased + Minors*/
         Route::controller(DeceasedController::class)->group(function () {
-            Route::get('/deceased', 'index');
-            Route::post('/query-deceased', 'getDni');
-            Route::get('/captcha', 'getCaptcha');
+            Route::get('/dni/query', 'getDni');
+            Route::post('/dni/minors-deceased', 'getMinorsDeceased');
+            Route::post('/dni/cookies-captcha', 'getCookiesCaptcha');
         });
 
         /*Logs*/
         Route::controller(LogsController::class)->group(function () {
             Route::get('/logs/list', 'index');
             Route::get('/logs/github', 'github');
+            Route::post('/logs/save', 'logs');
         });
 
         /*Permisos*/

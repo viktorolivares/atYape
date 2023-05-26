@@ -4,14 +4,12 @@ namespace App\Http\Services;
 
 
 
-class Deceased
+class MinorsDeceased
 {
 
     public static function search($dni, $captcha, $cookie)
     {
-
         if (!$captcha || !$dni) {
-
             return [
                 "success" => false,
                 "msg" => "Debe ingresar el captcha y el DNI."
@@ -25,15 +23,12 @@ class Deceased
             ];
         }
 
-
         if (!$cookie) {
-
             return [
                 "success" => false,
                 "msg" => 'Actualizar la página'
             ];
         }
-
 
         $url = 'https://serviciosbiometricos.reniec.gob.pe/appConsultaHuellas/consultar';
 
@@ -62,4 +57,5 @@ class Deceased
         return $result;
 
     }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class AuthController extends Controller
                 return response()->json([
                     'success' => true,
                     'authUser' => $user,
-                ]);
+                ], Response::HTTP_OK);
             } else {
                 throw ValidationException::withMessages([
                     'credentials' => ['El estado de tu cuenta no está activo.'],
@@ -55,8 +56,8 @@ class AuthController extends Controller
         Auth::logout();
 
         return response()->json([
-            'code' => 204
-        ]);
+            'success' => true
+        ], Response::HTTP_NO_CONTENT);
 
     }
 

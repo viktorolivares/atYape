@@ -11,6 +11,13 @@ use Carbon\Carbon;
 class LogsController extends Controller
 {
 
+    protected $activityLogService;
+
+    public function __construct(ActivityLogService $activityLogService)
+    {
+        $this->activityLogService = $activityLogService;
+    }
+    
     public function index(Request $request)
     {
 
@@ -60,4 +67,21 @@ class LogsController extends Controller
             'changes' => $changes
         ]);
     }
+
+    public function logs(Request $request)
+    {
+        $email = $request->email;
+        $type = $request->type;
+        $ip = $request->ip();
+
+        $this->activityLogService->createLog($type, $email, $ip);
+
+        return response()->json([
+            'success' => true,
+            'data' => $email,
+
+        ], Response::HTTP_CREATED);
+    }
+
+
 }

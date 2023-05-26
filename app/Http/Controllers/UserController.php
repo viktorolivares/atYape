@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Services\ActivityLogService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -15,13 +14,6 @@ use DB;
 
 class UserController extends Controller
 {
-
-    protected $activityLogService;
-
-    public function __construct(ActivityLogService $activityLogService)
-    {
-        $this->activityLogService = $activityLogService;
-    }
 
     public function index(Request $request)
     {
@@ -212,61 +204,57 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
+        $user = User::find(Auth::id());
 
-        if ($request->ajax()) {
-
-            $user = User::find(Auth::id());
-
-            if (!$user) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Usuario no encontrado',
-                ], Response::HTTP_NOT_FOUND);
-            }
-
-            $validatedData = $request->validate([
-                'firstname' => 'required|string|max:255',
-                'lastname' => 'required|string|max:255',
-                'password' => 'sometimes|string|min:8|confirmed',
-                'selected_image' => 'nullable|string',
-            ]);
-
-            $user->firstname = $validatedData['firstname'];
-            $user->lastname = $validatedData['lastname'];
-
-            if (!empty($validatedData['password'])) {
-                $user->password = Hash::make($validatedData['password']);
-            }
-
-
-            $file = null;
-
-            if ($request->has('selected_image')) {
-                if ($user->file_id) {
-                    $file = $user->file;
-                    $file->path = 'images/users/' . $request->selected_image;
-                    $file->filename = $request->selected_image;
-                    $file->save();
-                } else {
-                    $file = $this->saveSelectedImage($request->selected_image);
-                }
-            }
-
-
-            DB::transaction(function () use ($user, $file) {
-                $user->update();
-
-                if ($file) {
-                    $user->file_id = $file->id;
-                    $user->update();
-                }
-            });
-
+        if (!$user) {
             return response()->json([
-                'success' => true,
-                'data' => $user,
-            ], Response::HTTP_CREATED);
+                'success' => false,
+                'message' => 'Usuario no encontrado',
+            ], Response::HTTP_NOT_FOUND);
         }
+
+        $validatedData = $request->validate([
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'password' => 'sometimes|string|min:8|confirmed',
+            'selected_image' => 'nullable|string',
+        ]);
+
+        $user->firstname = $validatedData['firstname'];
+        $user->lastname = $validatedData['lastname'];
+
+        if (!empty($validatedData['password'])) {
+            $user->password = Hash::make($validatedData['password']);
+        }
+
+
+        $file = null;
+
+        if ($request->has('selected_image')) {
+            if ($user->file_id) {
+                $file = $user->file;
+                $file->path = 'images/users/' . $request->selected_image;
+                $file->filename = $request->selected_image;
+                $file->save();
+            } else {
+                $file = $this->saveSelectedImage($request->selected_image);
+            }
+        }
+
+
+        DB::transaction(function () use ($user, $file) {
+            $user->update();
+
+            if ($file) {
+                $user->file_id = $file->id;
+                $user->update();
+            }
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $user,
+        ], Response::HTTP_CREATED);
     }
 
     public function getUser($id)
@@ -312,21 +300,6 @@ class UserController extends Controller
 
             return response()->json($user);
         }
-    }
-
-    public function logs(Request $request)
-    {
-        $email = $request->email;
-        $type = $request->type;
-        $ip = $request->ip();
-
-        $this->activityLogService->createLog($type, $email, $ip);
-
-        return response()->json([
-            'success' => true,
-            'data' => $email,
-
-        ], Response::HTTP_CREATED);
     }
 
 }

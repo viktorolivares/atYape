@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
-use App\Events\NewTransactionSaved;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Transaction;
@@ -59,9 +58,6 @@ class TransactionApiController extends Controller
         $transactions = new Transaction();
         $transactions->fill($data);
         $transactions->save();
-
-        // Fire the event when a new transaction is saved
-        // event(new NewTransactionSaved($transactions));
 
         return response()->json([
             'success' => true,
