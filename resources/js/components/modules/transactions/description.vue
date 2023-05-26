@@ -23,7 +23,7 @@
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Mostrar</small>
                     </span>
-                    <select id="perPage" v-model="paginated.perPage" class="form-select form-select-sm"
+                    <select id="perPage" v-model="paginated.perPage" class="form-select"
                         @change="changeItemsPerPage(paginated.perPage)" aria-label="Mostrar resultados por página">
                         <option :value="10">10</option>
                         <option :value="20">20</option>
@@ -37,7 +37,7 @@
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Estado</small>
                     </span>
-                    <select id="state" v-model="filter.state" class="form-select form-select-sm" @change="fetchData"
+                    <select id="state" v-model="filter.state" class="form-select" @change="fetchData"
                         aria-label="Filtrar por estado">
                         <option :value="''">Todos</option>
                         <option :value="'validated'">Validados</option>
@@ -54,17 +54,17 @@
                         aria-label="Filtrar por persona">
                 </div>
             </div>
-            <div class="col-md-1 d-grid">
-                <button type="button" class="btn btn-sm btn-primary" @click.prevent="reset">
+            <div class="col-md-1 d-sm-grid">
+                <button type="button" class="btn btn-primary d-block" @click.prevent="reset">
                     <i class="mdi mdi-refresh"></i>
                     Reset
                 </button>
             </div>
-            <div class="col-md-1 d-grid">
-                <button type="button" @click.prevent="openModalPendings" class="btn btn-sm btn-warning"
+            <div class="col-md-1 d-sm-grid">
+                <button type="button" @click.prevent="openModalPendings" class="btn btn-warning d-block"
                     data-bs-toggle="modal" data-bs-target="#searchModal">
                     <i class="uil-search"></i>
-                    Pendientes
+                    Pdtes
                 </button>
             </div>
         </form>
@@ -259,18 +259,18 @@
                                 <strong>Cargando...</strong>
                                 <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
                             </div>
-                            <div v-else>
-                                <table class="table table-striped table-sm table-nowrap table-centered">
+                            <div class="table-pendings" v-else>
+                                <table class="table table-active table-sm table-nowrap table-centered">
                                     <tbody>
                                         <tr v-for="transaction in pendings">
                                             <td>
-                                                <h5 class="font-15 mb-1 fw-normal">{{ transaction.person }}</h5>
-                                                <span class="text-muted font-13">{{ transaction.register_date }}</span>
+                                                <h5 class="font-13 mb-1 fw-normal">{{ transaction.person }}</h5>
+                                                <span class="text-muted font-12">{{ transaction.register_date }}</span>
                                             </td>
                                             <td>
-                                                <span class="text-success fw-bold pe-2">S/ {{ transaction.amount }}</span>
+                                                <span class="text-success font-15 fw-bold pe-2">S/ {{ transaction.amount }}</span>
                                             </td>
-                                            <td class="table-action">
+                                            <td class="table-action text-center">
                                                 <button class="btn btn-sm"
                                                     :class="transaction.state === 'validated' ? 'btn-light text-muted' : 'btn-success'"
                                                     :disabled="transaction.state === 'validated'"
@@ -537,3 +537,10 @@ export default {
 
 };
 </script>
+
+<style>
+.table-pendings {
+    max-height: 250px; /* Establece la altura máxima deseada */
+    overflow-y: auto; /* Agrega un desbordamiento vertical */
+}
+</style>

@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Timer :user="authUser"></Timer>
         <Sidebar :route="route" :permissions="permissions" :user="authUser"></Sidebar>
         <div class="content-page">
             <div class="content">
@@ -21,11 +22,12 @@
 import Navbar from './template/Navbar.vue';
 import Footer from './template/Footer.vue';
 import Sidebar from './template/Sidebar.vue';
+import Timer from './ActivityTimer.vue';
 
 export default {
     name: "App",
     props: ['route', 'user'],
-    components: { Navbar, Footer, Sidebar },
+    components: { Navbar, Footer, Sidebar, Timer },
 
     data() {
         return {

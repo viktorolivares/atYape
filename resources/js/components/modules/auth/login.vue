@@ -1,43 +1,36 @@
 <template>
     <div>
-        <div class="account-pages pt-2 pt-sm-5 pb-2 pb-sm-5">
+        <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-xxl-4 col-lg-5">
                         <Transition name="slide-fade" mode="out-in">
                             <div class="card" v-if="showCard">
-                                <!-- Logo -->
-                                <div class="card-header pt-3 pb-3 text-center bg-light">
-                                    <a href="#">
-                                        <span>
-                                            <img :src="route + '/assets/images/logo_1.png'" alt="Login" height="40" />
-                                        </span>
-                                    </a>
-                                </div>
-                                <div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">Recuperación de contraseña</h5>
-                                        <p class="card-text">
-                                            No te preocupes, a todos nos pasa.
-                                            Para recuperar tu contraseña, por favor comunícate con el administrador.
-                                        </p>
-                                        <button class="btn btn-primary btn-sm float-end my-3"
-                                            @click="showLoginForm">
-                                            <i class="mdi mdi-arrow-left"></i>
-                                            Volver
-                                        </button>
+                                <div class="row g-0 align-items-center">
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Recuperación de contraseña</h4>
+                                            <p class="card-text font-12">No te preocupes, a todos nos pasa.
+                                                Para recuperar tu contraseña, por favor comunícate con el administrador.</p>
+                                            <button class="btn btn-primary btn-sm my-2 scale-up-center"
+                                                @click="showLoginForm">
+                                                <i class="mdi mdi-arrow-left"></i>
+                                                Volver
+                                            </button>
+                                            <p class="card-text text-muted font-10 mt-2">
+                                                Equipo de Prevención de Fraude
+                                            </p>
+                                        </div> <!-- end card-body-->
+                                    </div> <!-- end col -->
+                                    <div class="col-md-4">
+                                        <img :src="route + '/assets/images/at.jpg'" class="card-img" alt="Login" />
                                     </div>
-                                </div>
-                                <!-- End card-body -->
-                            </div>
+                                </div> <!-- end row-->
+                            </div> <!-- end card-->
                             <div class="card" v-else>
                                 <!-- Logo -->
                                 <div class="card-header pt-3 pb-3 text-center bg-dark">
-                                    <a href="#">
-                                        <span>
-                                            <img :src="route + '/assets/images/logo_2.png'" alt="Login" height="40" />
-                                        </span>
-                                    </a>
+                                    <img :src="route + '/assets/images/logo_2.png'" alt="Login" height="40" />
                                 </div>
                                 <div class="card-body p-3">
                                     <div class="text-center w-75 m-auto">
@@ -57,13 +50,14 @@
                                                 <small>Olvidaste tu contraseña</small>
                                             </a>
 
-                                            <label for="password" class="form-label">Password</label>
+                                            <label for="password" class="form-label">Contraseña</label>
                                             <div class="input-group input-group-merge">
                                                 <input :type="showPassword ? 'text' : 'password'" id="password"
                                                     v-model="password"
                                                     :class="['form-control', passwordError ? 'is-invalid' : '']" required />
                                                 <div class="input-group-text" @click="togglePasswordVisibility">
-                                                    <span class="mdi" :class="showPassword ? 'mdi-eye-off' : 'mdi-eye'"></span>
+                                                    <span class="mdi"
+                                                        :class="showPassword ? 'mdi-eye-off' : 'mdi-eye'"></span>
                                                 </div>
                                                 <span v-if="passwordError" class="invalid-feedback" role="alert">
                                                     {{ passwordError }}
@@ -74,11 +68,12 @@
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" v-model="remember"
                                                     id="remember" />
-                                                <label class="form-check-label" for="remember">Remember Me</label>
+                                                <label class="form-check-label" for="remember">Recuérdame</label>
                                             </div>
                                         </div>
                                         <div class="mb-3 mb-0 text-center">
-                                            <button type="submit" :disabled="processing" class="btn btn-primary btn-block px-4">
+                                            <button type="submit" :disabled="processing"
+                                                class="btn btn-primary btn-block px-4">
                                                 {{ processing ? "Espere por favor..." : "Login" }}
                                             </button>
                                         </div>
@@ -94,12 +89,15 @@
             </div>
             <!-- End container -->
         </div>
+
+        <!-- end page -->
+        <footer class="footer footer-alt">
+            2023 © AT - apuestatotal.com
+        </footer>
     </div>
 </template>
-
 <script>
 
-import axios from "axios";
 import toastMixin from "../mixins/toastMixin.js";
 
 export default {
@@ -124,16 +122,13 @@ export default {
     methods: {
 
         async login() {
-
             this.processing = true
-
             try {
                 const response = await axios.post("/login", {
                     email: this.email,
                     password: this.password,
                     remember: this.remember,
                 });
-
                 if (response.status === 200) {
 
                     const email = response.data.authUser.email
@@ -211,9 +206,7 @@ export default {
         showLoginForm() {
             this.showCard = false;
         }
-
     },
-
 };
 
 </script>

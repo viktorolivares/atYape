@@ -23,7 +23,7 @@
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Mostrar</small>
                     </span>
-                    <select id="perPage" v-model="paginated.perPage" class="form-select form-select-sm"
+                    <select id="perPage" v-model="paginated.perPage" class="form-select"
                         @change="changeItemsPerPage(paginated.perPage)" aria-label="Mostrar resultados por página">
                         <option :value="5">5</option>
                         <option :value="10">10</option>
@@ -38,7 +38,7 @@
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Estado</small>
                     </span>
-                    <select id="state" v-model="filter.state" class="form-select form-select-sm" @change="fetchData"
+                    <select id="state" v-model="filter.state" class="form-select" @change="fetchData"
                         aria-label="Filtrar por estado">
                         <option :value="''">Todos</option>
                         <option :value="'active'">Activos</option>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="input-group input-group-sm">
+                <div class="input-group">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Nombre</small>
                     </span>
@@ -55,15 +55,15 @@
                         aria-label="Filtrar por persona">
                 </div>
             </div>
-            <div class="col-md-1 d-grid gap-2">
+            <div class="col-md-1 d-grid">
                 <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
                     <i class="uil-search"></i>
                 </button>
             </div>
-            <div class="col-md-1 d-grid gap-2">
+            <div class="col-md-1 d-grid">
                 <template v-if="getPermissions.includes('users.create')">
                     <router-link class="btn btn-sm btn-primary" :to="{ name: 'users.create' }" aria-label="Agregar usuario">
-                        <i class="mdi mdi-plus"></i> Nuevo
+                        <i class="mdi mdi-plus"></i>
                     </router-link>
                 </template>
                 <template v-else>

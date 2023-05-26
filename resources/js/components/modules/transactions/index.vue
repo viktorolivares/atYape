@@ -15,16 +15,15 @@
             </div>
         </div>
         <!-- end page title -->
-
         <!-- Formulario de filtro -->
         <div>
             <form class="row g-1 mb-1" @submit.prevent="fetchData">
                 <div class="col-md-2">
-                    <div class="input-group input-group-sm">
+                    <div class="input-group">
                         <span class="input-group-text bg-primary border-primary text-white">
                             <small>Estado</small>
                         </span>
-                        <select id="state" v-model="filter.state" class="form-select form-select-sm" @change="fetchData"
+                        <select id="state" v-model="filter.state" class="form-select" @change="fetchData"
                             aria-label="Filtrar por estado">
                             <option :value="''">Todos</option>
                             <option :value="'validated'">Validados</option>
@@ -33,12 +32,12 @@
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="input-group input-group-sm">
+                    <div class="input-group">
                         <span class="input-group-text bg-primary border-primary text-white">
                             <small>Yape!</small>
                         </span>
-                        <select id="description" v-model="filter.description" class="form-select form-select-sm"
-                            @change="fetchData" aria-label="Filtrar por Yape">
+                        <select id="description" v-model="filter.description" class="form-select" @change="fetchData"
+                            aria-label="Filtrar por Yape">
                             <option :value="''">Todos</option>
                             <option :value="'Business'">Business</option>
                             <option :value="'Mulfood'">Mulfood</option>
@@ -48,7 +47,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="input-group input-group-sm">
+                    <div class="input-group">
                         <span class="input-group-text bg-primary border-primary text-white">
                             <small>Desde</small>
                         </span>
@@ -57,7 +56,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="input-group input-group-sm">
+                    <div class="input-group">
                         <span class="input-group-text bg-primary border-primary text-white">
                             <small>Hasta</small>
                         </span>
@@ -66,20 +65,18 @@
                     </div>
                 </div>
                 <div class="col-md-1 d-grid">
-                    <button type="submit" class="btn btn-sm btn-success" aria-label="Buscar transacciones">
+                    <button type="submit" class="btn btn-success" aria-label="Buscar transacciones">
                         <i class="uil-search"></i>
                     </button>
                 </div>
                 <div class="col-md-1 d-grid">
-                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#transactionSaveModal" @click.prevent="openModalTransaction">
                         <i class=" uil-plus"></i>
                     </button>
                 </div>
             </form>
-
         </div>
-
         <!-- Tabla de resultados -->
         <div class="row">
             <div class="col-md-12 mt-1">
@@ -258,7 +255,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Modal Details -->
         <div class="modal fade" id="transactionDetailsModal" tabindex="-1" aria-labelledby="transactionDetailsModalLabel"
             aria-hidden="true">
@@ -281,7 +277,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Modal Transaction -->
         <div class="modal fade" id="transactionSaveModal" tabindex="-1" aria-labelledby="transactionSaveModalLabel"
             aria-hidden="true">
@@ -327,10 +322,8 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
-
 <script>
 
 import { format, subDays, parseISO } from 'date-fns';

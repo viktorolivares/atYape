@@ -10,6 +10,7 @@ import UserForm from "./components/modules/users/form.vue";
 import RoleForm from "./components/modules/roles/form.vue";
 import Users from "./components/modules/users/index.vue";
 import Roles from "./components/modules/roles/index.vue";
+import Logout from "./components/modules/auth/logout.vue";
 import Login from "./components/modules/auth/login.vue";
 import Logs from "./components/modules/logs/index.vue";
 import Dni from "./components/modules/dni/index.vue";
@@ -197,6 +198,7 @@ const routes = [
             }
         },
     },
+    { path: "/logout", component: Logout },
     { path: "/:pathMatch(.*)*", component: NotFound },
 ];
 
