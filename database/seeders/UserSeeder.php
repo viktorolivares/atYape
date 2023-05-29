@@ -15,8 +15,8 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'firstname' => 'Admin',
-            'lastname' => 'Prevención',
+            'firstname' => 'Prevención',
+            'lastname' => 'Online',
             'email' => 'prevencion@apuestatotal.com',
             'password' => Hash::make('password'),
             'created_at' => now(),
@@ -24,8 +24,8 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'firstname' => 'Victor',
-            'lastname' => 'Olivares',
+            'firstname' => 'VICTOR',
+            'lastname' => 'OLIVARES',
             'email' => 'victor.olivares@apuestatotal.com',
             'password' => Hash::make('password'),
             'created_at' => now(),
@@ -33,8 +33,8 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'firstname' => 'Juan Carlos',
-            'lastname' => 'López Neciosup',
+            'firstname' => 'JUAN CARLOS',
+            'lastname' => 'LÓPEZ NECIOSUP',
             'email' => 'juancarlos.lopez@apuestatotal.com',
             'password' => Hash::make('password'),
             'created_at' => now(),
@@ -42,8 +42,8 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'firstname' => 'Andrés',
-            'lastname' => 'Arismendis Guerreros',
+            'firstname' => 'ANDRÉS',
+            'lastname' => 'ARISMENDIS GUERREROS',
             'email' => 'luis.arismendis@apuestatotal.com',
             'password' => Hash::make('password'),
             'created_at' => now(),
@@ -51,8 +51,8 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'firstname' => 'Jenson',
-            'lastname' => 'Paico Vega',
+            'firstname' => 'JENSON',
+            'lastname' => 'PAICO VEGA',
             'email' => 'jenson.paico@apuestatotal.com',
             'password' => Hash::make('password'),
             'created_at' => now(),
@@ -60,8 +60,8 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'firstname' => 'Karla',
-            'lastname' => 'Panez Vega',
+            'firstname' => 'KARLA',
+            'lastname' => 'PANEZ VEGA',
             'email' => 'karla.panez@apuestatotal.com',
             'password' => Hash::make('password'),
             'created_at' => now(),

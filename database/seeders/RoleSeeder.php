@@ -15,14 +15,14 @@ class RoleSeeder extends Seeder
     {
         DB::table('roles')->insert([
             'name' => 'Administrador',
-            'slug' => 'Responsable de administrar y mantener el sistemas.',
+            'slug' => 'Responsable de administrar y mantener el sistema.',
             'created_at' => now(),
             'updated_at' => now()
         ]);
 
         DB::table('roles')->insert([
             'name' => 'Validador',
-            'slug' => 'Encargado de validar información y asegurarse de su veracidad y precisión.',
+            'slug' => 'Encargado de validar información y asegurarse de su veracidad.',
             'created_at' => now(),
             'updated_at' => now()
         ]);
