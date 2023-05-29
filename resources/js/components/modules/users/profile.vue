@@ -22,7 +22,11 @@
                         <img :src="formData.file ? route + `/${formData.file.path}` : route + '/default.png'" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
 
                         <h4 class="mb-0 mt-2">{{ formData.fullname }}</h4>
-                        <p class="text-muted font-14">{{ formData.roles[0].name }}</p>
+                        <p class="text-muted font-14">
+                            <span class=" list-unstyled" v-for="role in formData.roles" :key="role.id">
+                                [{{ role.name }}]
+                            </span>
+                        </p>
                         <div class="text-start mt-3">
                             <h4 class="font-13 text-uppercase">Sobre mi:</h4>
                             <p class="text-muted mb-2 font-13">
