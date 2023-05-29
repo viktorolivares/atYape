@@ -14,7 +14,7 @@ class UserRoleSeeder extends Seeder
     public function run(): void
     {
         $user_roles = [
-            array('user_id' => '1', 'role_id' => '1')
+            array('user_id' => '1', 'role_id' => '1'),
         ];
 
         DB::table('user_roles')->insert($user_roles);

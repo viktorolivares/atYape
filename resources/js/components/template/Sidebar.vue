@@ -46,12 +46,12 @@
                                 </router-link>
                             </li>
                         </template>
-                        <li class="side-nav-item">
+                        <!-- <li class="side-nav-item">
                             <a class="side-nav-link">
                                 <i class="uil-mobile-vibrate"></i>
                                 <span>APK</span>
                             </a>
-                        </li>
+                        </li> -->
                     </template>
 
                     <!-- Gestión de Usuarios -->

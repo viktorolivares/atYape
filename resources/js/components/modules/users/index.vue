@@ -68,7 +68,7 @@
                 </template>
                 <template v-else>
                     <button class="btn btn-danger" disabled>
-                        <i class="mdi mdi-block-helper"></i> Nuevo
+                        <i class="mdi mdi-block-helper"></i>
                     </button>
                 </template>
             </div>
