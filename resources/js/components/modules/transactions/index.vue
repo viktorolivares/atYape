@@ -230,11 +230,18 @@
                                             </div>
                                         </td>
                                         <td class="table-action text-center" v-else>
-                                            <a type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
-                                                data-bs-target="#transactionDetailsModal"
-                                                @click="openModalDetails(transaction)" :title="transaction.details">
-                                                <i class="mdi mdi-comment-text-outline"></i>
-                                            </a>
+                                            <template v-if="getPermissions.includes('transactions.edit')">
+                                                <a type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
+                                                    data-bs-target="#transactionDetailsModal"
+                                                    @click="openModalDetails(transaction)" :title="transaction.details">
+                                                    <i class="mdi mdi-comment-text-outline"></i>
+                                                </a>
+                                            </template>
+                                            <template v-else>
+                                                <button href="#" class="btn btn-sm" disabled>
+                                                    <i class="mdi mdi-block-helper"></i>
+                                                </button>
+                                            </template>
                                         </td>
                                     </tr>
                                 </transition-group>
