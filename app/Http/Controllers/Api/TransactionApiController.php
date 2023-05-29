@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Transaction;
@@ -21,8 +21,7 @@ class TransactionApiController extends Controller
         $person = trim(str_replace("Yape! ", "", $person));
         $amount_array = explode(" ", $message);
         $amount = end($amount_array);
-        $uuid = Str::uuid()->toString();
-        $transaction = substr((string) $key, 36) . '|' . $uuid;
+        $transaction = substr((string) $key, 36) . '|' . $description;
 
 
         $data = [

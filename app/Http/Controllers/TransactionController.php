@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Services\ActivityLogService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -12,6 +13,14 @@ use Carbon\Carbon;
 
 class TransactionController extends Controller
 {
+
+    protected $activityLogService;
+
+    public function __construct(ActivityLogService $activityLogService)
+    {
+        $this->activityLogService = $activityLogService;
+    }
+
     public function index(Request $request)
     {
         $description = $request->description;
@@ -102,6 +111,29 @@ class TransactionController extends Controller
         $transactions->fill($data);
         $transactions->save();
 
+        $logData = [
+            'user_id' => Auth::id(),
+            'model' => 'Transacciones',
+            'action' => 'Crear',
+            'ip' => $request->ip(),
+            'data' => [
+                'new_transaction' => [
+                    'description' => $request->description,
+                    'person' => $request->person,
+                    'amount' => $request->amount,
+                    'registerDate' => $request->register_date
+                ]
+            ],
+        ];
+
+        $this->activityLogService->createLog(
+            $logData['user_id'],
+            $logData['model'],
+            $logData['action'],
+            $logData['ip'],
+            $logData['data']
+        );
+
         return response()->json([
             'success' => true,
             'transaction' => $transactions,
@@ -116,6 +148,26 @@ class TransactionController extends Controller
 
         $transaction->save();
 
+        $logData = [
+            'user_id' => Auth::id(),
+            'model' => 'Transacciones',
+            'action' => 'Actualizar',
+            'ip' => $request->ip(),
+            'data' => [
+                'update_transaction' => [
+                    'state' => $request->state,
+                ]
+            ],
+        ];
+
+        $this->activityLogService->createLog(
+            $logData['user_id'],
+            $logData['model'],
+            $logData['action'],
+            $logData['ip'],
+            $logData['data']
+        );
+
         return response()->json([
             'success' => true,
             Response::HTTP_CREATED
@@ -128,6 +180,26 @@ class TransactionController extends Controller
         $transaction->details = $request->details;
         $transaction->updated_by = $request->id;
         $transaction->save();
+
+        $logData = [
+            'user_id' => Auth::id(),
+            'model' => 'Transacciones',
+            'action' => 'Actualizar',
+            'ip' => $request->ip(),
+            'data' => [
+                'update_transaction' => [
+                    'details' => $request->details,
+                ]
+            ],
+        ];
+
+        $this->activityLogService->createLog(
+            $logData['user_id'],
+            $logData['model'],
+            $logData['action'],
+            $logData['ip'],
+            $logData['data']
+        );
 
         return response()->json([
             'success' => true,
@@ -208,6 +280,30 @@ class TransactionController extends Controller
         $transaction->updated_by = Auth::id();
         $transaction->save();
 
+        $logData = [
+            'user_id' => Auth::id(),
+            'model' => 'Transacciones',
+            'action' => 'Actualizar',
+            'ip' => $request->ip(),
+            'data' => [
+                'update_transaction' => [
+                    'transaction' => $id,
+                    'description' => $request->description,
+                    'person' => $request->person,
+                    'amount' => $request->amount,
+                    'register_date' => $request->register_date
+                ]
+            ],
+        ];
+
+        $this->activityLogService->createLog(
+            $logData['user_id'],
+            $logData['model'],
+            $logData['action'],
+            $logData['ip'],
+            $logData['data']
+        );
+
         return response()->json([
             'success' => true,
             'transaction' => $transaction,
@@ -226,6 +322,26 @@ class TransactionController extends Controller
         }
 
         $transaction->delete();
+
+        $logData = [
+            'user_id' => Auth::id(),
+            'model' => 'Transacciones',
+            'action' => 'Eliminar',
+            'ip' => $request->ip(),
+            'data' => [
+                'delete_transaction' => [
+                    'transaction' => $id,
+                ]
+            ],
+        ];
+
+        $this->activityLogService->createLog(
+            $logData['user_id'],
+            $logData['model'],
+            $logData['action'],
+            $logData['ip'],
+            $logData['data']
+        );
 
         return response()->json([
             'success' => true,

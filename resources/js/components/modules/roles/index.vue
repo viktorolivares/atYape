@@ -22,7 +22,8 @@
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Mostrar</small>
                     </span>
-                    <select id="perPage" v-model="paginated.perPage" class="form-select"  @change="changeItemsPerPage(paginated.perPage)" aria-label="Mostrar resultados por página">
+                    <select id="perPage" v-model="paginated.perPage" class="form-select"
+                        @change="changeItemsPerPage(paginated.perPage)" aria-label="Mostrar resultados por página">
                         <option :value="5">5</option>
                         <option :value="10">10</option>
                         <option :value="20">20</option>
@@ -36,7 +37,8 @@
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Slug</small>
                     </span>
-                    <input type="text" class="form-control" v-model="filter.slug" @input="fetchData" aria-label="Filtrar por persona">
+                    <input type="text" class="form-control" v-model="filter.slug" @input="fetchData"
+                        aria-label="Filtrar por persona">
                 </div>
             </div>
             <div class="col-md-4">
@@ -44,7 +46,8 @@
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Nombre</small>
                     </span>
-                    <input type="text" class="form-control" v-model="filter.name" @input="fetchData" aria-label="Filtrar por persona">
+                    <input type="text" class="form-control" v-model="filter.name" @input="fetchData"
+                        aria-label="Filtrar por persona">
                 </div>
             </div>
             <div class="col-md-1 d-grid">
@@ -60,7 +63,7 @@
                 </template>
                 <template v-else>
                     <button class="btn btn-danger" disabled>
-                        <i class="uil-plus"></i>
+                        <i class="mdi mdi-block-helper"></i>
                     </button>
                 </template>
             </div>
@@ -106,6 +109,16 @@
                                             <template v-if="getPermissions.includes('roles.edit')">
                                                 <a href="#" class="btn action-icon" @click.prevent="editRole(role.id)">
                                                     <i class="mdi mdi-pencil"></i>
+                                                </a>
+                                            </template>
+                                            <template v-else>
+                                                <button href="#" class="btn btn-sm" disabled>
+                                                    <i class="mdi mdi-block-helper"></i>
+                                                </button>
+                                            </template>
+                                            <template v-if="getPermissions.includes('roles.delete')">
+                                                <a href="#" class="btn action-icon" @click.prevent="deleteRole(role.id)">
+                                                    <i class="mdi mdi-delete"></i>
                                                 </a>
                                             </template>
                                             <template v-else>
@@ -182,8 +195,8 @@ export default {
         return {
             apiUrl: "/api/roles/list",
             filter: {
-                name : '',
-                slug : ''
+                name: '',
+                slug: ''
             },
             paginated: {
                 perPage: 10,
@@ -199,7 +212,7 @@ export default {
     methods: {
 
         fetchData(resetPagination = false) {
-            this.loadData(this.apiUrl, resetPagination );
+            this.loadData(this.apiUrl, resetPagination);
         },
 
         getFilterParams() {
@@ -216,6 +229,31 @@ export default {
 
         editRole(roleId) {
             this.$router.push(`/roles/edit/${roleId}`);
+        },
+
+        deleteRole(roleId) {
+            this.$swal({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#727cf5',
+                cancelButtonColor: '#fa5c7c',
+                confirmButtonText: '¡Sí, bórralo!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/roles/delete/${roleId}`)
+                        .then(response => {
+                            this.fetchData();
+                            this.$swal('¡Eliminado!', 'La transacción ha sido eliminada.', 'success');
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            this.$swal('¡Error!', 'Hubo un problema al eliminar la transacción.', 'error');
+                        });
+                }
+            });
         },
 
     },

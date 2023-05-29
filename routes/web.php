@@ -3,13 +3,13 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\DeceasedController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LogsController;
+use App\Http\Controllers\DniController;
 use App\Http\Controllers\IpController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -25,6 +25,7 @@ use Illuminate\Http\Request;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
@@ -74,6 +75,7 @@ Route::group(['prefix' => 'api'], function () {
             Route::put('/roles/{id}', 'updateRole');
             Route::get('/roles/permissions/{id}', 'getRolePermissions');
             Route::get('/roles/{id}', 'getRole');
+            Route::delete('/roles/delete/{id}', 'deleteRole');
         });
 
         /*Transacciones*/
@@ -89,10 +91,10 @@ Route::group(['prefix' => 'api'], function () {
         });
 
         /*DNI Deceased + Minors*/
-        Route::controller(DeceasedController::class)->group(function () {
+        Route::controller(DniController::class)->group(function () {
             Route::get('/dni/query', 'getDni');
             Route::post('/dni/minors-deceased', 'getMinorsDeceased');
-            Route::post('/dni/cookies-captcha', 'getCookiesCaptcha');
+            Route::get('/dni/cookies-captcha', 'getCookiesCaptcha');
         });
 
         /*Logs*/

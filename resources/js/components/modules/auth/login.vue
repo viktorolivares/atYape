@@ -135,7 +135,6 @@ export default {
                     const user = response.data.authUser
 
                     this.getRolePermissions(user);
-                    this.createActivityLog('connection', email)
 
                     var toastDuration = 2000;
                     this.showToast("¡Bienvenido!", {
@@ -191,16 +190,6 @@ export default {
 
         togglePasswordVisibility() {
             this.showPassword = !this.showPassword;
-        },
-
-        createActivityLog(type, email) {
-            axios.post('/api/logs/save', { type: type, email: email })
-                .then(response => {
-                    console.log(response.data)
-                })
-                .catch(error => {
-                    console.log(error)
-                });
         },
 
         showLoginForm() {

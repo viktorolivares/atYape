@@ -70,10 +70,18 @@
                     </button>
                 </div>
                 <div class="col-md-1 d-grid">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#transactionSaveModal" @click.prevent="openModalTransaction">
-                        <i class=" uil-plus"></i>
-                    </button>
+                    <template v-if="getPermissions.includes('transactions.create')">
+                        <button class="btn btn-primary" aria-label="Agregar transaccioón"
+                            @click.prevent="openModalTransaction" data-bs-toggle="modal"
+                            data-bs-target="#transactionSaveModal">
+                            <i class=" uil-plus"></i>
+                        </button>
+                    </template>
+                    <template v-else>
+                        <button class="btn btn-danger" disabled>
+                            <i class="mdi mdi-block-helper"></i>
+                        </button>
+                    </template>
                 </div>
             </form>
         </div>
@@ -155,12 +163,19 @@
                                         <td>{{ transaction.amount }}</td>
                                         <td>{{ transaction.formatted_date }}</td>
                                         <td class="table-action text-center">
-                                            <label class="switch" aria-label="Cambiar estado">
-                                                <input type="checkbox" :checked="transaction.state === 'validated'"
-                                                    @change="toggleStatus(transaction)"
-                                                    aria-checked="transaction.state === 'validated'" />
-                                                <span class="slider round"></span>
-                                            </label>
+                                            <template v-if="getPermissions.includes('transactions.edit')">
+                                                <label class="switch" aria-label="Cambiar estado">
+                                                    <input type="checkbox" :checked="transaction.state === 'validated'"
+                                                        @change="toggleStatus(transaction)"
+                                                        aria-checked="transaction.state === 'validated'" />
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </template>
+                                            <template v-else>
+                                                <button href="#" class="btn btn-sm" disabled>
+                                                    <i class="mdi mdi-block-helper"></i>
+                                                </button>
+                                            </template>
                                         </td>
                                         <td>
                                             <span v-if="transaction.state === 'validated'">
@@ -177,23 +192,40 @@
                                                     <i class="mdi mdi-menu"></i>
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                        data-bs-target="#transactionSaveModal"
-                                                        @click="openModalEdit(transaction)">
-                                                        <i class="mdi mdi-lead-pencil"></i>
-                                                        Editar
-                                                    </a>
-                                                    <a type="button" class="dropdown-item"
-                                                        @click="deleteTransaction(transaction)">
-                                                        <i class="mdi mdi-delete"></i>
-                                                        Eliminar
-                                                    </a>
-                                                    <a type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                        data-bs-target="#transactionDetailsModal"
-                                                        @click="openModalDetails(transaction)" :title="transaction.details">
-                                                        <i class="mdi mdi-comment-text-outline"></i>
-                                                        Detalles
-                                                    </a>
+                                                    <template v-if="getPermissions.includes('transactions.edit')">
+                                                        <a type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                            data-bs-target="#transactionSaveModal"
+                                                            @click="openModalEdit(transaction)">
+                                                            <i class="mdi mdi-lead-pencil"></i>
+                                                            Editar
+                                                        </a>
+                                                        <a type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                            data-bs-target="#transactionDetailsModal"
+                                                            @click="openModalDetails(transaction)"
+                                                            :title="transaction.details">
+                                                            <i class="mdi mdi-comment-text-outline"></i>
+                                                            Detalles
+                                                        </a>
+                                                    </template>
+                                                    <template v-else>
+                                                        <button href="#" class="btn btn-sm" disabled>
+                                                            <i class="mdi mdi-block-helper"></i>
+                                                            Can't edit
+                                                        </button>
+                                                    </template>
+                                                    <template v-if="getPermissions.includes('transactions.delete')">
+                                                        <a type="button" class="dropdown-item"
+                                                            @click="deleteTransaction(transaction)">
+                                                            <i class="mdi mdi-delete"></i>
+                                                            Eliminar
+                                                        </a>
+                                                    </template>
+                                                    <template v-else>
+                                                        <button href="#" class="btn btn-sm" disabled>
+                                                            <i class="mdi mdi-block-helper"></i>
+                                                            Can't delete
+                                                        </button>
+                                                    </template>
                                                 </div>
                                             </div>
                                         </td>
@@ -256,7 +288,7 @@
             </div>
         </div>
         <!-- Modal Details -->
-        <div class="modal fade" id="transactionDetailsModal" tabindex="-1" aria-labelledby="transactionDetailsModalLabel"
+        <div class="modal" id="transactionDetailsModal" tabindex="-1" aria-labelledby="transactionDetailsModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -277,8 +309,9 @@
                 </div>
             </div>
         </div>
+
         <!-- Modal Transaction -->
-        <div class="modal fade" id="transactionSaveModal" tabindex="-1" aria-labelledby="transactionSaveModalLabel"
+        <div class="modal" id="transactionSaveModal" tabindex="-1" aria-labelledby="transactionSaveModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -326,7 +359,7 @@
 </template>
 <script>
 
-import { format, subDays, parseISO } from 'date-fns';
+import { format, subDays } from 'date-fns';
 import dataMixin from "../mixins/dataMixin.js";
 import toastMixin from "../mixins/toastMixin.js";
 
@@ -355,6 +388,7 @@ export default {
                 person: '',
                 amount: '',
             },
+            getPermissions: JSON.parse(localStorage.getItem('permissions'))
         }
     },
 
@@ -419,8 +453,6 @@ export default {
                     type: "success"
                 });
 
-                this.createActivityLog(`update-transaction-state: [ Transaction: ${transaction.id}, State: ${state} ]`, this.user.email)
-
             } catch (error) {
                 console.error('Error al actualizar el estado de la transacción:', error);
             }
@@ -445,7 +477,6 @@ export default {
 
                 this.closeModalDetails();
 
-                this.createActivityLog(`update-transaction-details: [Transaction: ${this.selectedTransaction.id}, Details: ${this.selectedTransaction.details}]`, this.user.email);
             } catch (error) {
                 console.error('Error al actualizar los detalles de la transacción:', error);
             }
@@ -470,16 +501,6 @@ export default {
         changeItemsPerPage(newPerPage) {
             this.paginated.perPage = newPerPage;
             this.fetchData(true);
-        },
-
-        createActivityLog(type, email) {
-            axios.post('/api/logs/save', { type: type, email: email })
-                .then(response => {
-                    console.log(response.data)
-                })
-                .catch(error => {
-                    console.log(error)
-                });
         },
 
         openModalDetails(transaction) {
@@ -547,6 +568,22 @@ export default {
             this.transactionData = JSON.parse(JSON.stringify(transaction));
             this.transactionData.register_date = format(new Date(this.transactionData.register_date), 'yyyy-MM-dd\'T\'HH:mm');
         },
+
+        closeModalDetails() {
+            const modalElement = document.getElementById('transactionDetailsModal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+                modal.hide();
+            }
+        },
+
+        closeModalTransaction() {
+            const modalElement = document.getElementById('transactionSaveModal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+                modal.hide();
+            }
+        }
     }
 };
 

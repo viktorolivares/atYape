@@ -1,4 +1,3 @@
-<!-- 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 -->
 <template>
     <div>
         <!-- start page title -->
@@ -42,51 +41,50 @@
                             <div class="col-3">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text bg-primary border-primary text-white">
-                                        <small>Email</small>
+                                        <small>Modelo</small>
                                     </span>
-                                    <input type="text" class="form-control" v-model="filter.email" @input="fetchData"
-                                        aria-label="Filtrar por email">
+                                    <input type="text" class="form-control" v-model="filter.model" @input="fetchData"
+                                        aria-label="Filtrar por modelo">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body" v-if="items.length > 0">
                         <div class="table-responsive-sm">
-                            <table class="table table-centered table-hover table-sm">
+                            <table class="table table-centered table-hover table-sm nowrap">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>#</th>
-                                        <th @click="toggleSort('type')">
-                                            <span>Type</span>
-                                            &nbsp;
-                                            <i class="mdi" :class="getSortIconClass('type')"></i>
+                                        <th>
+                                            <span>Data</span>
                                         </th>
-                                        <th @click="toggleSort('email')">
-                                            <span>Email</span>
-                                            &nbsp;
-                                            <i class="mdi" :class="getSortIconClass('email')"></i>
+                                        <th @click="toggleSort('model')">
+                                            <span>Modelo</span> &nbsp;
+                                            <i class="mdi" :class="getSortIconClass('model')"></i>
                                         </th>
-                                        <th @click="toggleSort('ip')">
-                                            <span>IP</span>
-                                            &nbsp;
-                                            <i class="mdi" :class="getSortIconClass('ip')"></i>
-                                        </th>
+                                        <th>Usuario</th>
+                                        <th>IP</th>
                                         <th @click="toggleSort('created_at')">
-                                            <span>Registrado:</span>
-                                            &nbsp;
+                                            <span>Registrado:</span>&nbsp;
                                             <i class="mdi" :class="getSortIconClass('created_at')"></i>
                                         </th>
                                     </tr>
                                 </thead>
                                 <transition-group name="fade" tag="tbody" mode="in-out">
                                     <tr v-for="(logs, index) in items" :key="logs.id">
-                                        <td>{{ index + 1 }}</td>
-                                        <td>
-                                            <div class="logs-type shadow">
-                                                {{ logs.type }}
+                                        <td class="p-2">
+                                            <div class="logs-type shadow alert-primary">
+                                                <vue-json-pretty :data="JSON.parse(logs.data)" />
                                             </div>
                                         </td>
-                                        <td> {{ logs.email }} </td>
+                                        <td>
+                                            {{ logs.model }}
+                                            <p class="text-muted font-11">{{ logs.action }}</p>
+                                        </td>
+                                        <td>
+                                            {{ logs.user.fullname }}
+                                            <p class="text-muted font-11">{{ logs.user.email }}</p>
+
+                                        </td>
                                         <td> {{ logs.ip }} </td>
                                         <td>{{ logs.formatted_date }}</td>
                                     </tr>
@@ -249,11 +247,14 @@
 import dataMixin from "../mixins/dataMixin.js";
 import toastMixin from "../mixins/toastMixin.js";
 import { format, subDays } from 'date-fns';
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 import axios from 'axios';
 
 export default {
 
     mixins: [dataMixin, toastMixin],
+    components: { VueJsonPretty },
 
     data() {
         return {
@@ -262,7 +263,7 @@ export default {
             loadingLanguages: true,
             apiUrl: "/api/logs/list",
             filter: {
-                email: '',
+                model: '',
             },
             paginated: {
                 perPage: 20,
@@ -303,7 +304,7 @@ export default {
 
         getFilterParams() {
             return {
-                email: this.filter.email,
+                model: this.filter.model,
                 startDate: this.filter.startDate,
                 endDate: this.filter.endDate,
                 page: this.paginated.page,

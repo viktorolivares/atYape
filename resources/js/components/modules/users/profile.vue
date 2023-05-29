@@ -21,12 +21,12 @@
                     <div class="card-body">
                         <img :src="formData.file ? route + `/${formData.file.path}` : route + '/default.png'" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
 
-                        <h4 class="mb-0 mt-2">{{ formData.firstname }}</h4>
-                        <p class="text-muted font-14">Role</p>
+                        <h4 class="mb-0 mt-2">{{ formData.fullname }}</h4>
+                        <p class="text-muted font-14">{{ formData.roles[0].name }}</p>
                         <div class="text-start mt-3">
-                            <h4 class="font-13 text-uppercase">About Me :</h4>
+                            <h4 class="font-13 text-uppercase">Sobre mi:</h4>
                             <p class="text-muted mb-2 font-13">
-                                <strong>Full Name : </strong>
+                                <strong>Nombre completo : </strong>
                                 <span class="ms-2">{{ formData.firstname + ' ' + formData.lastname }}</span>
                             </p>
                             <p class="text-muted mb-2 font-13">
@@ -34,6 +34,9 @@
                                 <span class="ms-2 ">{{ formData.email }}</span>
                             </p>
                         </div>
+
+                        <img :src=" route + '/assets/images/logo_1.png'" class="mt-4" alt="profile-image" width="200">
+
                     </div> <!-- end card-body -->
                 </div> <!-- end card -->
             </div> <!-- end col-->
@@ -49,7 +52,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label for="firstname" class="form-label">First Name</label>
+                                                <label for="firstname" class="form-label">Nombres</label>
                                                 <input type="text" class="form-control" id="firstname"
                                                     placeholder="Enter first name" v-model="formData.firstname" required>
                                                 <div class="invalid-feedback">Please enter a valid first name.</div>
@@ -57,7 +60,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label for="lastname" class="form-label">Last Name</label>
+                                                <label for="lastname" class="form-label">Apellidos</label>
                                                 <input type="text" class="form-control" id="lastname"
                                                     placeholder="Enter last name" v-model="formData.lastname" required>
                                                 <div class="invalid-feedback">Please enter a valid last name.</div>

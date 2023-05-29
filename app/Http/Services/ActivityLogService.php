@@ -6,12 +6,16 @@ use App\Models\ActivityLog;
 
 class ActivityLogService
 {
-    public function createLog($type, $email, $ip)
+    public function createLog($userId, $model, $action, $ip, $data)
     {
+        $data = json_encode($data);
+
         ActivityLog::create([
-            'type' => $type,
-            'email' => $email,
-            'ip' => $ip
+            'user_id' => $userId,
+            'model' => $model,
+            'action' => $action,
+            'ip' => $ip,
+            'data' => $data,
         ]);
     }
 }

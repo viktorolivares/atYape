@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Services\Github;
 use Illuminate\Http\Request;
@@ -11,17 +13,10 @@ use Carbon\Carbon;
 class LogsController extends Controller
 {
 
-    protected $activityLogService;
-
-    public function __construct(ActivityLogService $activityLogService)
-    {
-        $this->activityLogService = $activityLogService;
-    }
-    
     public function index(Request $request)
     {
 
-        $email = $request->email;
+        $model = $request->model;
         $startDate = $request->startDate;
         $endDate = $request->endDate;
         $perPage = $request->perPage;
@@ -33,9 +28,10 @@ class LogsController extends Controller
             $endDate = Carbon::now()->format('Y-m-d H:i:s');
         }
 
-        $logs = ActivityLog::whereBetween('created_at', [$startDate, $endDate])
-            ->when($email, function ($query, $email) {
-                return $query->where('email', 'like', '%' . $email . '%');
+        $logs = ActivityLog::with('user')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->when($model, function ($query, $model) {
+                return $query->where('model', 'like', '%' . $model . '%');
             })
             ->when($sortField && $sortDirection, function ($query) use ($sortField, $sortDirection) {
                 return $query->orderBy($sortField, $sortDirection);
@@ -50,10 +46,12 @@ class LogsController extends Controller
             return $created;
         });
 
-        return response()->json([
+        return response()->json(
+            [
                 'success' => true,
                 'data' => $logs,
-            ], Response::HTTP_OK
+            ],
+            Response::HTTP_OK
         );
     }
 
@@ -67,21 +65,4 @@ class LogsController extends Controller
             'changes' => $changes
         ]);
     }
-
-    public function logs(Request $request)
-    {
-        $email = $request->email;
-        $type = $request->type;
-        $ip = $request->ip();
-
-        $this->activityLogService->createLog($type, $email, $ip);
-
-        return response()->json([
-            'success' => true,
-            'data' => $email,
-
-        ], Response::HTTP_CREATED);
-    }
-
-
 }

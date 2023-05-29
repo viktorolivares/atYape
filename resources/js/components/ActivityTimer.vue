@@ -8,32 +8,15 @@ export default {
     setup(props) {
         const timeoutId = ref(null);
 
-        const createActivityLog = (type, email) => {
-            axios.post('/api/logs/save', { type: type, email: email })
-                .then(response => {
-                    console.log(response.data);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        };
-
         const logout = () => {
-
-            const email = props.user.email;
-
-            createActivityLog('disconnection: {"State": "Por inactividad"}', email);
-
-            setTimeout(() => {
-                axios.post('/logout')
-                    .then(response => {
-                        if (response.data.success === true) {
-                            window.location.href = "/logout";
-                            localStorage.clear();
-                        }
-                    })
-                    .catch(error => console.log(error));
-            }, 2000);
+            axios.post('/logout')
+                .then(response => {
+                    if (response.data === 204) {
+                        window.location.href = "/logout";
+                        localStorage.clear();
+                    }
+                })
+                .catch(error => console.log(error));
         };
 
         const resetLocalStorageAfterInactivity = () => {
@@ -43,7 +26,7 @@ export default {
 
             timeoutId.value = setTimeout(() => {
                 logout();
-            }, 60 * 60 * 1000);
+            }, 30 * 60 * 1000);
         };
 
         const userActivity = () => {

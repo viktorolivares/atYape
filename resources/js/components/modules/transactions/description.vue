@@ -392,7 +392,6 @@ export default {
                         type: "success"
                     });
 
-                    this.createActivityLog(`update-transaction-state: [ Transaction: ${transaction.id}, State: validated ]`, this.user.email)
 
                 } catch (error) {
                     console.error('Error al actualizar el estado de la transacción:', error);
@@ -419,15 +418,6 @@ export default {
             this.fetchData(true);
         },
 
-        createActivityLog(type, email) {
-            axios.post('/api/logs/save', { type: type, email: email })
-                .then(response => {
-                    console.log(response.data)
-                })
-                .catch(error => {
-                    console.log(error)
-                });
-        },
 
         openModal(transaction) {
             this.selectedTransaction = JSON.parse(JSON.stringify(transaction));
@@ -452,8 +442,6 @@ export default {
                 });
 
                 this.closeModal();
-
-                this.createActivityLog(`update-transaction-details: [Transaction: ${this.selectedTransaction.id}, Details: ${this.selectedTransaction.details}]`, this.user.email);
 
             } catch (error) {
                 console.error('Error al actualizar los detalles de la transacción:', error);
@@ -532,15 +520,20 @@ export default {
                 register_date: '',
             };
             this.pendings = {}
-        }
+        },
+
+        closeModal() {
+            const modalElement = document.getElementById('transactionModal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+                modal.hide();
+            }
+        },
     }
 
 };
 </script>
 
 <style>
-.table-pendings {
-    max-height: 250px; /* Establece la altura máxima deseada */
-    overflow-y: auto; /* Agrega un desbordamiento vertical */
-}
+
 </style>

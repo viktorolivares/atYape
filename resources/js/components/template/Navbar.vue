@@ -108,35 +108,22 @@ export default {
     mixins: [toastMixin],
 
     methods: {
-
         logout() {
-            const email = this.user.email;
-            this.createActivityLog('disconnection', email);
-            this.showToast("¡Hasta Pronto!", {
-                position: "top-center",
-                type : 'info'
-            });
-
-            setTimeout(() => {
-                axios.post('/logout')
-                    .then(response => {
-                        if (response.data.success === true) {
-                            window.location.href = "/login";
-                            localStorage.clear();
-                        }
-                    })
-                    .catch(error => console.log(error));
-            }, 2000);
-        },
-
-        createActivityLog(type, email) {
-            axios.post('/api/logs/save', { type: type, email: email })
+            axios.post('/logout')
                 .then(response => {
-                    console.log(response.data)
+                    if (response.data === 204) {
+                        this.showToast("¡Hasta Pronto!", {
+                            position: "top-center",
+                            type: 'info'
+                        });
+
+                        setTimeout(() => {
+                            localStorage.clear();
+                            window.location.href = "/login";
+                        }, 2000);
+                    }
                 })
-                .catch(error => {
-                    console.log(error)
-                });
+                .catch(error => console.log(error));
         },
     },
 

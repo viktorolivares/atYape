@@ -10,8 +10,15 @@ class ActivityLog extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type',
-        'email',
+        'user_id',
+        'model',
+        'action',
+        'data',
         'ip'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

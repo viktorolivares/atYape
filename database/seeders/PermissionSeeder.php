@@ -81,36 +81,6 @@ class PermissionSeeder extends Seeder
             'updated_at' => now()
         ]);
 
-        // Permissions
-        DB::table('permissions')->insert([
-            'name' => 'Crear Permisos',
-            'slug' => 'permissions.create',
-            'module_id' => 3,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-        DB::table('permissions')->insert([
-            'name' => 'Ver Permisos',
-            'slug' => 'permissions.index',
-            'module_id' => 3,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-        DB::table('permissions')->insert([
-            'name' => 'Actualizar Permisos',
-            'slug' => 'permissions.edit',
-            'module_id' => 3,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-        DB::table('permissions')->insert([
-            'name' => 'Eliminar Permisos',
-            'slug' => 'permissions.delete',
-            'module_id' => 3,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
         // Transactions
         DB::table('permissions')->insert([
             'name' => 'Crear Transacciones',

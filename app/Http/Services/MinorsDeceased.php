@@ -9,27 +9,6 @@ class MinorsDeceased
 
     public static function search($dni, $captcha, $cookie)
     {
-        if (!$captcha || !$dni) {
-            return [
-                "success" => false,
-                "msg" => "Debe ingresar el captcha y el DNI."
-            ];
-        }
-
-        if (strlen($dni) !== 8) {
-            return [
-                "success" => false,
-                "message" => "DNI debe contener 8 dígitos."
-            ];
-        }
-
-        if (!$cookie) {
-            return [
-                "success" => false,
-                "msg" => 'Actualizar la página'
-            ];
-        }
-
         $url = 'https://serviciosbiometricos.reniec.gob.pe/appConsultaHuellas/consultar';
 
         $payload = array(

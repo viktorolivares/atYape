@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
-            $table->string('email');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('model');
+            $table->string('action');
+            $table->text('data')->nullable();
             $table->string('ip')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

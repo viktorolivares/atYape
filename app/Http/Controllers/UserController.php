@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Services\ActivityLogService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -14,6 +15,13 @@ use DB;
 
 class UserController extends Controller
 {
+
+    protected $activityLogService;
+
+    public function __construct(ActivityLogService $activityLogService)
+    {
+        $this->activityLogService = $activityLogService;
+    }
 
     public function index(Request $request)
     {
@@ -69,6 +77,26 @@ class UserController extends Controller
         $user->state = $request->state;
         $user->save();
 
+        $logData = [
+            'user_id' => Auth::id(),
+            'model' => 'Usuarios',
+            'action' => 'Actualizar',
+            'ip' => $request->ip(),
+            'data' => [
+                'update_state' => [
+                    'state' => $request->state,
+                ]
+            ],
+        ];
+
+        $this->activityLogService->createLog(
+            $logData['user_id'],
+            $logData['model'],
+            $logData['action'],
+            $logData['ip'],
+            $logData['data'],
+        );
+
         return response()->json([
             'success' => true,
         ], Response::HTTP_CREATED);
@@ -108,6 +136,28 @@ class UserController extends Controller
                 $user->update();
             }
         });
+
+        $logData = [
+            'user_id' => Auth::id(),
+            'model' => 'Usuarios',
+            'action' => 'Crear',
+            'ip' => $request->ip(),
+            'data' => [
+                'new_user' => [
+                    'firstname' => $request->firstname,
+                    'lastname' => $request->lastname,
+                    'email' => $request->email
+                ]
+            ],
+        ];
+
+        $this->activityLogService->createLog(
+            $logData['user_id'],
+            $logData['model'],
+            $logData['action'],
+            $logData['ip'],
+            $logData['data']
+        );
 
         return response()->json([
             'success' => true,
@@ -165,7 +215,6 @@ class UserController extends Controller
             $user->password = Hash::make($validatedData['password']);
         }
 
-
         $file = null;
 
         if ($request->has('selected_image')) {
@@ -179,7 +228,6 @@ class UserController extends Controller
             }
         }
 
-
         DB::transaction(function () use ($user, $file, $validatedData) {
             $user->update();
             $user->roles()->sync($validatedData['roles']);
@@ -190,11 +238,28 @@ class UserController extends Controller
             }
         });
 
-        return response()->json([
-            'success' => true,
-            'data' => $user,
 
-        ]);
+        $logData = [
+            'user_id' => Auth::id(),
+            'model' => 'Usuarios',
+            'action' => 'Actualizar',
+            'ip' => $request->ip(),
+            'data' => [
+                'update_user' => [
+                    'user' => $id,
+                    'firstname' => $request->firstname,
+                    'lastname' => $request->lastname,
+                ]
+            ],
+        ];
+
+        $this->activityLogService->createLog(
+            $logData['user_id'],
+            $logData['model'],
+            $logData['action'],
+            $logData['ip'],
+            $logData['data']
+        );
 
         return response()->json([
             'success' => true,
@@ -241,7 +306,6 @@ class UserController extends Controller
             }
         }
 
-
         DB::transaction(function () use ($user, $file) {
             $user->update();
 
@@ -250,6 +314,28 @@ class UserController extends Controller
                 $user->update();
             }
         });
+
+        $logData = [
+            'user_id' => Auth::id(),
+            'model' => 'Usuarios',
+            'action' => 'Actualizar',
+            'ip' => $request->ip(),
+            'data' => [
+                'update_profile' => [
+                    'user' => Auth::id(),
+                    'firstname' => $request->firstname,
+                    'lastname' => $request->lastname,
+                ]
+            ],
+        ];
+
+        $this->activityLogService->createLog(
+            $logData['user_id'],
+            $logData['model'],
+            $logData['action'],
+            $logData['ip'],
+            $logData['data']
+        );
 
         return response()->json([
             'success' => true,
