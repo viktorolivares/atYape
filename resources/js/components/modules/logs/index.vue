@@ -324,7 +324,7 @@ export default {
                     this.lastCommits = commits.slice(0, 3);
                 }
 
-                console.log(commits)
+                console.log(response)
 
             } catch (error) {
                 console.error(error);

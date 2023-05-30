@@ -6,13 +6,14 @@ use Illuminate\Support\Facades\Http;
 
 class Github
 {
+    private const USER = 'viktorolivares';
+    private const REPOSITORY = 'atYape';
+
     public static function  getLanguages()
     {
-        $token = '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';
-        $user = 'viktorolivares';
-        $repository = 'atYape';
+        $token = config('config.git');
 
-        $url = "https://api.github.com/repos/{$user}/{$repository}/languages";
+        $url = "https://api.github.com/repos/" . self::USER . "/" . self::REPOSITORY . "/languages";
 
         $response = Http::withToken($token)->get($url);
 
@@ -21,17 +22,15 @@ class Github
 
     public static function getLatestChanges()
     {
-        $token = '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';
-        $user = 'viktorolivares';
-        $repository = 'atYape';
+        $token = config('config.git');
 
         // Obtener los últimos commits
-        $commitsUrl = "https://api.github.com/repos/{$user}/{$repository}/commits";
+        $commitsUrl = "https://api.github.com/repos/" . self::USER . "/" . self::REPOSITORY . "/commits";
         $commitsResponse = Http::withToken($token)->get($commitsUrl);
         $commits = $commitsResponse->json();
 
         // Obtener los últimos cambios en el repositorio
-        $lastChangeUrl = "https://api.github.com/repos/{$user}/{$repository}/events";
+        $lastChangeUrl = "https://api.github.com/repos/" . self::USER . "/" . self::REPOSITORY . "/events";
         $lastChangeResponse = Http::withToken($token)->get($lastChangeUrl);
         $lastChange = $lastChangeResponse->json();
 
