@@ -45,8 +45,6 @@
                         </div>
                     </li>
                 </template>
-
-
                 <li class="dropdown notification-list">
                     <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#"
                         role="button" aria-haspopup="false" aria-expanded="false">
@@ -70,14 +68,11 @@
                         <div class=" dropdown-header noti-title">
                             <h6 class="text-overflow m-0">Welcome !</h6>
                         </div>
-
                         <!-- item-->
-
                         <router-link class="dropdown-item notify-item" :to="{ name: 'users.profile' }">
                             <i class="mdi mdi-account-circle me-1"></i>
                             <span>Mi perfil</span>
                         </router-link>
-
                         <!-- item-->
                         <button type="button" @click.prevent="logout" class="dropdown-item notify-item">
                             <i class="mdi mdi-logout me-1"></i>
@@ -90,7 +85,6 @@
                 <i class="mdi mdi-menu"></i>
             </button>
             <div class="app-search dropdown d-none d-lg-block">
-
             </div>
         </div>
         <!-- end Topbar -->

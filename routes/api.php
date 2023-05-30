@@ -16,13 +16,10 @@ use App\Http\Controllers\Api\TransactionApiController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::controller(TransactionApiController::class)->group(function () {
+        Route::post('/transactions/saveApk', 'saveTransaction');
+    });
 });
-
-Route::controller(TransactionApiController::class)->group(function () {
-    Route::post('/transactions/saveApk', 'saveTransaction');
-});
-
 
 

@@ -57,22 +57,33 @@
                                             <div class="mb-3">
                                                 <label for="firstname" class="form-label">Nombres</label>
                                                 <input type="text" class="form-control" id="firstname"
-                                                    placeholder="Enter first name" v-model="formData.firstname" required>
-                                                <div class="invalid-feedback">Please enter a valid first name.</div>
+                                                    placeholder="Nombres" v-model="formData.firstname" required>
+                                                <div class="invalid-feedback">Por favor, ingrese un nombre válido.</div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="lastname" class="form-label">Apellidos</label>
                                                 <input type="text" class="form-control" id="lastname"
-                                                    placeholder="Enter last name" v-model="formData.lastname" required>
-                                                <div class="invalid-feedback">Please enter a valid last name.</div>
+                                                    placeholder="Apellidos" v-model="formData.lastname" required>
+                                                <div class="invalid-feedback">Por favor ingrese un apellido válido.</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label for="password" class="form-label">Contraseña:</label>
+                                            <label for="current_confirmation" class="form-label">Contraseña actual:</label>
+                                            <div class="input-group">
+                                                <input :type="showConfirmPassword ? 'text' : 'password'"
+                                                    id="current_confirmation" class="form-control"
+                                                    v-model="formData.currentPassword"/>
+                                                <div class="input-group-text" @click="toggleConfirmPassword">
+                                                    <span class="mdi" :class="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="password" class="form-label">Nueva Contraseña:</label>
                                             <div class="input-group">
                                                 <input :type="showPassword ? 'text' : 'password'" id="password"
                                                     class="form-control" :class="{ 'is-invalid': errors.password }"
@@ -85,23 +96,26 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="password_confirmation" class="form-label">Confirmar
-                                                contraseña:</label>
-                                            <div class="input-group">
-                                                <input :type="showConfirmPassword ? 'text' : 'password'"
-                                                    id="password_confirmation" class="form-control"
-                                                    v-model="formData.password_confirmation" />
-                                                <div class="input-group-text" @click="toggleConfirmPassword">
-                                                    <span class="mdi" :class="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"></span>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="my-4">
-                                                <label for="image" class="form-label">Select an Image</label>
+                                                <label for="password_confirmation" class="form-label">Confirmar
+                                                    contraseña:</label>
+                                                <div class="input-group">
+                                                    <input :type="showConfirmPassword ? 'text' : 'password'"
+                                                        id="password_confirmation" class="form-control"
+                                                        v-model="formData.password_confirmation" />
+                                                    <div class="input-group-text" @click="toggleConfirmPassword">
+                                                        <span class="mdi" :class="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"></span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="my-4">
+                                                <label for="image" class="form-label">Seleccione una imagen</label>
                                                 <div class="d-flex flex-wrap bg-success-lighten">
                                                     <span v-for="image  in preloadedImages" :key="image.filename"
                                                         class="card m-1 avatar-sm" style="cursor: pointer;"
@@ -158,6 +172,7 @@ export default {
             },
             showPassword: false,
             showConfirmPassword: false,
+            currentPassword: '',
             errors: {},
             preloadedImages: [],
             selectedImage: null,
@@ -193,6 +208,8 @@ export default {
                     this.formData.selected_image = this.selectedImage.filename;
                     this.formData.selected_image_path = this.selectedImage.path;
                 }
+
+                this.formData.current_password = this.formData.currentPassword;
 
                 const response = await axios.put('/api/users/profile', this.formData);
                 this.onUserUpdatedOrCreate(response.data);
@@ -264,6 +281,7 @@ export default {
                 lastname: '',
                 password: '',
                 password_confirmation: '',
+                currentPassword: '',
                 file: null,
             };
             this.errors = {};

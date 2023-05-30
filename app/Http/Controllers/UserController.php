@@ -282,16 +282,25 @@ class UserController extends Controller
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'password' => 'sometimes|string|min:8|confirmed',
+            'current_password' => 'required_with:password|string',
             'selected_image' => 'nullable|string',
         ]);
 
         $user->firstname = $validatedData['firstname'];
         $user->lastname = $validatedData['lastname'];
 
+        if (!empty($validatedData['current_password'])) {
+            if (!Hash::check($validatedData['current_password'], $user->password)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'La contraseña actual es incorrecta',
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }
+
         if (!empty($validatedData['password'])) {
             $user->password = Hash::make($validatedData['password']);
         }
-
 
         $file = null;
 

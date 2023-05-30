@@ -10,7 +10,7 @@
                     <div class="col-md-6">
                         <div class="text-md-end footer-links d-none d-md-block">
                             <a href="#">
-                                <small>Laravel v10.7.1 (PHP v8.1.10)</small>
+                                <small>Laravel version: {{ laravelVersion}} | PHP version: {{ phpVersion }} | Version vue: {{ vueVersion }}</small>
                             </a>
                         </div>
                     </div>
@@ -20,7 +20,37 @@
         <!-- End Footer -->
     </div>
 </template>
+
 <script>
-    export default {
-    }
+
+import { createApp } from 'vue';
+
+export default {
+    data() {
+        return {
+            laravelVersion: '',
+            phpVersion: '',
+            vueVersion: '',
+        };
+    },
+
+    mounted() {
+        this.fetchVersions();
+    },
+    
+    methods: {
+        fetchVersions() {
+            fetch('/api/version')
+                .then(response => response.json())
+                .then(data => {
+                    this.laravelVersion = data.laravel;
+                    this.phpVersion = data.php;
+                    this.vueVersion = createApp().version;
+                })
+                .catch(error => {
+                    console.error('Error fetching versions:', error);
+                });
+        },
+    },
+};
 </script>

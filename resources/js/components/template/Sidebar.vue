@@ -23,7 +23,6 @@
             <div class="h-100" id="leftside-menu-container" data-simplebar>
                 <!--- Sidemenu -->
                 <ul class="side-nav">
-
                     <!-- Dashboard -->
                     <template v-if="permissions.includes('dashboard.index')">
                         <li class="side-nav-title side-nav-item">Home</li>
@@ -34,7 +33,6 @@
                             </router-link>
                         </li>
                     </template>
-
                     <!-- Transacciones + APK -->
                     <template v-if="permissions.includes('transactions.index')">
                         <li class="side-nav-title side-nav-item">APP</li>
@@ -53,7 +51,6 @@
                             </a>
                         </li> -->
                     </template>
-
                     <!-- Gestión de Usuarios -->
                     <template v-if="permissions.includes('users.index') || permissions.includes('roles.index')">
                         <li class="side-nav-title side-nav-item">Admin</li>
@@ -87,7 +84,6 @@
                             </div>
                         </li>
                     </template>
-
                     <!-- Utilidades -->
                     <template
                         v-if="permissions.includes('dni.index') || permissions.includes('ip.index') || permissions.includes('domain.index') || permissions.includes('logs.index')">
@@ -139,7 +135,6 @@
                         </li>
                     </template>
                 </ul>
-
                 <!-- Users online -->
                 <div class="help-box text-white text-center mt-3">
                     <img :src="route + '/assets/images/rocket.svg'" height="40" alt="Helper Icon Image">
@@ -173,17 +168,21 @@
 import toastMixin from "../modules/mixins/toastMixin";
 
 export default {
+
     mixins: [toastMixin],
     props: ['route', 'permissions', 'user'],
+
     data() {
         return {
             connectedUsers: [],
             isLoading: true
         };
     },
+
     created() {
         this.fetchUsersOnline();
     },
+
     methods: {
         fetchUsersOnline() {
             window.Echo.join('users-online')

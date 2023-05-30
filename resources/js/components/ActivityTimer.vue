@@ -6,14 +6,17 @@ export default {
     props: ['user'],
 
     setup(props) {
+
         const timeoutId = ref(null);
 
         const logout = () => {
             axios.post('/logout')
                 .then(response => {
                     if (response.data === 204) {
-                        window.location.href = "/logout";
                         localStorage.clear();
+                        setTimeout(() => {
+                            window.location.href = "/logout";
+                        }, 2000);
                     }
                 })
                 .catch(error => console.log(error));

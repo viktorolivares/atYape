@@ -12,6 +12,7 @@ use App\Http\Controllers\LogsController;
 use App\Http\Controllers\DniController;
 use App\Http\Controllers\IpController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 
 
@@ -116,6 +117,16 @@ Route::group(['prefix' => 'api'], function () {
         /*Domain*/
         Route::get('/domain/list', [DomainController::class, 'index']);
 
+        /*Version Laravel / PHP*/
+        Route::get('/version', function () {
+            $laravelVersion = App::version();
+            $phpVersion = phpversion();
+
+            return response()->json([
+                'laravel' => $laravelVersion,
+                'php' => $phpVersion,
+            ]);
+        });
     });
 });
 

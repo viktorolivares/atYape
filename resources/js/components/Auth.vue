@@ -5,7 +5,6 @@
                 <component :is="Component" :route="route" />
             </Transition>
         </router-view>
-
     </div>
 </template>
 
