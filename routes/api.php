@@ -2,8 +2,9 @@
 
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\TransactionApiController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,9 @@ use App\Http\Controllers\Api\TransactionApiController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::controller(TransactionApiController::class)->group(function () {
