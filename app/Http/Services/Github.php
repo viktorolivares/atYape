@@ -8,7 +8,7 @@ class Github
 {
     public static function  getLanguages()
     {
-        $token = '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';
+        $token = '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';
         $user = 'viktorolivares';
         $repository = 'atYape';
 
@@ -21,7 +21,7 @@ class Github
 
     public static function getLatestChanges()
     {
-        $token = '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';
+        $token = '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';
         $user = 'viktorolivares';
         $repository = 'atYape';
 
