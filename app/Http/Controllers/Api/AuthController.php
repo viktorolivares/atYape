@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -30,7 +29,9 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::guard('web')->logout();
+        $user = Auth::user();
+
+        $user->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logged out successfully'], 200);
     }

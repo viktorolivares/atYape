@@ -57,7 +57,7 @@
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#users" aria-expanded="false" aria-controls="utilities"
                                 class="side-nav-link">
-                                <i class="uil-store"></i>
+                                <i class="uil-users-alt"></i>
                                 <span> Gestión de Usuarios </span>
                                 <span class="menu-arrow"></span>
                             </a>
@@ -91,7 +91,7 @@
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#utilities" aria-expanded="false" aria-controls="utilities"
                                 class="side-nav-link">
-                                <i class="uil-store"></i>
+                                <i class="uil-cog"></i>
                                 <span> Utilidades </span>
                                 <span class="menu-arrow"></span>
                             </a>

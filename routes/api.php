@@ -18,12 +18,14 @@ use App\Http\Controllers\Api\TransactionApiController;
 */
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    
     Route::controller(TransactionApiController::class)->group(function () {
         Route::post('/transactions/saveApk', 'saveTransaction');
     });
+
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 

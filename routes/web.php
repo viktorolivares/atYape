@@ -29,7 +29,11 @@ use Illuminate\Http\Request;
 
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
 
 Route::group(['prefix' => 'api'], function () {
 
