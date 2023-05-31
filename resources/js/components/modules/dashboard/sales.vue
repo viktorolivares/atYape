@@ -59,14 +59,26 @@ export default {
                 },
                 dataLabels: {
                     enabled: true,
+                    style: {
+                        fontSize: '11px',
+                    },
                     formatter: function (value) {
                         const formatter = new Intl.NumberFormat('es-PE', {
                             style: 'currency',
                             currency: 'PEN',
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 1,
+                            maximumFractionDigits: 1,
                         });
-                        return formatter.format(value).replace(/\s/g, '');
+
+                        if (Math.abs(value) >= 1000) {
+                            const suffixes = ['', 'K', 'M', 'B', 'T'];
+                            const tier = Math.floor(Math.log10(Math.abs(value)) / 3);
+                            const suffix = suffixes[tier];
+                            const scaled = value / Math.pow(10, tier * 3);
+                            return formatter.format(scaled) + suffix;
+                        } else {
+                            return formatter.format(value);
+                        }
                     },
                 },
                 theme: {

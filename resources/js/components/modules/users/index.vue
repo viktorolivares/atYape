@@ -62,8 +62,8 @@
             </div>
             <div class="col-md-1 d-grid">
                 <template v-if="getPermissions.includes('users.create')">
-                    <router-link class="btn btn-sm btn-primary" :to="{ name: 'users.create' }" aria-label="Agregar usuario">
-                        <i class="mdi mdi-plus"></i>
+                    <router-link class="btn btn-primary" :to="{ name: 'users.create' }" aria-label="Agregar usuario">
+                        <i class="uil-plus"></i>
                     </router-link>
                 </template>
                 <template v-else>

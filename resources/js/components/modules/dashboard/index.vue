@@ -12,8 +12,8 @@
                                 </span>
                                 <input type="date" class="form-control" v-model="date">
                             </div>
-                            <a href="#" class="btn btn-sm btn-primary ms-2" @click="fetchDataForSelectedDate">
-                                <i class="mdi mdi-search-web"></i>
+                            <a href="#" class="btn btn-primary ms-2" @click="getData">
+                                <i class="uil-search"></i>
                             </a>
                         </form>
                     </div>
@@ -35,25 +35,21 @@
                                         <div class="float-end">
                                             <i class="mdi mdi-chart-bar widget-icon"></i>
                                         </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Number of Customers">{{ item.description }}</h5>
+                                        <h5 class="text-muted fw-normal mt-0" title="Number of Customers">
+                                            {{ item.description }}
+                                        </h5>
                                         <h3 class="mt-3 mb-3">{{ formatCurrency(item.total) }}</h3>
                                         <p class="mb-0 text-muted">
-                                            <span
-                                                class="me-2"
-                                                :class="{
-                                                    'text-success': ratio[item.description] >= 0,
-                                                    'text-danger': ratio[item.description] < 0,
-                                                }"
-                                            >
-                                                <i
-                                                    class="mdi"
-                                                    :class="{
-                                                            'mdi-arrow-up-bold': ratio[item.description] >= 0,
-                                                            'mdi-arrow-down-bold': ratio[item.description] < 0,
-                                                        }"
-                                                >
+                                            <span class="me-2" :class="{
+                                                'text-success': ratio[item.description] >= 0,
+                                                'text-danger': ratio[item.description] < 0,
+                                            }">
+                                                <i class="mdi" :class="{
+                                                        'mdi-arrow-up-bold': ratio[item.description] >= 0,
+                                                        'mdi-arrow-down-bold': ratio[item.description] < 0,
+                                                    }">
                                                 </i>
-                                            {{ Math.abs(ratio[item.description]).toFixed(2) }}%
+                                                {{ Math.abs(ratio[item.description]).toFixed(2) }}%
                                             </span>
                                             <span class="text-nowrap">Desde ayer</span>
                                         </p>
@@ -64,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-7">
+                    <div class="col-lg-5">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="header-title mb-3">ÚLTIMOS 30 DÍAS</h4>
@@ -74,8 +70,57 @@
                             </div>
                             <!-- end card-body-->
                         </div>
-                         <!-- end card-->
+                        <!-- end card-->
                     </div>
+                    <div class="col-lg-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="header-title mt-1 mb-3">Transacciones:</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-centered mb-0 font-14">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <span class="text-muted">Validadas</span>
+                                                    <h2>
+                                                        {{ summary.totalValidatedTransactions }}
+                                                    </h2>
+                                                    <div class="progress mb-3">
+                                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                                            :style="{ width: (summary.totalValidatedTransactions / summary.totalTransactions * 100) + '%' }"
+                                                            aria-valuenow="summary.totalValidatedTransactions"
+                                                            aria-valuemin="0" aria-valuemax="100">
+                                                            {{ (summary.totalValidatedTransactions / summary.totalTransactions * 100).toFixed(0) }}%
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span class="text-muted">Pendientes:</span>
+                                                    <h2>
+                                                        {{ summary.totalPendingTransactions }}
+                                                    </h2>
+                                                    <div class="progress mb-3">
+                                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
+                                                            :style="{ width: ((summary.totalTransactions - summary.totalValidatedTransactions) / summary.totalTransactions * 100) + '%' }"
+                                                            aria-valuenow="(summary.totalTransactions - summary.totalValidatedTransactions)"
+                                                            aria-valuemin="0" aria-valuemax="100">
+                                                            {{ ((summary.totalTransactions - summary.totalValidatedTransactions) / summary.totalTransactions * 100).toFixed(0) }}%
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end table-responsive -->
+                            </div>
+                            <!-- end card-body-->
+                        </div>
+                        <!-- end card-->
+                    </div>
+                    <!-- end col-->
                 </div>
                 <div class="row">
                     <div class="col-lg-5">
@@ -119,6 +164,11 @@ export default {
             date: '',
             data: [],
             ratio: [],
+            summary: {
+                totalTransactions: 0,
+                totalValidatedTransactions: 0,
+                totalPendingTransactions: 0,
+            },
         }
     },
 
@@ -126,17 +176,23 @@ export default {
         const date = new Date();
         this.date = moment(date).format("YYYY-MM-DD");
         this.fetchDataForSelectedDate();
+        this.getTransactionStates();
 
     },
 
     methods: {
+
+        getData() {
+            this.fetchDataForSelectedDate();
+            this.getTransactionStates();
+        },
 
         fetchDataForSelectedDate() {
             axios
                 .get("/api/dashboard/data", { params: { date: this.date } })
                 .then((response) => {
                     this.data = response.data.data,
-                    this.ratio = response.data.ratio
+                        this.ratio = response.data.ratio
                 })
                 .catch((error) => {
                     console.log(error);
@@ -150,7 +206,17 @@ export default {
                 minimumFractionDigits: 2,
             });
             return formatter.format(value);
-        }
+        },
+
+        async getTransactionStates() {
+            try {
+                const response = await axios.get("/api/dashboard/state-day", { params: { date: this.date } });
+                this.summary = response.data;
+                console.log(response)
+            } catch (error) {
+                console.error("Error fetching transaction states:", error);
+            }
+        },
     },
 };
 

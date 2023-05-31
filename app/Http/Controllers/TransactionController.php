@@ -187,40 +187,45 @@ class TransactionController extends Controller
         $transaction = Transaction::findOrFail($id);
         $oldTransaction = $transaction->toArray();
 
-        $transaction->details = $request->details;
-        $transaction->updated_by = $request->id;
-        $transaction->save();
+        if (!empty($request->details)) {
 
-        $newTransaction = $transaction->toArray();
+            $transaction->details = $request->details;
+            $transaction->updated_by = $request->id;
+            $transaction->save();
 
-        $changes = $this->compareTransactionChanges($oldTransaction, $newTransaction);
+            $newTransaction = $transaction->toArray();
 
-        if (!empty($changes)) {
-            $logData = [
-                'user_id' => Auth::id(),
-                'model' => 'Transacciones',
-                'action' => 'Actualizar',
-                'ip' => $request->ip(),
-                'data' => [
-                    'update_transaction' => [
-                        'details' => $request->details,
-                    ]
-                ],
-            ];
+            $changes = $this->compareTransactionDetails($oldTransaction, $newTransaction);
 
-            $this->activityLogService->createLog(
-                $logData['user_id'],
-                $logData['model'],
-                $logData['action'],
-                $logData['ip'],
-                $logData['data']
-            );
+            if (!empty($changes)) {
+                $logData = [
+                    'user_id' => Auth::id(),
+                    'model' => 'Transacciones',
+                    'action' => 'Actualizar',
+                    'ip' => $request->ip(),
+                    'data' => [
+                        'update_transaction' => [
+                            'details' => $request->details,
+                        ]
+                    ],
+                ];
+
+                $this->activityLogService->createLog(
+                    $logData['user_id'],
+                    $logData['model'],
+                    $logData['action'],
+                    $logData['ip'],
+                    $logData['data']
+                );
+            }
+
+            return response()->json([
+                'success' => true,
+                "old" => $oldTransaction,
+                "new" => $newTransaction
+
+            ], Response::HTTP_CREATED);
         }
-
-        return response()->json([
-            'success' => true,
-            Response::HTTP_CREATED
-        ]);
     }
 
     public function listByDescription($description, Request $request)
@@ -421,6 +426,27 @@ class TransactionController extends Controller
                         'new' => $value,
                     ];
                 }
+            }
+        }
+
+        return $changes;
+    }
+
+    private function compareTransactionDetails($oldTransaction, $newTransaction)
+    {
+        $changes = [];
+
+        $updatableFields = ['details'];
+
+        foreach ($updatableFields as $field) {
+            $oldValue = isset($oldTransaction[$field]) ? strval($oldTransaction[$field]) : null;
+            $newValue = isset($newTransaction[$field]) ? strval($newTransaction[$field]) : null;
+
+            if ($oldValue !== $newValue) {
+                $changes[$field] = [
+                    'old' => $oldValue,
+                    'new' => $newValue,
+                ];
             }
         }
 

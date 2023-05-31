@@ -58,6 +58,7 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('/dashboard/chart-data', 'getChartData');
             Route::get('/dashboard/top', 'getTop10');
             Route::get('/dashboard/sales-day', 'getSalesByDay');
+            Route::get('/dashboard/state-day', 'getTransactionStates');
         });
 
         /*Users*/

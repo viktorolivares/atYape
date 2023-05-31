@@ -221,15 +221,18 @@ class UserController extends Controller
         $user->email = $validatedData['email'];
 
         $passwordChanged = false;
+        $file = null;
+        $selectedImageUploaded = false;
 
         if (!empty($validatedData['password'])) {
             $user->password = Hash::make($validatedData['password']);
             $passwordChanged = true;
         }
 
-        $file = null;
-
         if ($request->has('selected_image')) {
+
+            $selectedImageUploaded = true;
+
             if ($user->file_id) {
                 $file = $user->file;
                 $file->path = 'images/users/' . $request->selected_image;
@@ -250,7 +253,7 @@ class UserController extends Controller
             }
         });
 
-        if (!empty($changes || $passwordChanged === true)) {
+        if (!empty($changes || $passwordChanged === true || $selectedImageUploaded === true )) {
 
             $user->load('roles');
 
@@ -260,6 +263,7 @@ class UserController extends Controller
                 'lastname' => $user->lastname,
                 'email' => $user->email,
                 'passwordChanged' => $passwordChanged,
+                'selectedImageUploaded' => $selectedImageUploaded,
                 'roles' => $user->roles()->pluck('name'),
             ];
 
@@ -324,15 +328,18 @@ class UserController extends Controller
         }
 
         $passwordChanged = false;
+        $file = null;
+        $selectedImageUploaded = false;
 
         if (!empty($validatedData['password'])) {
             $user->password = Hash::make($validatedData['password']);
             $passwordChanged = true;
         }
 
-        $file = null;
-
         if ($request->has('selected_image')) {
+
+            $selectedImageUploaded = true;
+
             if ($user->file_id) {
                 $file = $user->file;
                 $file->path = 'images/users/' . $request->selected_image;
@@ -352,14 +359,15 @@ class UserController extends Controller
             }
         });
 
-        if (!empty($changes || $passwordChanged === true)) {
+        if (!empty($changes || $passwordChanged === true || $selectedImageUploaded === true )) {
 
 
             $updateFields = [
                 'id' => $user->id,
                 'firstname' => $user->firstname,
                 'lastname' => $user->lastname,
-                'passwordChanged' => $passwordChanged
+                'passwordChanged' => $passwordChanged,
+                'selectedImageUploaded' => $selectedImageUploaded,
             ];
 
             $logData = [

@@ -74,11 +74,11 @@
                                         <div class="col-md-6">
                                             <label for="current_confirmation" class="form-label">Contraseña actual:</label>
                                             <div class="input-group">
-                                                <input :type="showConfirmPassword ? 'text' : 'password'"
+                                                <input :type="currentPassword ? 'text' : 'password'"
                                                     id="current_confirmation" class="form-control"
                                                     v-model="formData.currentPassword"/>
-                                                <div class="input-group-text" @click="toggleConfirmPassword">
-                                                    <span class="mdi" :class="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"></span>
+                                                <div class="input-group-text" @click="togglecurrentPassword">
+                                                    <span class="mdi" :class="currentPassword ? 'mdi-eye-off' : 'mdi-eye'"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -249,6 +249,10 @@ export default {
 
         toggleConfirmPassword() {
             this.showConfirmPassword = !this.showConfirmPassword;
+        },
+
+        togglecurrentPassword(){
+            this.currentPassword = !this.currentPassword;
         },
 
         onImageChange(event) {

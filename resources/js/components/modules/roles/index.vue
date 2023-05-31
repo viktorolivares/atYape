@@ -57,7 +57,7 @@
             </div>
             <div class="col-md-1 d-grid">
                 <template v-if="getPermissions.includes('roles.create')">
-                    <router-link class="btn btn-primary" :to="{ name: 'roles.create' }" aria-label="Agregar usuario">
+                    <router-link class="btn btn-primary" :to="{ name: 'roles.create' }" aria-label="Agregar Roles">
                         <i class=" uil-plus"></i>
                     </router-link>
                 </template>

@@ -74,8 +74,6 @@ class DashboardController extends Controller
             ->get();
 
         return response()->json($data);
-
-
     }
 
     public function getTop10()
@@ -93,14 +91,33 @@ class DashboardController extends Controller
 
     public function getSalesByDay()
     {
-
         $sales = Transaction::select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
-                    ->groupBy('date')
-                    ->orderByDesc('date')
-                    ->take(15)
-                    ->get();
+            ->groupBy('date')
+            ->orderByDesc('date')
+            ->take(15)
+            ->get();
 
         return $sales;
+    }
 
+    public function getTransactionStates(Request $request)
+    {
+        $date = Carbon::parse($request->date);
+
+        $totalTransactions = Transaction::whereDate('created_at', $date)->count();
+
+        $totalValidatedTransactions = Transaction::whereDate('created_at', $date)
+            ->where('state', 'validated')
+            ->count();
+
+        $totalPendingTransactions = Transaction::whereDate('created_at', $date)
+            ->where('state', 'pending')
+            ->count();
+
+        return response()->json([
+            'totalTransactions' => $totalTransactions,
+            'totalValidatedTransactions' => $totalValidatedTransactions,
+            'totalPendingTransactions' => $totalPendingTransactions,
+        ]);
     }
 }
