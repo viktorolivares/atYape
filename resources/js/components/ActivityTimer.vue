@@ -10,7 +10,7 @@ export default {
         const timeoutId = ref(null);
 
         const logout = () => {
-            axios.post('/logout')
+            axios.post('/logout', { automatic: true })
                 .then(response => {
                     if (response.data === 204) {
                         localStorage.clear();

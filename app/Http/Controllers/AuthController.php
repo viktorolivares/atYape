@@ -56,7 +56,7 @@ class AuthController extends Controller
                     'success' => true,
                     'authUser' => $user,
                 ], Response::HTTP_OK);
-                
+
             } else {
                 throw ValidationException::withMessages([
                     'credentials' => ['El estado de tu cuenta no está activo.'],
@@ -92,7 +92,8 @@ class AuthController extends Controller
             'ip' => $request->ip(),
             'data' => [
                 'logout' => [
-                    'email' => $user->email
+                    'email' => $user->email,
+                    'automatic' => $request->input('automatic', false),
                 ]
             ],
         ];

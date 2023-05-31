@@ -74,6 +74,7 @@ class UserController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
+        $previousState = $user->state;
         $user->state = $request->state;
         $user->save();
 
@@ -84,7 +85,8 @@ class UserController extends Controller
             'ip' => $request->ip(),
             'data' => [
                 'update_state' => [
-                    'state' => $request->state,
+                    'previous_state' => $previousState,
+                    'new_state' => $request->state,
                 ]
             ],
         ];
@@ -128,6 +130,7 @@ class UserController extends Controller
         }
 
         DB::transaction(function () use ($user, $file, $validatedData) {
+
             $user->save();
             $user->roles()->attach($validatedData['roles']);
 
@@ -137,17 +140,21 @@ class UserController extends Controller
             }
         });
 
+        $new_user = [
+            'id' => $user->id,
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'email' => $user->email,
+            'roles' => $user->roles()->pluck('name'),
+        ];
+
         $logData = [
             'user_id' => Auth::id(),
             'model' => 'Usuarios',
             'action' => 'Crear',
             'ip' => $request->ip(),
             'data' => [
-                'new_user' => [
-                    'firstname' => $request->firstname,
-                    'lastname' => $request->lastname,
-                    'email' => $request->email
-                ]
+                'new_user' => $new_user,
             ],
         ];
 
@@ -188,7 +195,7 @@ class UserController extends Controller
             ], Response::HTTP_FORBIDDEN);
         }
 
-        $user = User::find($id);
+        $user = User::with('roles')->find($id);
 
         if (!$user) {
             return response()->json([
@@ -207,12 +214,17 @@ class UserController extends Controller
             'roles.*' => 'exists:roles,id',
         ]);
 
+        $changes = $this->compareUserChanges($user->toArray(), $validatedData);
+
         $user->firstname = $validatedData['firstname'];
         $user->lastname = $validatedData['lastname'];
         $user->email = $validatedData['email'];
 
+        $passwordChanged = false;
+
         if (!empty($validatedData['password'])) {
             $user->password = Hash::make($validatedData['password']);
+            $passwordChanged = true;
         }
 
         $file = null;
@@ -228,7 +240,7 @@ class UserController extends Controller
             }
         }
 
-        DB::transaction(function () use ($user, $file, $validatedData) {
+        DB::transaction(function () use ($user, $file, $validatedData, $changes) {
             $user->update();
             $user->roles()->sync($validatedData['roles']);
 
@@ -238,28 +250,39 @@ class UserController extends Controller
             }
         });
 
+        if (!empty($changes || $passwordChanged === true)) {
 
-        $logData = [
-            'user_id' => Auth::id(),
-            'model' => 'Usuarios',
-            'action' => 'Actualizar',
-            'ip' => $request->ip(),
-            'data' => [
-                'update_user' => [
-                    'user' => $id,
-                    'firstname' => $request->firstname,
-                    'lastname' => $request->lastname,
-                ]
-            ],
-        ];
+            $user->load('roles');
 
-        $this->activityLogService->createLog(
-            $logData['user_id'],
-            $logData['model'],
-            $logData['action'],
-            $logData['ip'],
-            $logData['data']
-        );
+            $updateFields = [
+                'id' => $user->id,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'email' => $user->email,
+                'passwordChanged' => $passwordChanged,
+                'roles' => $user->roles()->pluck('name'),
+            ];
+
+            $logData = [
+                'user_id' => Auth::id(),
+                'model' => 'Usuarios',
+                'action' => 'Actualizar',
+                'ip' => $request->ip(),
+                'data' => [
+                    'update_user' => [
+                        'user' => $updateFields
+                    ]
+                ],
+            ];
+
+            $this->activityLogService->createLog(
+                $logData['user_id'],
+                $logData['model'],
+                $logData['action'],
+                $logData['ip'],
+                $logData['data']
+            );
+        }
 
         return response()->json([
             'success' => true,
@@ -286,6 +309,8 @@ class UserController extends Controller
             'selected_image' => 'nullable|string',
         ]);
 
+        $changes = $this->compareUserChanges($user->toArray(), $validatedData);
+
         $user->firstname = $validatedData['firstname'];
         $user->lastname = $validatedData['lastname'];
 
@@ -298,8 +323,11 @@ class UserController extends Controller
             }
         }
 
+        $passwordChanged = false;
+
         if (!empty($validatedData['password'])) {
             $user->password = Hash::make($validatedData['password']);
+            $passwordChanged = true;
         }
 
         $file = null;
@@ -324,27 +352,36 @@ class UserController extends Controller
             }
         });
 
-        $logData = [
-            'user_id' => Auth::id(),
-            'model' => 'Usuarios',
-            'action' => 'Actualizar',
-            'ip' => $request->ip(),
-            'data' => [
-                'update_profile' => [
-                    'user' => Auth::id(),
-                    'firstname' => $request->firstname,
-                    'lastname' => $request->lastname,
-                ]
-            ],
-        ];
+        if (!empty($changes || $passwordChanged === true)) {
 
-        $this->activityLogService->createLog(
-            $logData['user_id'],
-            $logData['model'],
-            $logData['action'],
-            $logData['ip'],
-            $logData['data']
-        );
+
+            $updateFields = [
+                'id' => $user->id,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'passwordChanged' => $passwordChanged
+            ];
+
+            $logData = [
+                'user_id' => Auth::id(),
+                'model' => 'Usuarios',
+                'action' => 'Actualizar',
+                'ip' => $request->ip(),
+                'data' => [
+                    'update_profile' => [
+                        'user' => $updateFields
+                    ]
+                ],
+            ];
+
+            $this->activityLogService->createLog(
+                $logData['user_id'],
+                $logData['model'],
+                $logData['action'],
+                $logData['ip'],
+                $logData['data']
+            );
+        }
 
         return response()->json([
             'success' => true,
@@ -397,4 +434,36 @@ class UserController extends Controller
         }
     }
 
+    private function compareUserChanges($old, $new)
+    {
+        $changes = [];
+
+        if (isset($old['roles'])) {
+            $old['roles'] = array_column($old['roles'], 'id');
+            sort($old['roles']);
+        }
+
+        foreach ($new as $key => $value) {
+            if (array_key_exists($key, $old)) {
+                if (is_array($value)) {
+                    sort($value);
+                    if ($old[$key] !== $value) {
+                        $changes[$key] = [
+                            'old' => $old[$key],
+                            'new' => $value
+                        ];
+                    }
+                } else {
+                    if ($old[$key] !== $value) {
+                        $changes[$key] = [
+                            'old' => $old[$key],
+                            'new' => $value
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $changes;
+    }
 }

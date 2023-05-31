@@ -72,16 +72,19 @@ class RoleController extends Controller
 
         $role->permissions()->sync($permissions);
 
+        $new_role = [
+            'name' => $role->name,
+            'slug' => $role->slug,
+            'permissions' => $role->permissions()->pluck('name'),
+        ];
+
         $logData = [
             'user_id' => Auth::id(),
             'model' => 'Roles',
             'action' => 'Crear',
             'ip' => $request->ip(),
             'data' => [
-                'new_role' => [
-                    'name' => $request->name,
-                    'slug' => $request->slug,
-                ]
+                'new_role' => $new_role
             ],
         ];
 
@@ -101,7 +104,7 @@ class RoleController extends Controller
 
     public function updateRole(Request $request, $id)
     {
-        if($id == 1){
+        if ($id == 1) {
             return response()->json([
                 'success' => false,
                 'message' => 'No se puede actualizar el rol de administrador',
@@ -115,6 +118,9 @@ class RoleController extends Controller
         ]);
 
         $role = Role::find($id);
+        $oldRoleData = $role->toArray();
+        $oldPermissions = $role->permissions()->pluck('id')->toArray();
+        sort($oldPermissions);
 
         if (!$role) {
             return response()->json([
@@ -130,27 +136,37 @@ class RoleController extends Controller
         $permissions = Permission::whereIn('id', $request->input('permissions'))->get();
         $role->permissions()->sync($permissions);
 
-        $logData = [
-            'user_id' => Auth::id(),
-            'model' => 'Roles',
-            'action' => 'Actualizar',
-            'ip' => $request->ip(),
-            'data' => [
-                'update_role' => [
-                    'role' => $id,
-                    'name' => $request->name,
-                    'slug' => $request->slug,
-                ]
-            ],
-        ];
+        $newPermissions = $role->permissions()->pluck('id')->toArray();
+        sort($newPermissions);
+        $roleChanges = $this->compareChanges($oldRoleData, $validatedData);
+        $permissionChanges = $this->compareChanges(['permissions' => $oldPermissions], ['permissions' => $newPermissions]);
 
-        $this->activityLogService->createLog(
-            $logData['user_id'],
-            $logData['model'],
-            $logData['action'],
-            $logData['ip'],
-            $logData['data']
-        );
+        if (!empty($roleChanges) || !empty($permissionChanges)) {
+
+            $updateFields = [
+                'name' => $role->name,
+                'slug' => $role->slug,
+                'permissions' => $role->permissions()->pluck('name'),
+            ];
+
+            $logData = [
+                'user_id' => Auth::id(),
+                'model' => 'Roles',
+                'action' => 'Actualizar',
+                'ip' => $request->ip(),
+                'data' => [
+                    'update_role' => $updateFields
+                ],
+            ];
+
+            $this->activityLogService->createLog(
+                $logData['user_id'],
+                $logData['model'],
+                $logData['action'],
+                $logData['ip'],
+                $logData['data']
+            );
+        }
 
         return response()->json([
             'success' => true,
@@ -191,9 +207,10 @@ class RoleController extends Controller
         return response()->json($roles);
     }
 
-    public function deleteRole($id) {
+    public function deleteRole(Request $request, $id)
+    {
 
-        if($id == 1){
+        if ($id == 1) {
             return response()->json([
                 'success' => false,
                 'message' => 'No se puede eliminar el rol de administrador',
@@ -207,11 +224,45 @@ class RoleController extends Controller
             $role->users()->detach();
             $role->delete();
 
-            return response()->json(['message' => 'Role deleted successfully'], 200);
+            $logData = [
+                'user_id' => Auth::id(),
+                'model' => 'Roles',
+                'action' => 'Eliminar',
+                'ip' => $request->ip(),
+                'data' => [
+                    'delete_role' => [
+                        'role' => $id,
+                    ]
+                ],
+            ];
 
+            $this->activityLogService->createLog(
+                $logData['user_id'],
+                $logData['model'],
+                $logData['action'],
+                $logData['ip'],
+                $logData['data']
+            );
+
+            return response()->json(['message' => 'Role deleted successfully'], 200);
         } else {
             return response()->json(['error' => 'Role not found'], 404);
         }
     }
 
+    public function compareChanges($oldData, $newData)
+    {
+        $changes = [];
+
+        foreach($newData as $key => $value) {
+            if (array_key_exists($key, $oldData) && $oldData[$key] !== $newData[$key]) {
+                $changes[$key] = [
+                    'old' => $oldData[$key],
+                    'new' => $newData[$key],
+                ];
+            }
+        }
+
+        return $changes;
+    }
 }

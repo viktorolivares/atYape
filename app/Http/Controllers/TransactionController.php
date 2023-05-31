@@ -111,18 +111,23 @@ class TransactionController extends Controller
         $transactions->fill($data);
         $transactions->save();
 
+
+        $new_transaction = [
+            'id' => $transactions->id,
+            'description' => $transactions->description,
+            'person' => $transactions->person,
+            'amount' => $transactions->amount,
+            'register_date' => $transactions->register_date,
+
+        ];
+
         $logData = [
             'user_id' => Auth::id(),
             'model' => 'Transacciones',
             'action' => 'Crear',
             'ip' => $request->ip(),
             'data' => [
-                'new_transaction' => [
-                    'description' => $request->description,
-                    'person' => $request->person,
-                    'amount' => $request->amount,
-                    'registerDate' => $request->register_date
-                ]
+                'new_transaction' => $new_transaction
             ],
         ];
 
@@ -143,6 +148,8 @@ class TransactionController extends Controller
     public function updateState(Request $request, $id)
     {
         $transaction = Transaction::findOrFail($id);
+        $previousState = $transaction->state;
+
         $transaction->state = $request->state;
         $transaction->updated_by = $request->id;
 
@@ -155,7 +162,8 @@ class TransactionController extends Controller
             'ip' => $request->ip(),
             'data' => [
                 'update_transaction' => [
-                    'state' => $request->state,
+                    'previous_state' => $previousState,
+                    'new_state' => $request->state,
                 ]
             ],
         ];
@@ -177,29 +185,37 @@ class TransactionController extends Controller
     public function updateDetails(Request $request, $id)
     {
         $transaction = Transaction::findOrFail($id);
+        $oldTransaction = $transaction->toArray();
+
         $transaction->details = $request->details;
         $transaction->updated_by = $request->id;
         $transaction->save();
 
-        $logData = [
-            'user_id' => Auth::id(),
-            'model' => 'Transacciones',
-            'action' => 'Actualizar',
-            'ip' => $request->ip(),
-            'data' => [
-                'update_transaction' => [
-                    'details' => $request->details,
-                ]
-            ],
-        ];
+        $newTransaction = $transaction->toArray();
 
-        $this->activityLogService->createLog(
-            $logData['user_id'],
-            $logData['model'],
-            $logData['action'],
-            $logData['ip'],
-            $logData['data']
-        );
+        $changes = $this->compareTransactionChanges($oldTransaction, $newTransaction);
+
+        if (!empty($changes)) {
+            $logData = [
+                'user_id' => Auth::id(),
+                'model' => 'Transacciones',
+                'action' => 'Actualizar',
+                'ip' => $request->ip(),
+                'data' => [
+                    'update_transaction' => [
+                        'details' => $request->details,
+                    ]
+                ],
+            ];
+
+            $this->activityLogService->createLog(
+                $logData['user_id'],
+                $logData['model'],
+                $logData['action'],
+                $logData['ip'],
+                $logData['data']
+            );
+        }
 
         return response()->json([
             'success' => true,
@@ -251,6 +267,7 @@ class TransactionController extends Controller
     public function updateTransaction(Request $request, $id)
     {
         $transaction = Transaction::findOrFail($id);
+        $oldTransaction = $transaction->toArray();
 
         if ($transaction->system === 'APK') {
             return response()->json([
@@ -280,33 +297,44 @@ class TransactionController extends Controller
         $transaction->updated_by = Auth::id();
         $transaction->save();
 
-        $logData = [
-            'user_id' => Auth::id(),
-            'model' => 'Transacciones',
-            'action' => 'Actualizar',
-            'ip' => $request->ip(),
-            'data' => [
-                'update_transaction' => [
-                    'transaction' => $id,
-                    'description' => $request->description,
-                    'person' => $request->person,
-                    'amount' => $request->amount,
-                    'register_date' => $request->register_date
-                ]
-            ],
-        ];
+        $newTransaction = $transaction->toArray();
 
-        $this->activityLogService->createLog(
-            $logData['user_id'],
-            $logData['model'],
-            $logData['action'],
-            $logData['ip'],
-            $logData['data']
-        );
+        $changes = $this->compareTransactionChanges($oldTransaction, $newTransaction);
+
+        if (!empty($changes)) {
+
+            $updateFields = [
+                'id' => $transaction->id,
+                'description' => $transaction->description,
+                'person' => $transaction->person,
+                'amount' => $transaction->amount,
+                'register_date' => $transaction->register_date,
+            ];
+
+            $logData = [
+                'user_id' => Auth::id(),
+                'model' => 'Transacciones',
+                'action' => 'Actualizar',
+                'ip' => $request->ip(),
+                'data' => [
+                    'update_transaction' => [
+                        'transaction' => $updateFields
+                    ]
+                ],
+            ];
+
+            $this->activityLogService->createLog(
+                $logData['user_id'],
+                $logData['model'],
+                $logData['action'],
+                $logData['ip'],
+                $logData['data']
+            );
+        }
 
         return response()->json([
             'success' => true,
-            'transaction' => $transaction,
+            'transaction' => $transaction
         ], Response::HTTP_OK);
     }
 
@@ -373,5 +401,29 @@ class TransactionController extends Controller
         } catch (ValidationException $e) {
             return response()->json(['error' => $e->errors()], 422);
         }
+    }
+
+    private function compareTransactionChanges($oldTransaction, $newTransaction)
+    {
+        $changes = [];
+
+        $updatableFields = ['description', 'person', 'amount', 'register_date'];
+
+        foreach ($newTransaction as $key => $value) {
+            if (in_array($key, $updatableFields)) {
+                if ($key == 'register_date') {
+                    $value = date('Y-m-d H:i:s', strtotime($value));
+                    $oldTransaction[$key] = date('Y-m-d H:i:s', strtotime($oldTransaction[$key]));
+                }
+                if (isset($oldTransaction[$key]) && strval($oldTransaction[$key]) !== strval($value)) {
+                    $changes[$key] = [
+                        'old' => $oldTransaction[$key],
+                        'new' => $value,
+                    ];
+                }
+            }
+        }
+
+        return $changes;
     }
 }

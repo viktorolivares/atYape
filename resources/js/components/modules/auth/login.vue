@@ -96,6 +96,7 @@
         </footer>
     </div>
 </template>
+
 <script>
 
 import toastMixin from "../mixins/toastMixin.js";
