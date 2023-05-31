@@ -168,10 +168,10 @@ export default {
                 return;
             }
             try {
-                const response = await axios.get(`/api/roles/${this.roleId}`);
+                const response = await axios.get(`/admin/roles/${this.roleId}`);
                 this.formData = response.data.data;
 
-                const permissionsResponse = await axios.get(`/api/roles/permissions/${this.roleId}/`);
+                const permissionsResponse = await axios.get(`/admin/roles/permissions/${this.roleId}/`);
                 this.selectPermissions = permissionsResponse.data.data.map(permission => permission.id);
 
                 for (const moduleName in this.permissions) {
@@ -185,7 +185,7 @@ export default {
 
         async loadPermissionsByRol() {
             try {
-                const response = await axios.get("/api/permissions/by-module");
+                const response = await axios.get("/admin/permissions/by-module");
                 this.permissions = response.data.data;
 
             } catch (error) {
@@ -196,7 +196,7 @@ export default {
         async saveRole() {
             try {
                 if (this.roleId) {
-                    const response = await axios.put(`/api/roles/${this.roleId}`, {
+                    const response = await axios.put(`/admin/roles/${this.roleId}`, {
                         name: this.formData.name,
                         slug: this.formData.slug,
                         permissions: this.selectPermissions,
@@ -205,7 +205,7 @@ export default {
                     this.onRoleUpdateOrCreate(response.data);
 
                 } else {
-                    const response = await axios.post('/api/roles/save', {
+                    const response = await axios.post('/admin/roles/save', {
                         name: this.formData.name,
                         slug: this.formData.slug,
                         permissions: this.selectPermissions,
@@ -294,7 +294,7 @@ export default {
 
         async getRolePermissions() {
             try {
-                const response = await axios.get("/api/users/roles/permissions");
+                const response = await axios.get("/admin/users/roles/permissions");
                 if (response.status === 200) {
                     localStorage.setItem('permissions', JSON.stringify(response.data));
                     this.$eventBus.$emit('updatePermissions', response.data);

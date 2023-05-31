@@ -271,7 +271,7 @@ export default {
         return {
             domains: '',
             responses: [],
-            apiUrl: '/api/domain/list',
+            apiUrl: '/admin/domain/list',
             isFetching: false,
             fetchProgress: 0,
             showTable: false,

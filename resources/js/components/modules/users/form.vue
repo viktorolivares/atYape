@@ -170,7 +170,7 @@ export default {
             }
 
             try {
-                const response = await axios.get(`/api/users/${this.userId}`);
+                const response = await axios.get(`/admin/users/${this.userId}`);
                 this.formData = response.data;
 
                 if (this.formData.file) {
@@ -189,7 +189,7 @@ export default {
 
         async loadAllRoles() {
             try {
-                const response = await axios.get("/api/roles/all");
+                const response = await axios.get("/admin/roles/all");
                 this.allRoles = response.data;
             } catch (error) {
                 console.error("Error al cargar roles:", error.message);
@@ -210,11 +210,11 @@ export default {
                 let response;
 
                 if (this.userId) {
-                    response = await axios.put(`/api/users/${this.userId}`, this.formData);
+                    response = await axios.put(`/admin/users/${this.userId}`, this.formData);
                     this.onUserUpdatedOrCreate(response.data);
 
                 } else {
-                    response = await axios.post('/api/users/save', this.formData);
+                    response = await axios.post('/admin/users/save', this.formData);
                     this.onUserUpdatedOrCreate(response.data);
                 }
             } catch (error) {
@@ -258,7 +258,7 @@ export default {
 
         async getPreloadedImages() {
             try {
-                const response = await axios.get('/api/files/preloaded');
+                const response = await axios.get('/admin/files/preloaded');
                 this.preloadedImages = response.data;
             } catch (error) {
                 console.error('Error al obtener las imágenes precargadas:', error.message);

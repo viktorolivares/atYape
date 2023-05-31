@@ -193,7 +193,7 @@ export default {
 
     data() {
         return {
-            apiUrl: "/api/roles/list",
+            apiUrl: "/admin/roles/list",
             filter: {
                 name: '',
                 slug: ''
@@ -243,7 +243,7 @@ export default {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete(`/api/roles/delete/${roleId}`)
+                    axios.delete(`/admin/roles/delete/${roleId}`)
                         .then(response => {
                             this.fetchData();
                             this.$swal('¡Eliminado!', 'La transacción ha sido eliminada.', 'success');

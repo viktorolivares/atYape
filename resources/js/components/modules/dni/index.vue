@@ -618,7 +618,7 @@ export default {
             this.data = {};
 
             try {
-                const response = await axios.get('/api/dni/query', { params: { dni } });
+                const response = await axios.get('/admin/dni/query', { params: { dni } });
 
 
                 const errorDni = response.data.data.error;
@@ -654,7 +654,7 @@ export default {
             this.data = {};
 
             try {
-                const response = await axios.post('/api/dni/minors-deceased', { dniMinorsDeceased, cookie, captcha });
+                const response = await axios.post('/admin/dni/minors-deceased', { dniMinorsDeceased, cookie, captcha });
 
                 const status = response.data.data.status;
                 const message = response.data.data.message;
@@ -691,7 +691,7 @@ export default {
             }
         },
         async getCookiesCaptcha() {
-            const response = await axios.get('/api/dni/cookies-captcha');
+            const response = await axios.get('/admin/dni/cookies-captcha');
             this.cookies = response.data;
             this.updateCaptcha();
             return response.data;
@@ -726,7 +726,7 @@ export default {
                 const trimmedDni = dni.trim()
                 if (trimmedDni.length > 0) {
                     try {
-                        const response = await axios.get('/api/dni/query', { params: { dni: trimmedDni } });
+                        const response = await axios.get('/admin/dni/query', { params: { dni: trimmedDni } });
 
                         if (response.status === 200) {
                             this.responses.push(response.data.data)
@@ -799,7 +799,7 @@ export default {
                 const trimmedDni = dni.trim()
                 if (trimmedDni.length > 0) {
                     try {
-                        const response = await axios.post('/api/dni/minors-deceased', {
+                        const response = await axios.post('/admin/dni/minors-deceased', {
                             dniMinorsDeceased: trimmedDni,
                             cookie: cookie,
                             captcha: captcha

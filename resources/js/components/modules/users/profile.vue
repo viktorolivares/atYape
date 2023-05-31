@@ -188,7 +188,7 @@ export default {
 
         async loadUserData() {
             try {
-                const response = await axios.get(`/api/users/profile`);
+                const response = await axios.get(`/admin/users/profile`);
                 this.formData = response.data;
 
                 if (this.formData.file) {
@@ -211,7 +211,7 @@ export default {
 
                 this.formData.current_password = this.formData.currentPassword;
 
-                const response = await axios.put('/api/users/profile', this.formData);
+                const response = await axios.put('/admin/users/profile', this.formData);
                 this.onUserUpdatedOrCreate(response.data);
 
                 this.getAuthUser();
@@ -261,7 +261,7 @@ export default {
 
         async getPreloadedImages() {
             try {
-                const response = await axios.get('/api/files/preloaded');
+                const response = await axios.get('/admin/files/preloaded');
                 this.preloadedImages = response.data;
             } catch (error) {
                 console.error('Error al obtener las imágenes precargadas:', error.message);
@@ -270,7 +270,7 @@ export default {
 
         async getAuthUser(){
             try {
-                const response = await axios.get('/api/refresh/auth');
+                const response = await axios.get('/admin/refresh/auth');
                 console.log(response.data)
                 this.$eventBus.$emit('verifyAuth', response.data);
 

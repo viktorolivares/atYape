@@ -101,7 +101,7 @@ export default {
     methods: {
         async fetchChartData() {
             try {
-                const response = await axios.get('/api/dashboard/chart-data');
+                const response = await axios.get('/admin/dashboard/chart-data');
                 const data = response.data;
 
                 this.chartData[0].data = data.map(item => item.total);

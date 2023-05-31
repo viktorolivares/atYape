@@ -378,7 +378,7 @@ export default {
 
     data() {
         return {
-            apiUrl: "/api/transactions/list",
+            apiUrl: "/admin/transactions/list",
             selectedTransaction: {},
             updateInterval: null,
             filter: {
@@ -449,7 +449,7 @@ export default {
 
             const state = transaction.state === 'validated' ? 'pending' : 'validated';
             try {
-                await axios.put(`/api/transactions/${transaction.id}/state`, {
+                await axios.put(`/admin/transactions/${transaction.id}/state`, {
                     state: state,
                     id: this.user.id
                 });
@@ -473,7 +473,7 @@ export default {
                     return
                 }
 
-                await axios.put(`/api/transactions/${this.selectedTransaction.id}/details`, {
+                await axios.put(`/admin/transactions/${this.selectedTransaction.id}/details`, {
                     details: this.selectedTransaction.details,
                     id: this.user.id
                 });
@@ -525,7 +525,7 @@ export default {
 
         saveTransaction() {
 
-            const url = this.transactionData.id ? `/api/transactions/update/${this.transactionData.id}` : '/api/transactions/save';
+            const url = this.transactionData.id ? `/admin/transactions/update/${this.transactionData.id}` : '/admin/transactions/save';
             const method = this.transactionData.id ? 'put' : 'post';
 
             axios({ method, url, data: this.transactionData })
@@ -558,7 +558,7 @@ export default {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete(`/api/transactions/delete/${transaction.id}`)
+                    axios.delete(`/admin/transactions/delete/${transaction.id}`)
                         .then(response => {
                             this.fetchData();
                             this.$swal('¡Eliminado!', 'La transacción ha sido eliminada.', 'success');

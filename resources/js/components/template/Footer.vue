@@ -37,10 +37,10 @@ export default {
     mounted() {
         this.fetchVersions();
     },
-    
+
     methods: {
         fetchVersions() {
-            fetch('/api/version')
+            fetch('/admin/version')
                 .then(response => response.json())
                 .then(data => {
                     this.laravelVersion = data.laravel;

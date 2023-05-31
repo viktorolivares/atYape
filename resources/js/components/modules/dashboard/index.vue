@@ -189,7 +189,7 @@ export default {
 
         fetchDataForSelectedDate() {
             axios
-                .get("/api/dashboard/data", { params: { date: this.date } })
+                .get("/admin/dashboard/data", { params: { date: this.date } })
                 .then((response) => {
                     this.data = response.data.data,
                         this.ratio = response.data.ratio
@@ -210,7 +210,7 @@ export default {
 
         async getTransactionStates() {
             try {
-                const response = await axios.get("/api/dashboard/state-day", { params: { date: this.date } });
+                const response = await axios.get("/admin/dashboard/state-day", { params: { date: this.date } });
                 this.summary = response.data;
                 console.log(response)
             } catch (error) {

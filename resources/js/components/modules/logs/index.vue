@@ -261,7 +261,7 @@ export default {
             languages: {},
             lastcommits: {},
             loadingLanguages: true,
-            apiUrl: "/api/logs/list",
+            apiUrl: "/admin/logs/list",
             filter: {
                 model: '',
             },
@@ -314,7 +314,7 @@ export default {
 
         async fetchGithub() {
             try {
-                const response = await axios.get('/api/logs/github');
+                const response = await axios.get('/admin/logs/github');
                 this.languages = response.data.languages;
                 this.loadingLanguages = false;
 

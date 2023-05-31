@@ -383,7 +383,7 @@ export default {
 
             if (transaction.state === 'pending') {
                 try {
-                    await axios.put(`/api/transactions/${transaction.id}/state`, {
+                    await axios.put(`/admin/transactions/${transaction.id}/state`, {
                         state: 'validated',
                         id: this.user.id
                     });
@@ -432,7 +432,7 @@ export default {
                     return
                 }
 
-                await axios.put(`/api/transactions/${this.selectedTransaction.id}/details`, {
+                await axios.put(`/admin/transactions/${this.selectedTransaction.id}/details`, {
                     details: this.selectedTransaction.details,
                     id: this.user.id
                 });
@@ -459,7 +459,7 @@ export default {
         searchPendingTransactions() {
             this.isLoading = true;
             this.errors = {};
-            axios.get('/api/transactions/pendings', {
+            axios.get('/admin/transactions/pendings', {
                 params: {
                     person: this.searchPending.person,
                     amount: this.searchPending.amount,

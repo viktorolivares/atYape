@@ -221,7 +221,7 @@ export default {
 
     data() {
         return {
-            apiUrl: "/api/users/list",
+            apiUrl: "/admin/users/list",
             filter: {
                 state: '',
                 name: '',
@@ -253,7 +253,7 @@ export default {
         async toggleStatus(user) {
             const state = user.state === 'active' ? 'inactive' : 'active';
             try {
-                await axios.put(`/api/users/${user.id}/state`, {
+                await axios.put(`/admin/users/${user.id}/state`, {
                     state: state,
                 });
                 user.state = state;

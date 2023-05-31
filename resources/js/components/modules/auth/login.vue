@@ -175,7 +175,7 @@ export default {
 
         async getRolePermissions(authUser) {
             try {
-                const response = await axios.get("/api/users/roles/permissions", {
+                const response = await axios.get("/admin/users/roles/permissions", {
                     params: {
                         "userId": authUser.id
                     }

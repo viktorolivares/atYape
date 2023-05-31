@@ -72,7 +72,7 @@ export default {
     methods: {
         async fetchTopData() {
             try {
-                const response = await axios.get('/api/dashboard/top');
+                const response = await axios.get('/admin/dashboard/top');
                 const data = response.data;
 
                 this.chartOptions.xaxis.categories = data.map(item => item.person);

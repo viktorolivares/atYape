@@ -81,7 +81,7 @@ export default {
     methods: {
         async fetchData() {
             try {
-                const response = await axios.get("/api/dashboard/sales-day");
+                const response = await axios.get("/admin/dashboard/sales-day");
                 const data = response.data;
 
                 this.chartOptions.xaxis.categories = data.map(item => item.date);
