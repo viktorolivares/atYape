@@ -74,7 +74,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-body" v-if="totalTransactions > 0">
                                 <h5 class="header-title mt-1 mb-3">Transacciones:</h5>
                                 <div class="table-responsive">
                                     <table class="table table-sm table-centered mb-0 font-14">
@@ -115,6 +115,9 @@
                                     </table>
                                 </div>
                                 <!-- end table-responsive -->
+                            </div>
+                            <div v-else>
+                                <span class="text-muted">SIN DATOS</span>
                             </div>
                             <!-- end card-body-->
                         </div>
