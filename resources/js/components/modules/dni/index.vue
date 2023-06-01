@@ -879,8 +879,10 @@ export default {
                 }, 2000);
             }
         },
+
         updateCaptcha() {
-            this.captchaImage = `${this.route}/captcha.jpg?timestamp=${Date.now()}`;
+            const captchaImage = `${this.route}/storage/captcha.jpg?timestamp=${Date.now()}`;
+            this.captchaImage = captchaImage;
         },
         cleanData() {
             this.dniMinorsDeceased = '',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Services\MinorsDeceased;
 use App\Http\Services\DniQuery;
 use Illuminate\Http\Request;
@@ -64,7 +65,7 @@ class DniController extends Controller
 
         $client = new Client();
         $urlCaptcha = 'https://serviciosbiometricos.reniec.gob.pe/appConsultaHuellas/captcha';
-        $routeCaptcha = public_path('captcha.jpg');
+        $routeCaptcha = storage_path('app/public/captcha.jpg');
 
         try {
 
