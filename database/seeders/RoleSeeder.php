@@ -62,5 +62,12 @@ class RoleSeeder extends Seeder
             'updated_at' => now()
         ]);
 
+        DB::table('roles')->insert([
+            'name' => 'Validador Principal',
+            'slug' => 'Encargado de validar información y asegurarse de su veracidad.',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
     }
 }
