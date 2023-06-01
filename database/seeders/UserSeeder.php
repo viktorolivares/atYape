@@ -207,15 +207,6 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'firstname' => 'FRANK SAUL',
-            'lastname' => 'PACHECO GRANADOS',
-            'email' => 'tv.pacheco@apuestatotal.net',
-            'password' => Hash::make('71119175'),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        DB::table('users')->insert([
             'firstname' => 'JOISSI GABRIEL',
             'lastname' => 'VÁSQUEZ DA COSTA',
             'email' => 'tv.vasquez@apuestatotal.net',
@@ -310,6 +301,15 @@ class UserSeeder extends Seeder
             'lastname' => 'SILVA CENTENO',
             'email' => 'tv.silva@apuestatotal.net',
             'password' => Hash::make('45783589'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('users')->insert([
+            'firstname' => 'MICHEL JONATHAN',
+            'lastname' => 'RAMIREZ SALAZAR',
+            'email' => 'tv.ramirez@apuestatotal.net',
+            'password' => Hash::make('46482291'),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
