@@ -116,7 +116,7 @@
                                 </div>
                                 <!-- end table-responsive -->
                             </div>
-                            <div v-else>
+                            <div class="card-body" v-else >
                                 <span class="text-muted">SIN DATOS</span>
                             </div>
                             <!-- end card-body-->
