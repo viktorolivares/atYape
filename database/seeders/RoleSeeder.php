@@ -21,8 +21,8 @@ class RoleSeeder extends Seeder
         ]);
 
         DB::table('roles')->insert([
-            'name' => 'Validador',
-            'slug' => 'Encargado de validar información y asegurarse de su veracidad.',
+            'name' => 'Analista',
+            'slug' => 'Encargado de analizar y procesar datos para obtener información relevante y tomar decisiones estratégicas.',
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -35,10 +35,32 @@ class RoleSeeder extends Seeder
         ]);
 
         DB::table('roles')->insert([
-            'name' => 'Analista',
-            'slug' => 'Encargado de analizar y procesar datos para obtener información relevante y tomar decisiones estratégicas.',
+            'name' => 'Validador Business',
+            'slug' => 'Encargado de validar información y asegurarse de su veracidad. | Business',
             'created_at' => now(),
             'updated_at' => now()
         ]);
+
+        DB::table('roles')->insert([
+            'name' => 'Validador Televentas',
+            'slug' => 'Encargado de validar información y asegurarse de su veracidad. | Televentas',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('roles')->insert([
+            'name' => 'Validador Mulfood',
+            'slug' => 'Encargado de validar información y asegurarse de su veracidad. | Mulfood',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('roles')->insert([
+            'name' => 'Validador Teleservicios',
+            'slug' => 'Encargado de validar información y asegurarse de su veracidad. | Mulfood',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
     }
 }
