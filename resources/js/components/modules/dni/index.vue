@@ -378,7 +378,7 @@
                                                         </div>
                                                         <div class="form-group mb-3">
                                                             <button class="btn btn-primary mt-3" :disabled="isLoading"
-                                                                @click="getMultipleMinorsDeceased(dnis, cookies, captcha)">
+                                                                @click.prevent="getMultipleMinorsDeceased(dnis, cookies, captcha)">
                                                                 <template v-if="isLoading">
                                                                     <span class="spinner-border spinner-border-sm me-1"
                                                                         role="status" aria-hidden="true">
@@ -769,6 +769,14 @@ export default {
 
         },
         async getMultipleMinorsDeceased(dnis, cookie, captcha) {
+
+
+            if (!this.captcha || this.captcha === '') {
+                this.showToast("Por favor, introduce el captcha", {
+                    type: "warning"
+                })
+                return
+            };
 
             if (!this.dnis || this.dnis.trim() === '') {
                 this.showToast("Por favor, introduce los DNIs", {

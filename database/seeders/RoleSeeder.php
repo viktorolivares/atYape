@@ -57,7 +57,7 @@ class RoleSeeder extends Seeder
 
         DB::table('roles')->insert([
             'name' => 'Validador Teleservicios',
-            'slug' => 'Encargado de validar información y asegurarse de su veracidad. | Telservicios',
+            'slug' => 'Encargado de validar información y asegurarse de su veracidad. | Teleservicios',
             'created_at' => now(),
             'updated_at' => now()
         ]);

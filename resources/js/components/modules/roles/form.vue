@@ -35,8 +35,14 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="slug" class="form-label">Slug:</label>
-                                        <input type="text" id="slug" class="form-control"
-                                            :class="{ 'is-invalid': errors.slug }" v-model="formData.slug" required />
+                                        <textarea
+                                            class="form-control"
+                                            id="slug" cols="30"
+                                            rows="4"
+                                            :class="{ 'is-invalid': errors.slug }, ['form-control']"
+                                            v-model="formData.slug"
+                                            required>
+                                        </textarea>
                                         <div class="invalid-feedback" v-if="errors.slug">
                                             {{ errors.slug[0] }}
                                         </div>
