@@ -71,7 +71,7 @@ class TransactionApiController extends Controller
                 return $query->where('description', $description);
             })
             ->limit(50)
-            ->get(['id', 'description', 'person', 'amount', 'state']);
+            ->get(['id', 'description', 'person', 'amount', 'state', 'register_date']);
 
         return response()->json($transactions, Response::HTTP_OK);
     }
