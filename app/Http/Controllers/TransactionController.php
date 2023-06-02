@@ -151,7 +151,7 @@ class TransactionController extends Controller
         $previousState = $transaction->state;
 
         $transaction->state = $request->state;
-        $transaction->updated_by = $request->id;
+        $transaction->updated_by = Auth::id();
 
         $transaction->save();
 
@@ -190,7 +190,7 @@ class TransactionController extends Controller
         if (!empty($request->details)) {
 
             $transaction->details = $request->details;
-            $transaction->updated_by = $request->id;
+            $transaction->updated_by = Auth::id();
             $transaction->save();
 
             $newTransaction = $transaction->toArray();
@@ -261,6 +261,8 @@ class TransactionController extends Controller
             $created->formatted_date = Carbon::parse($created->created_at)->format('d/m/Y H:i:s');
             return $created;
         });
+
+        dd($transactions);
 
         return response()->json([
             'success' => true,

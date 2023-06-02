@@ -64,7 +64,7 @@ const routes = [
         path: "/yape/business",
         component: Description,
         name: "yape.business",
-        props: { description: 'Business', apiUrl: '/api/transactions/list?description=business' },
+        props: { description: 'Business', apiUrl: '/admin/transactions/list?description=business' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },
@@ -73,7 +73,7 @@ const routes = [
         path: "/yape/mulfood",
         component: Description,
         name: "yape.mulfood",
-        props: { description: 'Mulfood', apiUrl: '/api/transactions/list?description=mulfood' },
+        props: { description: 'Mulfood', apiUrl: '/admin/transactions/list?description=mulfood' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },
@@ -82,7 +82,7 @@ const routes = [
         path: "/yape/teleservicios",
         component: Description,
         name: "yape.teleservicios",
-        props: { description: 'Teleservicios', apiUrl: '/api/transactions/list?description=teleservicios' },
+        props: { description: 'Teleservicios', apiUrl: '/admin/transactions/list?description=teleservicios' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },
@@ -91,7 +91,7 @@ const routes = [
         path: "/yape/televentas",
         component: Description,
         name: "yape.televentas",
-        props: { description: 'Televentas', apiUrl: '/api/transactions/list?description=televentas' },
+        props: { description: 'Televentas', apiUrl: '/admin/transactions/list?description=televentas' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },

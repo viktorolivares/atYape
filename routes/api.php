@@ -21,11 +21,12 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
+    Route::post('/logout', [AuthController::class, 'logout']);
+
     Route::controller(TransactionApiController::class)->group(function () {
         Route::post('/transactions/saveApk', 'saveTransaction');
+        Route::get('/transactions/listApk', 'listTransactions');
     });
-
-    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 

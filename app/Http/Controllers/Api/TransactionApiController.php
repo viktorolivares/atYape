@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use App\Models\Transaction;
 
 class TransactionApiController extends Controller
@@ -50,7 +49,6 @@ class TransactionApiController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $validator->messages(),
-                $data
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -62,5 +60,19 @@ class TransactionApiController extends Controller
             'success' => true,
             'transaction' => $transactions,
         ], Response::HTTP_CREATED);
+    }
+
+    public function listTransactions(Request $request)
+    {
+        $description = $request->description;
+
+        $transactions = Transaction::orderBy('id', 'desc')
+            ->when($description, function ($query, $description) {
+                return $query->where('description', $description);
+            })
+            ->limit(50)
+            ->get(['id', 'description', 'person', 'amount', 'state']);
+
+        return response()->json($transactions, Response::HTTP_OK);
     }
 }

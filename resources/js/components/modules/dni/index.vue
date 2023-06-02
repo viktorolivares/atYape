@@ -75,13 +75,13 @@
                                                                 <span class="text-danger">*</span>
                                                             </label>
                                                             <input type="text" id="dni-1"
-                                                                :class="['form-control', errors.dni ? 'is-invalid' : '']"
+                                                                :class="['form-control shadow-sm', errors.dni ? 'is-invalid' : '']"
                                                                 maxlength="8" v-model="dni">
                                                             <span v-if="errors.dni" class="invalid-feedback" role="alert">
                                                                 {{ errors.dni }}
                                                             </span>
                                                         </div>
-                                                        <div class="form-group mb-3">
+                                                        <div class="form-group mb-3 d-grid gap-2">
                                                             <button class="btn btn-primary mt-3" :disabled="isLoading"
                                                                 @click="getDni(dni)">
                                                                 <template v-if="isLoading">
@@ -140,10 +140,10 @@
                                                             <label for="massive-1">Lista de DNIs:
                                                                 <span class="text-danger">*</span>
                                                             </label>
-                                                            <textarea class="form-control" id="massive-1" cols="30"
+                                                            <textarea class="form-control shadow-sm" id="massive-1" cols="30"
                                                                 rows="10" v-model="dnis"></textarea>
                                                         </div>
-                                                        <div class="form-group mb-3">
+                                                        <div class="form-group mb-3 d-grid gap-2">
                                                             <button class="btn btn-primary mt-3" :disabled="isLoading"
                                                                 @click.prevent="getDniMultiple()">
                                                                 <template v-if="isLoading">
@@ -264,7 +264,7 @@
                                                                 <span class="text-danger">*</span>
                                                             </label>
                                                             <input type="text" id="dni-1"
-                                                                :class="['form-control', errors.captcha ? 'is-invalid' : '']"
+                                                                :class="['form-control shadow-sm', errors.captcha ? 'is-invalid' : '']"
                                                                 v-model="captcha">
                                                             <span v-if="errors.captcha" class="invalid-feedback"
                                                                 role="alert">
@@ -276,14 +276,14 @@
                                                                 <span class="text-danger">*</span>
                                                             </label>
                                                             <input type="text" id="dni-1"
-                                                                :class="['form-control', errors.dniMinorsDeceased ? 'is-invalid' : '']"
+                                                                :class="['form-control shadow-sm', errors.dniMinorsDeceased ? 'is-invalid' : '']"
                                                                 maxlength="8" v-model="dniMinorsDeceased">
                                                             <span v-if="errors.dniMinorsDeceased" class="invalid-feedback"
                                                                 role="alert">
                                                                 {{ errors.dniMinorsDeceased }}
                                                             </span>
                                                         </div>
-                                                        <div class="form-group mb-3">
+                                                        <div class="form-group mb-3 d-grid gap-2">
                                                             <button class="btn btn-primary mt-3" :disabled="isLoading"
                                                                 @click="getMinorsDeceased(dniMinorsDeceased, cookies, captcha)">
                                                                 <template v-if="isLoading">
@@ -362,7 +362,7 @@
                                                                 <span class="text-danger">*</span>
                                                             </label>
                                                             <input type="text" id="dni-1"
-                                                                :class="['form-control', errors.captcha ? 'is-invalid' : '']"
+                                                                :class="['form-control shadow-sm', errors.captcha ? 'is-invalid' : '']"
                                                                 v-model="captcha">
                                                             <span v-if="errors.captcha" class="invalid-feedback"
                                                                 role="alert">
@@ -373,10 +373,10 @@
                                                             <label for="massive-1">Lista de DNIs:
                                                                 <span class="text-danger">*</span>
                                                             </label>
-                                                            <textarea class="form-control" id="massive-1" cols="30"
+                                                            <textarea class="form-control shadow-sm" id="massive-1" cols="30"
                                                                 rows="10" v-model="dnis"></textarea>
                                                         </div>
-                                                        <div class="form-group mb-3">
+                                                        <div class="form-group mb-3 d-grid gap-2">
                                                             <button class="btn btn-primary mt-3" :disabled="isLoading"
                                                                 @click.prevent="getMultipleMinorsDeceased(dnis, cookies, captcha)">
                                                                 <template v-if="isLoading">
