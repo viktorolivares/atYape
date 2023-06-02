@@ -73,6 +73,7 @@ class TransactionApiController extends Controller
             ->limit(50)
             ->get(['id', 'description', 'person', 'amount', 'state', 'register_date']);
 
-        return response()->json($transactions)->header('Content-Type', 'application/json');
+        return response()->json($transactions, Response::HTTP_OK);
+
     }
 }

@@ -74,7 +74,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="card">
-                            <div class="card-body" v-if="totalTransactions != 0">
+                            <div class="card-body" v-if="totalTransactions !== 0">
                                 <h5 class="header-title mt-1 mb-3">Transacciones:</h5>
                                 <div class="table-responsive">
                                     <table class="table table-sm table-centered mb-0 font-14">
@@ -83,14 +83,14 @@
                                                 <td>
                                                     <span class="text-muted">Validadas</span>
                                                     <h2>
-                                                        {{ summary.totalValidatedTransactions }}
+                                                        {{ totalValidatedTransactions }}
                                                     </h2>
                                                     <div class="progress mb-3">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                                                            :style="{ width: (summary.totalValidatedTransactions / summary.totalTransactions * 100) + '%' }"
+                                                            :style="{ width: (totalValidatedTransactions / totalTransactions * 100) + '%' }"
                                                             aria-valuenow="summary.totalValidatedTransactions"
                                                             aria-valuemin="0" aria-valuemax="100">
-                                                            {{ (summary.totalValidatedTransactions / summary.totalTransactions * 100).toFixed(0) }}%
+                                                            {{ (totalValidatedTransactions / totalTransactions * 100).toFixed(0) }}%
                                                         </div>
                                                     </div>
                                                 </td>
@@ -99,14 +99,14 @@
                                                 <td>
                                                     <span class="text-muted">Pendientes:</span>
                                                     <h2>
-                                                        {{ summary.totalPendingTransactions }}
+                                                        {{ totalPendingTransactions }}
                                                     </h2>
                                                     <div class="progress mb-3">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
-                                                            :style="{ width: ((summary.totalTransactions - summary.totalValidatedTransactions) / summary.totalTransactions * 100) + '%' }"
+                                                            :style="{ width: ((totalTransactions - totalValidatedTransactions) / totalTransactions * 100) + '%' }"
                                                             aria-valuenow="(summary.totalTransactions - summary.totalValidatedTransactions)"
                                                             aria-valuemin="0" aria-valuemax="100">
-                                                            {{ ((summary.totalTransactions - summary.totalValidatedTransactions) / summary.totalTransactions * 100).toFixed(0) }}%
+                                                            {{ ((totalTransactions - totalValidatedTransactions) / totalTransactions * 100).toFixed(0) }}%
                                                         </div>
                                                     </div>
                                                 </td>
@@ -167,11 +167,9 @@ export default {
             date: '',
             data: [],
             ratio: [],
-            summary: {
-                totalTransactions: 0,
-                totalValidatedTransactions: 0,
-                totalPendingTransactions: 0,
-            },
+            totalTransactions: 0,
+            totalValidatedTransactions: 0,
+            totalPendingTransactions: 0,
         }
     },
 
@@ -214,7 +212,14 @@ export default {
         async getTransactionStates() {
             try {
                 const response = await axios.get("/admin/dashboard/state-day", { params: { date: this.date } });
-                this.summary = response.data;
+                const summary = response.data;
+
+                this.totalValidatedTransactions = summary.totalValidatedTransactions;
+                this.totalPendingTransactions = summary.totalPendingTransactions;
+                this.totalTransactions = summary.totalTransactions;
+
+                console.log(this.totalTransactions)
+
                 console.log(response)
             } catch (error) {
                 console.error("Error fetching transaction states:", error);
