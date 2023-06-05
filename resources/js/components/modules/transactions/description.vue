@@ -83,6 +83,11 @@
                                             &nbsp;
                                             <i class="mdi" :class="getSortIconClass('description')"></i>
                                         </th>
+                                        <th @click="toggleSort('created_at')">
+                                            <span>Registrado:</span>
+                                            &nbsp;
+                                            <i class="mdi" :class="getSortIconClass('created_at')"></i>
+                                        </th>
                                         <th @click="toggleSort('person')">
                                             <span>Persona</span>
                                             &nbsp;
@@ -92,11 +97,6 @@
                                             <span>Monto</span>
                                             &nbsp;
                                             <i class="mdi" :class="getSortIconClass('amount')"></i>
-                                        </th>
-                                        <th @click="toggleSort('created_at')">
-                                            <span>Registrado:</span>
-                                            &nbsp;
-                                            <i class="mdi" :class="getSortIconClass('created_at')"></i>
                                         </th>
                                         <th>Actualizar</th>
                                         <th @click="toggleSort('state')">
@@ -110,6 +110,7 @@
                                 <transition-group name="fade" tag="tbody" mode="in-out">
                                     <tr v-for="transaction in items" :key="transaction.id">
                                         <td>{{ transaction.description }}</td>
+                                        <td>{{ transaction.formatted_date }}</td>
                                         <td>
                                             {{ transaction.person }}
                                             <span class="mdi mdi-content-copy text-muted"
@@ -117,7 +118,6 @@
                                                 aria-label="Copiar nombre de persona">&nbsp;</span>
                                         </td>
                                         <td>{{ transaction.amount }}</td>
-                                        <td>{{ transaction.formatted_date }}</td>
                                         <td class="table-action">
                                             <button class="btn btn-sm"
                                                 :class="transaction.state === 'validated' ? 'btn-light text-muted' : 'btn-success'"
@@ -135,10 +135,18 @@
                                             </span>
                                         </td>
                                         <td class="table-action text-center">
-                                            <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
-                                                data-bs-target="#transactionModal" @click="openModal(transaction)"
+                                            <button type="button"
+                                                :class="['btn', 'btn-sm', transaction.details ? 'btn-warning' : 'btn-light']"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#transactionModal"
+                                                @click="openModal(transaction)"
                                                 :title="transaction.details">
-                                                <i class="mdi mdi-comment-text-outline"></i>
+                                                <template v-if="transaction.details">
+                                                    <i class="mdi mdi-comment-check"></i>
+                                                </template>
+                                                <template v-else>
+                                                    <i class="mdi mdi-comment-outline"></i>
+                                                </template>
                                             </button>
                                         </td>
                                     </tr>

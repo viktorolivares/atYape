@@ -241,6 +241,7 @@ export default {
                 return
             }
             const ipArray = this.ips.split('\n')
+
             if (ipArray.length > 100) {
                 this.showToast("Por favor, introduce hasta 100 IPs", {
                     type: "warning"

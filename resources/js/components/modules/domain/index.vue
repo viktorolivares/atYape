@@ -303,13 +303,15 @@ export default {
                 })
                 return
             }
+
             const domainArray = this.domains.split('\n')
             if (domainArray.length > 10) {
-                this.showToast("Por favor, introduce hasta 100 Dominios", {
+                this.showToast("Por favor, introduce hasta 10 Dominios", {
                     type: "warning"
                 })
                 return
             }
+
             this.responses = [];
             this.isFetching = true;
             this.fetchProgress = 0;
@@ -321,19 +323,14 @@ export default {
             let completedDomains = 0;
 
             for (const domain of domainArray) {
-
                 const trimmedDomain = domain.trim();
-
                 if (trimmedDomain.length > 0 && this.isValidDomain(trimmedDomain)) {
                     try {
-
                         const response = await axios.get(this.apiUrl, {
                             params: { domain: trimmedDomain }
                         });
-
                         this.responses.push(response.data.data);
                         this.credits = response.data.credits;
-
                     } catch (error) {
                         console.error(`Error al buscar el Dominio: ${trimmedDomain}`, error);
                         this.showToast("Error al buscar el Dominio", { type: "error" });

@@ -10,8 +10,8 @@ export default {
         filter: {},
         loading: false,
         sort: {
-            field: "id",
-            direction: "desc",
+            field: '',
+            direction: '',
         },
         pagination: paginationDefaults.pagination,
         paginated: paginationDefaults.paginated,

@@ -127,6 +127,11 @@
                                             &nbsp;
                                             <i class="mdi" :class="getSortIconClass('description')"></i>
                                         </th>
+                                        <th @click="toggleSort('created_at')">
+                                            <span>Registrado:</span>
+                                            &nbsp;
+                                            <i class="mdi" :class="getSortIconClass('created_at')"></i>
+                                        </th>
                                         <th @click="toggleSort('person')">
                                             <span>Persona</span>
                                             &nbsp;
@@ -136,11 +141,6 @@
                                             <span>Monto</span>
                                             &nbsp;
                                             <i class="mdi" :class="getSortIconClass('amount')"></i>
-                                        </th>
-                                        <th @click="toggleSort('created_at')">
-                                            <span>Registrado:</span>
-                                            &nbsp;
-                                            <i class="mdi" :class="getSortIconClass('created_at')"></i>
                                         </th>
                                         <th>Actualizar</th>
                                         <th @click="toggleSort('state')">
@@ -154,6 +154,7 @@
                                 <transition-group name="fade" tag="tbody" mode="in-out">
                                     <tr v-for="transaction in items" :key="transaction.id">
                                         <td>{{ transaction.description }}</td>
+                                        <td>{{ transaction.formatted_date }}</td>
                                         <td>
                                             {{ transaction.person }}
                                             <span class="mdi mdi-content-copy text-muted"
@@ -161,7 +162,6 @@
                                                 aria-label="Copiar nombre de persona">&nbsp;</span>
                                         </td>
                                         <td>{{ transaction.amount }}</td>
-                                        <td>{{ transaction.formatted_date }}</td>
                                         <td class="table-action text-center">
                                             <template v-if="getPermissions.includes('transactions.edit')">
                                                 <label class="switch" aria-label="Cambiar estado">
@@ -187,7 +187,9 @@
                                         </td>
                                         <td class="table-action text-center" v-if="transaction.system == 'Web'">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="dropdown"
+                                                <button type="button"
+                                                    :class="['btn', 'btn-sm', transaction.details ? 'btn-warning' : 'btn-info']"
+                                                    data-bs-toggle="dropdown"
                                                     aria-expanded="false">
                                                     <i class="mdi mdi-menu"></i>
                                                 </button>
@@ -231,10 +233,18 @@
                                         </td>
                                         <td class="table-action text-center" v-else>
                                             <template v-if="getPermissions.includes('transactions.edit')">
-                                                <a type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
+                                                <a type="button"
+                                                    :class="['btn', 'btn-sm', transaction.details ? 'btn-warning' : 'btn-light']"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#transactionDetailsModal"
-                                                    @click="openModalDetails(transaction)" :title="transaction.details">
-                                                    <i class="mdi mdi-comment-text-outline"></i>
+                                                    @click="openModalDetails(transaction)"
+                                                    :title="transaction.details">
+                                                    <template v-if="transaction.details">
+                                                        <i class="mdi mdi-comment-check"></i>
+                                                    </template>
+                                                    <template v-else>
+                                                        <i class="mdi mdi-comment-outline"></i>
+                                                    </template>
                                                 </a>
                                             </template>
                                             <template v-else>

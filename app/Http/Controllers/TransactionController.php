@@ -162,6 +162,7 @@ class TransactionController extends Controller
             'ip' => $request->ip(),
             'data' => [
                 'update_transaction' => [
+                    'id' => $transaction->id,
                     'previous_state' => $previousState,
                     'new_state' => $request->state,
                 ]
@@ -205,6 +206,7 @@ class TransactionController extends Controller
                     'ip' => $request->ip(),
                     'data' => [
                         'update_transaction' => [
+                            'id' => $transaction->id,
                             'details' => $request->details,
                         ]
                     ],

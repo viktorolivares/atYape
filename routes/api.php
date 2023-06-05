@@ -28,5 +28,3 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/transactions/listApk', 'listTransactions');
     });
 });
-
-
