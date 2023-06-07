@@ -64,14 +64,14 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="mb-3 mb-3">
+                                        <div class="mb-3">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" v-model="remember"
                                                     id="remember" />
                                                 <label class="form-check-label" for="remember">Recuérdame</label>
                                             </div>
                                         </div>
-                                        <div class="mb-3 mb-0 text-center">
+                                        <div class="mb-2 mt-4 text-center d-grid gap-2">
                                             <button type="submit" :disabled="processing"
                                                 class="btn btn-primary btn-block px-4">
                                                 {{ processing ? "Espere por favor..." : "Login" }}
@@ -89,11 +89,7 @@
             </div>
             <!-- End container -->
         </div>
-
         <!-- end page -->
-        <footer class="footer footer-alt">
-            2023 © AT - apuestatotal.com
-        </footer>
     </div>
 </template>
 
@@ -132,7 +128,6 @@ export default {
                 });
                 if (response.status === 200) {
 
-                    const email = response.data.authUser.email
                     const user = response.data.authUser
 
                     this.getRolePermissions(user);

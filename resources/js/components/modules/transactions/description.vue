@@ -108,7 +108,8 @@
                                     </tr>
                                 </thead>
                                 <transition-group name="fade" tag="tbody" mode="in-out">
-                                    <tr v-for="transaction in items" :key="transaction.id">
+                                    <tr v-for="transaction in items" :key="transaction.id"
+                                        :class="{ 'bg-success-lighten': selectedRow === transaction.id }">
                                         <td>{{ transaction.description }}</td>
                                         <td>{{ transaction.formatted_date }}</td>
                                         <td>
@@ -119,11 +120,17 @@
                                         </td>
                                         <td>{{ transaction.amount }}</td>
                                         <td class="table-action">
-                                            <button class="btn btn-sm"
+                                            <button class="btn btn-sm font-11"
                                                 :class="transaction.state === 'validated' ? 'btn-light text-muted' : 'btn-success'"
                                                 :disabled="transaction.state === 'validated'"
-                                                @click="toggleStatus(transaction)">
+                                                @click="confirmToggleStatus(transaction)">
                                                 {{ transaction.state === 'validated' ? 'Validado' : 'Validar' }}
+                                                <template v-if="transaction.state === 'validated'">
+                                                    <i class="mdi mdi-lock"></i>
+                                                </template>
+                                                <template v-else>
+                                                    <i class="mdi mdi-lock-open"></i>
+                                                </template>
                                             </button>
                                         </td>
                                         <td>
@@ -137,10 +144,8 @@
                                         <td class="table-action text-center">
                                             <button type="button"
                                                 :class="['btn', 'btn-sm', transaction.details ? 'btn-warning' : 'btn-light']"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#transactionModal"
-                                                @click="openModal(transaction)"
-                                                :title="transaction.details">
+                                                data-bs-toggle="modal" data-bs-target="#transactionModal"
+                                                @click="openModal(transaction)" :title="transaction.details">
                                                 <template v-if="transaction.details">
                                                     <i class="mdi mdi-comment-check"></i>
                                                 </template>
@@ -276,7 +281,8 @@
                                                 <span class="text-muted font-12">{{ transaction.register_date }}</span>
                                             </td>
                                             <td>
-                                                <span class="text-success font-15 fw-bold pe-2">S/ {{ transaction.amount }}</span>
+                                                <span class="text-success font-15 fw-bold pe-2">S/
+                                                    {{ transaction.amount }}</span>
                                             </td>
                                             <td class="table-action text-center">
                                                 <button class="btn btn-sm"
@@ -326,6 +332,7 @@ export default {
             },
             selectedTransaction: {},
             updateInterval: null,
+            selectedRow: null,
             pendings: {},
             isLoading: false,
             errors: {
@@ -387,23 +394,48 @@ export default {
             };
         },
 
-        async toggleStatus(transaction) {
+        confirmToggleStatus(transaction) {
+            if (transaction.state === 'validated') {
+                this.selectedRow = null;
+                return;
+            }
 
-            if (transaction.state === 'pending') {
-                try {
-                    await axios.put(`/admin/transactions/${transaction.id}/state`, {
-                        state: 'validated',
-                        id: this.user.id
-                    });
-                    transaction.state = 'validated';
-                    this.showToast("Success, Actualizado!", {
-                        type: "success"
-                    });
+            this.selectedRow = transaction.id;
 
-
-                } catch (error) {
-                    console.error('Error al actualizar el estado de la transacción:', error);
+            this.$swal({
+                title: '¿Cambiar a estado: Validado?',
+                html: `<div class='p-3 bg-success-lighten m-2 font-18 rounded-3'>
+                    ${transaction.person} por S/${transaction.amount}</br>
+                    Fecha: ${transaction.formatted_date}
+                </div>`,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#727cf5',
+                cancelButtonColor: '#fa5c7c',
+                confirmButtonText: '¡Sí, Validar!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.toggleStatus(transaction);
                 }
+                this.selectedRow = null;
+            });
+        },
+
+        toggleStatus(transaction) {
+            if (transaction.state !== 'validated') {
+                transaction.state = 'validated';
+
+                axios.put(`/admin/transactions/${transaction.id}/state`, {
+                    state: transaction.state,
+                    id: this.user.id
+                }).then(response => {
+                    this.showToast("¡Actualizado con éxito!", { type: "success" });
+                    this.fetchData();
+                }).catch(error => {
+                    console.error(error);
+                    this.$swal('¡Error!', 'Hubo un problema al actualizar el estado de la transacción.', 'error');
+                });
             }
         },
 
@@ -425,7 +457,6 @@ export default {
             this.paginated.perPage = newPerPage;
             this.fetchData(true);
         },
-
 
         openModal(transaction) {
             this.selectedTransaction = JSON.parse(JSON.stringify(transaction));
@@ -542,6 +573,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

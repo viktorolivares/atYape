@@ -142,7 +142,9 @@
                                             &nbsp;
                                             <i class="mdi" :class="getSortIconClass('amount')"></i>
                                         </th>
-                                        <th>Actualizar</th>
+                                        <th class="text-center">
+                                            Actualizar:
+                                        </th>
                                         <th @click="toggleSort('state')">
                                             <span>Estado</span>
                                             &nbsp;
@@ -152,7 +154,8 @@
                                     </tr>
                                 </thead>
                                 <transition-group name="fade" tag="tbody" mode="in-out">
-                                    <tr v-for="transaction in items" :key="transaction.id">
+                                    <tr v-for="transaction in items" :key="transaction.id"
+                                        :class="{ 'bg-success-lighten': selectedRow === transaction.id }">
                                         <td>{{ transaction.description }}</td>
                                         <td>{{ transaction.formatted_date }}</td>
                                         <td>
@@ -164,12 +167,17 @@
                                         <td>{{ transaction.amount }}</td>
                                         <td class="table-action text-center">
                                             <template v-if="getPermissions.includes('transactions.edit')">
-                                                <label class="switch" aria-label="Cambiar estado">
-                                                    <input type="checkbox" :checked="transaction.state === 'validated'"
-                                                        @change="toggleStatus(transaction)"
-                                                        aria-checked="transaction.state === 'validated'" />
-                                                    <span class="slider round"></span>
-                                                </label>
+                                                <button type="button" class="btn btn-sm font-11"
+                                                    :class="{ 'btn-dark': transaction.state === 'validated', 'btn-success': transaction.state === 'pending' }"
+                                                    @click="confirmToggleStatus(transaction)">
+                                                    {{ transaction.state === 'validated' ? 'Validado' : 'Validar' }}
+                                                    <template v-if="transaction.state === 'validated'">
+                                                        <i class="mdi mdi-lock"></i>
+                                                    </template>
+                                                    <template v-else>
+                                                        <i class="mdi mdi-lock-open"></i>
+                                                    </template>
+                                                </button>
                                             </template>
                                             <template v-else>
                                                 <button href="#" class="btn btn-sm" disabled>
@@ -189,8 +197,7 @@
                                             <div class="btn-group">
                                                 <button type="button"
                                                     :class="['btn', 'btn-sm', transaction.details ? 'btn-warning' : 'btn-info']"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="mdi mdi-menu"></i>
                                                 </button>
                                                 <div class="dropdown-menu">
@@ -235,10 +242,8 @@
                                             <template v-if="getPermissions.includes('transactions.edit')">
                                                 <a type="button"
                                                     :class="['btn', 'btn-sm', transaction.details ? 'btn-warning' : 'btn-light']"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#transactionDetailsModal"
-                                                    @click="openModalDetails(transaction)"
-                                                    :title="transaction.details">
+                                                    data-bs-toggle="modal" data-bs-target="#transactionDetailsModal"
+                                                    @click="openModalDetails(transaction)" :title="transaction.details">
                                                     <template v-if="transaction.details">
                                                         <i class="mdi mdi-comment-check"></i>
                                                     </template>
@@ -391,6 +396,7 @@ export default {
             apiUrl: "/admin/transactions/list",
             selectedTransaction: {},
             updateInterval: null,
+            selectedRow: null,
             filter: {
                 description: '',
                 state: '',
@@ -455,24 +461,47 @@ export default {
             this.filter.endDate = format(endDate, 'yyyy-MM-dd HH:mm');
         },
 
-        async toggleStatus(transaction) {
+        confirmToggleStatus(transaction) {
+            const isTransactionValidated = transaction.state === 'validated';
+            const nextStatus = isTransactionValidated ? 'Pendiente' : 'Validado';
+            const nextAction = isTransactionValidated ? 'Cambiar' : 'Validar';
+            const nextBgColor = isTransactionValidated ? 'bg-warning-lighten' : 'bg-success-lighten';
 
-            const state = transaction.state === 'validated' ? 'pending' : 'validated';
-            try {
-                await axios.put(`/admin/transactions/${transaction.id}/state`, {
-                    state: state,
-                    id: this.user.id
-                });
+            this.selectedRow = transaction.id;
 
-                transaction.state = state;
+            this.$swal({
+                title: `¿Cambiar a estado: ${nextStatus}?`,
+                html: `<div class='p-3 ${nextBgColor} m-2 font-18 rounded-3'>
+                            ${transaction.person} por S/${transaction.amount}</br>
+                            Fecha: ${transaction.formatted_date}
+                        </div>`,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#727cf5',
+                cancelButtonColor: '#fa5c7c',
+                confirmButtonText: `¡Sí, ${nextAction}!`,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.toggleStatus(transaction);
+                }
+                this.selectedRow = null;
+            });
+        },
 
-                this.showToast("Success, Actualizado!", {
-                    type: "success"
-                });
+        toggleStatus(transaction) {
+            const newState = transaction.state === 'validated' ? 'pending' : 'validated';
 
-            } catch (error) {
-                console.error('Error al actualizar el estado de la transacción:', error);
-            }
+            axios.put(`/admin/transactions/${transaction.id}/state`, {
+                state: newState,
+                id: this.user.id
+            }).then(response => {
+                this.showToast("¡Actualizado con éxito!", { type: "success" });
+                this.fetchData();
+            }).catch(error => {
+                console.error(error);
+                this.$swal('¡Error!', 'Hubo un problema al actualizar el estado de la transacción.', 'error');
+            });
         },
 
         async updateDetails() {
@@ -491,6 +520,8 @@ export default {
                 this.showToast("Success, Actualizado!", {
                     type: "success"
                 });
+
+                this.fetchData();
 
                 this.closeModalDetails();
 

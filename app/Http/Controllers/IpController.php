@@ -8,7 +8,6 @@ use App\Http\Services\IpConsult;
  class IpController extends Controller
 {
     public function ipConsult(Request $request)
-
     {
         sleep(2);
 

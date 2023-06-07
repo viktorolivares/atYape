@@ -179,8 +179,7 @@ class TransactionController extends Controller
 
         return response()->json([
             'success' => true,
-            Response::HTTP_CREATED
-        ]);
+        ], Response::HTTP_CREATED);
     }
 
     public function updateDetails(Request $request, $id)
@@ -263,8 +262,6 @@ class TransactionController extends Controller
             $created->formatted_date = Carbon::parse($created->created_at)->format('d/m/Y H:i:s');
             return $created;
         });
-
-        dd($transactions);
 
         return response()->json([
             'success' => true,

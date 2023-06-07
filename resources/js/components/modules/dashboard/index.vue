@@ -217,10 +217,6 @@ export default {
                 this.totalValidatedTransactions = summary.totalValidatedTransactions;
                 this.totalPendingTransactions = summary.totalPendingTransactions;
                 this.totalTransactions = summary.totalTransactions;
-
-                console.log(this.totalTransactions)
-
-                console.log(response)
             } catch (error) {
                 console.error("Error fetching transaction states:", error);
             }
