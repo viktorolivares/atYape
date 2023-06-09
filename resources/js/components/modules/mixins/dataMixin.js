@@ -6,49 +6,60 @@ export default {
     const paginationDefaults = this.getPaginationDefaults();
 
     return {
+        errors: [],
         items: [],
         filter: {},
         loading: false,
+        pageTotal: '',
         sort: {
             field: '',
             direction: '',
         },
         pagination: paginationDefaults.pagination,
         paginated: paginationDefaults.paginated,
+
     };
   },
 
   methods: {
     async loadData(apiUrl, resetPagination = false) {
-      try {
+        try {
 
-        if (resetPagination) {
-            this.goToFirstPage();
-        }
+            if (resetPagination) {
+                this.goToFirstPage();
+            }
 
-        this.loading = true;
+            this.loading = true;
 
-        const response = await axios.get(apiUrl, {
-            params: {
-                ...this.getFilterParams(),
-                page: this.paginated.page,
-                perPage: this.paginated.perPage,
-                sort_field: this.sort.field,
-                sort_direction: this.sort.direction
-            },
-        });
+            const response = await axios.get(apiUrl, {
+                params: {
+                    ...this.getFilterParams(),
+                    page: this.paginated.page,
+                    perPage: this.paginated.perPage,
+                    sort_field: this.sort.field,
+                    sort_direction: this.sort.direction
+                },
+            });
 
-        console.log(response.data.data)
+            this.updateItems(response.data.data);
+            this.pageTotal = response.data.totalAmount;
+            this.loading = false;
 
-        this.updateItems(response.data.data);
-        this.loading = false;
+        } catch (error) {
+            this.loading = false;
+            this.errors = error.response.data.errors;
 
-      } catch (error) {
+            console.log(this.errors)
 
-        console.log(error);
-        this.loading = false;
-
-      }
+            if (error.response && error.response.status === 422) {
+                const errors = error.response.data.errors;
+                for (let field in errors) {
+                    this.showToast(errors[field][0], { type: "error" });
+                }
+            } else {
+                console.error(error);
+            }
+        };
     },
 
     updateItems(data) {

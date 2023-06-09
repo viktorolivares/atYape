@@ -70,10 +70,9 @@
                     <transition name="fade">
                         <div class="card-body" v-if="showTable && !isFetching">
                             <button class="btn btn-sm btn-success float-end mb-2" @click="exportToExcel">
-                                <span class="mdi mdi-download"></span>
+                                <i class="mdi mdi-file-excel-box"></i>
                                 Exportar en excel
                             </button>
-
                             <table class="table table-sm table-bordered table-condensed table-hover table-striped">
                                 <thead class="table-dark">
                                     <tr>
@@ -101,8 +100,7 @@
                                             <td>{{ data.region }}</td>
                                             <td>{{ data.city }}</td>
                                             <td>
-                                                <a href="#" @click.prevent="openMap(data.latitude, data.longitude)">Ver
-                                                    Mapa</a>
+                                                <a href="#" @click.prevent="openMap(data.latitude, data.longitude)">Ver Mapa</a>
                                             </td>
                                             <td>{{ data.org }}</td>
                                         </tr>
@@ -148,7 +146,6 @@
                         </div>
                     </transition>
                 </div>
-
                 <transition name="slide-fade">
                     <div class="card" id="mapCard" v-if="mapCard">
                         <div class="card-body text-center">
@@ -298,9 +295,6 @@ export default {
                 }, 2000);
             }
 
-            console.log(this.responses)
-
-
         },
         isValidIp(ip) {
             const ipRegex = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]{1,2})$/g
@@ -347,7 +341,6 @@ export default {
                 setTimeout(() => {
                     this.isLoading = false;
                 }, 2000);
-                console.log([this.lat, this.lng]);
             } else {
                 this.showToast('Error: No se proporcionaron las coordenadas.', {
                     type: "error"

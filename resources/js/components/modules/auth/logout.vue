@@ -29,10 +29,10 @@
                             </div> <!-- end card-body-->
                         </div> <!-- end card-->
 
-                        <div class="row mt-3">
+                        <div class="row mt-2">
                             <div class="col-12 text-center">
-                                <p class="font-18">
-                                    <router-link to="/login" class="text-light ms-1">
+                                <p class="font-20">
+                                    <router-link to="/login" class="ms-1 text-white">
                                         <span class="mdi mdi-chevron-double-left"></span>
                                         <b> Volver al Inicio de sesión</b>
                                     </router-link>
@@ -53,10 +53,9 @@
 
     </div>
 </template>
+
 <script>
 export default {
-
     props: ['route'],
-
 }
 </script>

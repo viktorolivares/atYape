@@ -271,7 +271,6 @@ export default {
         async getAuthUser(){
             try {
                 const response = await axios.get('/admin/refresh/auth');
-                console.log(response.data)
                 this.$eventBus.$emit('verifyAuth', response.data);
 
             } catch (error) {
