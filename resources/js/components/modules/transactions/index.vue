@@ -10,7 +10,11 @@
                             <li class="breadcrumb-item active">Listado de Transacciones</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Transacciones</h4>
+                    <transition name="fade">
+                        <h4 class="page-title">Transacciones
+                            <span class="text-success"> [ Total por página: S/{{ pageTotal }} ]</span>
+                        </h4>
+                    </transition>
                 </div>
             </div>
         </div>
@@ -171,30 +175,23 @@
                                                     :class="{ 'btn-dark': transaction.state === 'validated', 'btn-success': transaction.state === 'pending' }"
                                                     @click="confirmToggleStatus(transaction)">
                                                     {{ transaction.state === 'validated' ? 'Validado' : 'Validar' }}
-                                                    <template v-if="transaction.state === 'validated'">
-                                                        <i class="mdi mdi-lock"></i>
-                                                    </template>
-                                                    <template v-else>
-                                                        <i class="mdi mdi-lock-open"></i>
-                                                    </template>
+                                                    <i :class="transaction.state === 'validated' ? 'mdi mdi-lock' : 'mdi mdi-lock-open'"></i>
                                                 </button>
                                             </template>
                                             <template v-else>
-                                                <button href="#" class="btn btn-sm" disabled>
+                                                <button class="btn btn-sm" disabled>
                                                     <i class="mdi mdi-block-helper"></i>
                                                 </button>
                                             </template>
                                         </td>
                                         <td>
-                                            <span v-if="transaction.state === 'validated'">
-                                                <i class="mdi mdi-circle text-success"></i> Validado
-                                            </span>
-                                            <span v-else>
-                                                <i class="mdi mdi-circle text-warning"></i> Pendiente
+                                            <span>
+                                                <i class="mdi mdi-circle" :class="[transaction.state === 'validated' ? 'text-success' : 'text-warning']"></i>
+                                                {{ transaction.state === 'validated' ? 'Validado' : 'Pendiente' }}
                                             </span>
                                         </td>
-                                        <td class="table-action text-center" v-if="transaction.system == 'Web'">
-                                            <div class="btn-group">
+                                        <td class="table-action text-center">
+                                            <div class="btn-group" v-if="transaction.system == 'Web'">
                                                 <button type="button"
                                                     :class="['btn', 'btn-sm', transaction.details ? 'btn-warning' : 'btn-info']"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -208,20 +205,14 @@
                                                             <i class="mdi mdi-lead-pencil"></i>
                                                             Editar
                                                         </a>
-                                                        <a type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                            data-bs-target="#transactionDetailsModal"
-                                                            @click="openModalDetails(transaction)"
-                                                            :title="transaction.details">
-                                                            <i class="mdi mdi-comment-text-outline"></i>
-                                                            Detalles
-                                                        </a>
                                                     </template>
-                                                    <template v-else>
-                                                        <button href="#" class="btn btn-sm" disabled>
-                                                            <i class="mdi mdi-block-helper"></i>
-                                                            Can't edit
-                                                        </button>
-                                                    </template>
+                                                    <a type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#transactionDetailsModal"
+                                                        @click="openModalDetails(transaction)" :title="transaction.details">
+                                                        <i class="mdi"
+                                                            :class="[transaction.details ? 'mdi-comment-check' : ' mdi-comment-outline']"></i>
+                                                        Detalles
+                                                    </a>
                                                     <template v-if="getPermissions.includes('transactions.delete')">
                                                         <a type="button" class="dropdown-item"
                                                             @click="deleteTransaction(transaction)">
@@ -229,33 +220,16 @@
                                                             Eliminar
                                                         </a>
                                                     </template>
-                                                    <template v-else>
-                                                        <button href="#" class="btn btn-sm" disabled>
-                                                            <i class="mdi mdi-block-helper"></i>
-                                                            Can't delete
-                                                        </button>
-                                                    </template>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="table-action text-center" v-else>
-                                            <template v-if="getPermissions.includes('transactions.edit')">
+                                            <template v-else>
                                                 <a type="button"
                                                     :class="['btn', 'btn-sm', transaction.details ? 'btn-warning' : 'btn-light']"
                                                     data-bs-toggle="modal" data-bs-target="#transactionDetailsModal"
                                                     @click="openModalDetails(transaction)" :title="transaction.details">
-                                                    <template v-if="transaction.details">
-                                                        <i class="mdi mdi-comment-check"></i>
-                                                    </template>
-                                                    <template v-else>
-                                                        <i class="mdi mdi-comment-outline"></i>
-                                                    </template>
+                                                    <i class="mdi"
+                                                        :class="[transaction.details ? 'mdi-comment-check' : 'mdi-comment-outline']"></i>
                                                 </a>
-                                            </template>
-                                            <template v-else>
-                                                <button href="#" class="btn btn-sm" disabled>
-                                                    <i class="mdi mdi-block-helper"></i>
-                                                </button>
                                             </template>
                                         </td>
                                     </tr>
@@ -324,10 +298,12 @@
                                 v-model="selectedTransaction.details"></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-success" @click="updateDetails(transaction)">Guardar</button>
-                    </div>
+                    <template  v-if="getPermissions.includes('transactions.edit')">
+                        <div class="modal-footer ">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-success" @click="updateDetails(transaction)">Guardar</button>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -470,10 +446,10 @@ export default {
             this.selectedRow = transaction.id;
 
             this.$swal({
-                title: `¿Cambiar a estado: ${nextStatus}?`,
-                html: `<div class='p-3 ${nextBgColor} m-2 font-18 rounded-3'>
-                            ${transaction.person} por S/${transaction.amount}</br>
-                            Fecha: ${transaction.formatted_date}
+                title: `<div class='font-24'>¿Cambiar a estado: ${nextStatus}?<div/>`,
+                html: `<div class='${nextBgColor} font-20 rounded-3 p-3'>
+                            <strong>Yape: </strong>${transaction.person} por S/${transaction.amount}</br>
+                            <strong>Fecha: </strong> ${transaction.formatted_date}
                         </div>`,
                 icon: 'info',
                 showCancelButton: true,

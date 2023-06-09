@@ -54,6 +54,7 @@ class TransactionController extends Controller
             })
             ->paginate($perPage);
 
+        $totalAmount = $transactions->sum('amount');
 
         $transactions->map(function ($created) {
             $created->formatted_date = Carbon::parse($created->created_at)->format('d/m/Y H:i:s');
@@ -63,8 +64,8 @@ class TransactionController extends Controller
         return response()->json([
             'success' => true,
             'data' => $transactions,
-            Response::HTTP_OK
-        ]);
+            'totalAmount' => $totalAmount,
+        ], Response::HTTP_OK);
     }
 
     public function saveTransaction(Request $request)
@@ -257,6 +258,7 @@ class TransactionController extends Controller
             })
             ->paginate($perPage);
 
+        $totalAmount = $transactions->sum('amount');
 
         $transactions->map(function ($created) {
             $created->formatted_date = Carbon::parse($created->created_at)->format('d/m/Y H:i:s');
@@ -266,8 +268,8 @@ class TransactionController extends Controller
         return response()->json([
             'success' => true,
             'data' => $transactions,
-            Response::HTTP_OK
-        ]);
+            'totalAmount' => $totalAmount
+        ], Response::HTTP_OK);
     }
 
     public function updateTransaction(Request $request, $id)
@@ -389,19 +391,28 @@ class TransactionController extends Controller
 
         try {
             $request->validate([
-                'person' => 'required',
+                'person' => 'required|min:6',
                 'amount' => 'required|numeric',
                 'register_date' => 'required|date',
             ]);
 
             $date = Carbon::parse($request->register_date);
+            $person = $request->person;
 
             $transactions = Transaction::where('state', 'pending')
                 ->where('description', $request->description)
-                ->where('person', $request->person)
                 ->where('amount', $request->amount)
                 ->whereDate('register_date', $date)
+                ->where(function ($query) use ($person) {
+                    $query->where('person', 'like', '%' . $person . '%')
+                        ->orWhere('person', 'like', '%' . str_replace(' ', '%', $person) . '%');
+                })
                 ->get();
+
+            $transactions->map(function ($registerDate) {
+                $registerDate->formatted_date = Carbon::parse($registerDate->register_date)->format('d/m/Y H:i:s');
+                return $registerDate;
+            });
 
             return response()->json($transactions);
         } catch (ValidationException $e) {

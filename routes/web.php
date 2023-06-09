@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
@@ -121,6 +122,12 @@ Route::group(['prefix' => 'admin'], function () {
 
         /*Domain*/
         Route::get('/domain/list', [DomainController::class, 'index']);
+
+        /*Reportes*/
+        Route::controller(ReportController::class)->group(function () {
+            Route::get('/reports/list', 'index');
+            Route::get('/reports/export', 'export');
+        });
 
         /*Version Laravel / PHP*/
         Route::get('/version', function () {

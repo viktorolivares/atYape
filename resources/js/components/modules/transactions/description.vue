@@ -10,7 +10,11 @@
                             <li class="breadcrumb-item active">Listado de Transacciones</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Yape! {{ this.description }}</h4>
+                    <transition name="fade">
+                        <h4 class="page-title">Yape! {{ this.description }}
+                            <span class="text-success"> [ Total por página: S/{{ pageTotal }} ]</span>
+                        </h4>
+                    </transition>
                 </div>
             </div>
         </div>
@@ -107,7 +111,7 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <transition-group name="fade" tag="tbody" mode="in-out">
+                                <transition-group name="bounce" tag="tbody" mode="in-out">
                                     <tr v-for="transaction in items" :key="transaction.id"
                                         :class="{ 'bg-success-lighten': selectedRow === transaction.id }">
                                         <td>{{ transaction.description }}</td>
@@ -125,20 +129,15 @@
                                                 :disabled="transaction.state === 'validated'"
                                                 @click="confirmToggleStatus(transaction)">
                                                 {{ transaction.state === 'validated' ? 'Validado' : 'Validar' }}
-                                                <template v-if="transaction.state === 'validated'">
-                                                    <i class="mdi mdi-lock"></i>
-                                                </template>
-                                                <template v-else>
-                                                    <i class="mdi mdi-lock-open"></i>
-                                                </template>
+                                                <i
+                                                    :class="transaction.state === 'validated' ? 'mdi mdi-lock' : 'mdi mdi-lock-open'"></i>
                                             </button>
                                         </td>
                                         <td>
-                                            <span v-if="transaction.state === 'validated'">
-                                                <i class="mdi mdi-circle text-success"></i> Validado
-                                            </span>
-                                            <span v-else>
-                                                <i class="mdi mdi-circle text-warning"></i> Pendiente
+                                            <span>
+                                                <i class="mdi mdi-circle"
+                                                    :class="[transaction.state === 'validated' ? 'text-success' : 'text-warning']"></i>
+                                                {{ transaction.state === 'validated' ? 'Validado' : 'Pendiente' }}
                                             </span>
                                         </td>
                                         <td class="table-action text-center">
@@ -146,12 +145,8 @@
                                                 :class="['btn', 'btn-sm', transaction.details ? 'btn-warning' : 'btn-light']"
                                                 data-bs-toggle="modal" data-bs-target="#transactionModal"
                                                 @click="openModal(transaction)" :title="transaction.details">
-                                                <template v-if="transaction.details">
-                                                    <i class="mdi mdi-comment-check"></i>
-                                                </template>
-                                                <template v-else>
-                                                    <i class="mdi mdi-comment-outline"></i>
-                                                </template>
+                                                <i
+                                                    :class="transaction.details ? 'mdi mdi-comment-check' : 'mdi mdi-comment-outline'"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -242,7 +237,7 @@
                             <div class="mb-3">
                                 <label>Persona</label>
                                 <input v-model="searchPending.person" type="text"
-                                    :class="['form-control', errors.person ? 'is-invalid' : '']" />
+                                    :class="['form-control', errors.person ? 'is-invalid' : '']"/>
                                 <span v-if="errors.person" class="invalid-feedback" role="alert">
                                     {{ errors.person }}
                                 </span>
@@ -263,11 +258,14 @@
                                     {{ errors.register_date }}
                                 </span>
                             </div>
-                            <div class="mb-3">
-                                <button type="submit" class="btn btn-primary d-grid btn-block">Buscar</button>
+                            <div class="mb-2 d-grid gap-2">
+                                <button type="submit" class="btn btn-primary" :disabled="isLoading">
+                                    <i class="uil-search"></i>
+                                    {{ isLoading ? 'Espero un mommento...' : 'Buscar' }}
+                                </button>
                             </div>
                         </form>
-                        <div class="mt-3">
+                        <div class="mt-2">
                             <div v-if="isLoading" class="d-flex align-items-center">
                                 <strong>Cargando...</strong>
                                 <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
@@ -277,19 +275,21 @@
                                     <tbody>
                                         <tr v-for="transaction in pendings">
                                             <td>
-                                                <h5 class="font-13 mb-1 fw-normal">{{ transaction.person }}</h5>
-                                                <span class="text-muted font-12">{{ transaction.register_date }}</span>
+                                                <h5 class="font-12 mb-1 fw-normal">{{ transaction.person }}</h5>
+                                                <span class="text-muted font-11">{{ transaction.formatted_date }}</span>
                                             </td>
                                             <td>
-                                                <span class="text-success font-15 fw-bold pe-2">S/
+                                                <span class="text-success font-14 fw-bold pe-2">S/
                                                     {{ transaction.amount }}</span>
                                             </td>
                                             <td class="table-action text-center">
-                                                <button class="btn btn-sm"
+                                                <button class="btn btn-sm font-11"
                                                     :class="transaction.state === 'validated' ? 'btn-light text-muted' : 'btn-success'"
                                                     :disabled="transaction.state === 'validated'"
                                                     @click="toggleStatus(transaction)">
                                                     {{ transaction.state === 'validated' ? 'Validado' : 'Validar' }}
+                                                    <i
+                                                        :class="transaction.state === 'validated' ? 'mdi mdi-lock' : 'mdi mdi-lock-open'"></i>
                                                 </button>
                                             </td>
                                         </tr>
@@ -318,7 +318,6 @@ export default {
     data() {
         return {
             filter: {
-                description: '',
                 state: '',
                 person: '',
             },
@@ -350,7 +349,7 @@ export default {
 
         this.updateInterval = setInterval(() => {
             this.fetchData();
-        }, 5000);
+        }, 3000);
 
     },
 
@@ -359,15 +358,6 @@ export default {
     },
 
     watch: {
-        description: {
-            handler: function (newVal, oldVal) {
-                if (newVal !== oldVal) {
-                    this.fetchData(true);
-                }
-            },
-            immediate: false,
-            deep: false
-        },
         apiUrl: {
             handler: function (newVal, oldVal) {
                 if (newVal !== oldVal) {
@@ -403,11 +393,11 @@ export default {
             this.selectedRow = transaction.id;
 
             this.$swal({
-                title: '¿Cambiar a estado: Validado?',
-                html: `<div class='p-3 bg-success-lighten m-2 font-18 rounded-3'>
-                    ${transaction.person} por S/${transaction.amount}</br>
-                    Fecha: ${transaction.formatted_date}
-                </div>`,
+                title: `<div class='font-24'>¿Cambiar a estado: Validado?<div/>`,
+                html: `<div class='bg-success-lighten font-20 rounded-3 p-3 '>
+                            <strong>Yape: </strong>${transaction.person} por S/${transaction.amount}</br>
+                            <strong>Fecha: </strong> ${transaction.formatted_date}
+                        </div>`,
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#727cf5',
@@ -423,21 +413,20 @@ export default {
         },
 
         toggleStatus(transaction) {
-            if (transaction.state !== 'validated') {
-                transaction.state = 'validated';
+            transaction.state = 'validated';
 
-                axios.put(`/admin/transactions/${transaction.id}/state`, {
-                    state: transaction.state,
-                    id: this.user.id
-                }).then(response => {
-                    this.showToast("¡Actualizado con éxito!", { type: "success" });
-                    this.fetchData();
-                }).catch(error => {
-                    console.error(error);
-                    this.$swal('¡Error!', 'Hubo un problema al actualizar el estado de la transacción.', 'error');
-                });
-            }
+            axios.put(`/admin/transactions/${transaction.id}/state`, {
+                state: transaction.state,
+                id: this.user.id
+            }).then(response => {
+                this.showToast("¡Actualizado con éxito!", { type: "success" });
+                this.fetchData();
+            }).catch(error => {
+                console.error(error);
+                this.$swal('¡Error!', 'Hubo un problema al actualizar el estado de la transacción.', 'error');
+            });
         },
+
 
         copyToClipboard(text) {
             const el = document.createElement('textarea');
@@ -449,7 +438,7 @@ export default {
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            this.showToast("Texto copiado al portapapeles: " + text);
+            this.showToast("Texto copiado al portapapeles: " + text, { type: "info" });
 
         },
 
@@ -480,6 +469,7 @@ export default {
                     type: "success"
                 });
 
+                this.fetchData();
                 this.closeModal();
 
             } catch (error) {
@@ -498,6 +488,13 @@ export default {
         searchPendingTransactions() {
             this.isLoading = true;
             this.errors = {};
+
+            if (this.searchPending.person && this.searchPending.person.split(' ').filter(word => word.trim() !== '').length < 2) {
+                this.errors.person = 'Debe ingresar al menos 2 palabras.';
+                this.isLoading = false;
+                return;
+            }
+
             axios.get('/admin/transactions/pendings', {
                 params: {
                     person: this.searchPending.person,
@@ -541,8 +538,6 @@ export default {
                         this.errors.amount = errors.amount ? errors.amount[0] : false;
                         this.errors.register_date = errors.register_date ? errors.register_date[0] : false;
 
-                        console.log(errors)
-
                     } else {
                         console.error(error);
                         this.isLoading = false
@@ -573,4 +568,3 @@ export default {
 };
 </script>
 
-<style></style>

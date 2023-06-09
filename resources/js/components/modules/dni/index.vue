@@ -813,8 +813,6 @@ export default {
                             captcha: captcha
                         });
 
-                        console.log(response.data)
-
                         if (response.status === 200) {
 
                             const messageCode = response.data.data.messageCode;

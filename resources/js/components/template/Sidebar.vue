@@ -45,10 +45,10 @@
                             </li>
                         </template>
                         <!-- <li class="side-nav-item">
-                            <a class="side-nav-link">
+                            <router-link class="side-nav-link" :to="{ name: 'apk.index' }">
                                 <i class="uil-mobile-vibrate"></i>
                                 <span>APK</span>
-                            </a>
+                            </router-link>
                         </li> -->
                     </template>
                     <!-- Gestión de Usuarios -->
@@ -86,7 +86,7 @@
                     </template>
                     <!-- Utilidades -->
                     <template
-                        v-if="permissions.includes('dni.index') || permissions.includes('ip.index') || permissions.includes('domain.index') || permissions.includes('logs.index')">
+                        v-if="permissions.includes('dni.index') || permissions.includes('ip.index') || permissions.includes('domain.index') || permissions.includes('logs.index') || permissions.includes('reports.index')">
                         <li class="side-nav-title side-nav-item">Tasks</li>
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#utilities" aria-expanded="false" aria-controls="utilities"
@@ -102,6 +102,14 @@
                                             <router-link :to="{ name: 'dni.index' }">
                                                 <i class="uil-file-check"></i>
                                                 &nbsp;<span>Validar DNI</span>
+                                            </router-link>
+                                        </li>
+                                    </template>
+                                    <template v-if="permissions.includes('reports.index')">
+                                        <li :class="{ 'menuitem-active': isActiveRoute('reports.index') }">
+                                            <router-link :to="{ name: 'reports.index' }">
+                                                <i class="uil-chart-bar"></i>
+                                                &nbsp;<span>Reportes</span>
                                             </router-link>
                                         </li>
                                     </template>
@@ -129,7 +137,6 @@
                                             </router-link>
                                         </li>
                                     </template>
-
                                 </ul>
                             </div>
                         </li>

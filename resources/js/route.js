@@ -10,12 +10,15 @@ import UserForm from "./components/modules/users/form.vue";
 import RoleForm from "./components/modules/roles/form.vue";
 import Users from "./components/modules/users/index.vue";
 import Roles from "./components/modules/roles/index.vue";
+import Reports from "./components/modules/reports/index.vue";
 import Logout from "./components/modules/auth/logout.vue";
 import Login from "./components/modules/auth/login.vue";
 import Logs from "./components/modules/logs/index.vue";
+import Apk from "./components/modules/apk/index.vue";
 import Dni from "./components/modules/dni/index.vue";
 import Ip from "./components/modules/ip/index.vue";
 import NotFound from "./components/NotFound.vue";
+
 
 function verifyAcces(to, from, next) {
 
@@ -61,10 +64,18 @@ const routes = [
         },
     },
     {
+        path: "/reports",
+        component: Reports,
+        name: "reports.index",
+        beforeEnter: (to, from, next) => {
+            verifyAcces(to, from, next);
+        },
+    },
+    {
         path: "/yape/business",
         component: Description,
         name: "yape.business",
-        props: { description: 'Business', apiUrl: '/admin/transactions/list?description=business' },
+        props: { description: 'Business', apiUrl: '/admin/transactions/description/business' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },
@@ -73,7 +84,7 @@ const routes = [
         path: "/yape/mulfood",
         component: Description,
         name: "yape.mulfood",
-        props: { description: 'Mulfood', apiUrl: '/admin/transactions/list?description=mulfood' },
+        props: { description: 'Mulfood', apiUrl: '/admin/transactions/description/mulfood' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },
@@ -82,7 +93,7 @@ const routes = [
         path: "/yape/teleservicios",
         component: Description,
         name: "yape.teleservicios",
-        props: { description: 'Teleservicios', apiUrl: '/admin/transactions/list?description=teleservicios' },
+        props: { description: 'Teleservicios', apiUrl: '/admin/transactions/description/teleservicios' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },
@@ -91,7 +102,7 @@ const routes = [
         path: "/yape/televentas",
         component: Description,
         name: "yape.televentas",
-        props: { description: 'Televentas', apiUrl: '/admin/transactions/list?description=televentas' },
+        props: { description: 'Televentas', apiUrl: '/admin/transactions/description/televentas' },
         beforeEnter: (to, from, next) => {
             verifyAcces(to, from, next);
         },
@@ -198,8 +209,10 @@ const routes = [
             }
         },
     },
-    { path: "/logout", component: Logout },
+    { path: "/apk", component: Apk, name: "apk.index",},
     { path: "/:pathMatch(.*)*", component: NotFound },
+    { path: "/logout", component: Logout },
+
 ];
 
 const router = createRouter({

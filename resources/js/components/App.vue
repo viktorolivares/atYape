@@ -42,12 +42,10 @@ export default {
 
         this.$eventBus.$on('verifyAuth', data => {
             this.authUser = data
-            console.log(data)
         });
 
         this.$eventBus.$on('updatePermissions', data => {
             this.permissions = data
-            console.log(data)
         });
 
     },

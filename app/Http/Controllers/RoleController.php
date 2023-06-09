@@ -104,13 +104,6 @@ class RoleController extends Controller
 
     public function updateRole(Request $request, $id)
     {
-        if ($id == 1) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No se puede actualizar el rol de administrador',
-            ], Response::HTTP_FORBIDDEN);
-        }
-
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',

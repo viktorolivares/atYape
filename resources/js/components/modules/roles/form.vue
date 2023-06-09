@@ -304,8 +304,6 @@ export default {
                 if (response.status === 200) {
                     localStorage.setItem('permissions', JSON.stringify(response.data));
                     this.$eventBus.$emit('updatePermissions', response.data);
-
-                    console.log(response.data)
                 }
             } catch (error) {
                 console.log(error)

@@ -148,14 +148,7 @@ export default {
                 if (error.response && error.response.status === 422) {
                     this.processing = false
 
-                    console.log(error.response)
-
-                    this.showToast(error.response.data.message, {
-                        type: "error",
-                        position: "top-center",
-                        theme: 'colored',
-
-                    });
+                    this.showToast(error.response.data.message, { type: "error" });
 
                     const errors = error.response.data.errors;
                     this.emailError = errors.email ? errors.email[0] : false;
