@@ -24,70 +24,38 @@
                         <!-- Checkout Steps -->
                         <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
                             <li class="nav-item">
-                                <a href="#install" data-bs-toggle="tab" class="nav-link rounded-0 active">
-                                    <i class="uil-mobile-android font-22"></i>
+                                <a href="#install" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0 active">
+                                    <i class="mdi mdi-cellphone-android font-22"></i>
                                     <span class="d-none d-lg-block">Instalación</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#config" data-bs-toggle="tab" class="nav-link rounded-0">
-                                    <i class="uil-cog font-22"></i>
-                                    <span class="d-none d-lg-block">Configuración</span>
+                                <a href="#shipping-information" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
+                                    <i class="mdi mdi-truck-fast font-18"></i>
+                                    <span class="d-none d-lg-block">Shipping Info</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#errors" data-bs-toggle="tab" class="nav-link rounded-0">
-                                    <i class="uil-exclamation-triangle font-22"></i>
-                                    <span class="d-none d-lg-block">Resolución de errores</span>
+                                <a href="#payment-information" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
+                                    <i class="mdi mdi-cash-multiple font-18"></i>
+                                    <span class="d-none d-lg-block">Payment Info</span>
                                 </a>
                             </li>
                         </ul>
+
+                        <!-- Steps Information -->
                         <div class="tab-content">
+
+                            <!-- Billing Content-->
                             <div class="tab-pane show active" id="install">
                                 <div class="row">
                                     <div class="col-lg-8">
-                                        <h4 class="mt-2 p-2">
-                                            <i class="uil-info-circle"></i>
-                                            Acerca de está de aplicación:
-                                        </h4>
-                                        <p class="text-muted mb-4 text-justify p-2">
-                                            El registro de notificaciones aprovecha el Servicio de Escucha de Notificaciones oficial, disponible en el sistema operativo Android, para capturar y almacenar las notificaciones que se reciben. Esta aplicación captura todas las notificaciones de Yape! enviandolas a traves de un servicio a la base de datos de la web <a href="https://control.teleservicios.at/login">wwww.control.teleservicios.at</a>
+                                        <h4 class="mt-2">Acerca de está de aplicación:</h4>
+
+                                        <p class="text-muted mb-4">
+                                            Esta aplicación captura todas las notificaciones de Yape! enviandolas a traves de un servicio a la base de datos de la web  <a href="https://control.teleservicios.at/login">wwww.control.teleservicios.at</a>
                                         </p>
-                                        <div class="card shadow">
-                                            <div class="card-header">
-                                                INSTALACIÓN
-                                            </div>
-                                            <div class="card-body">
-                                                <ul class="list-group">
-                                                    <li class="list-group-item">
-                                                        A. Habilitar permiso para instalar aplicaciones de fuentes desconocidas.
-                                                        <ol>
-                                                            <li>
-                                                                Abra la aplicación Configuración en su dispositivo Android.
-                                                            </li>
-                                                            <li>
-                                                                Desplácese hacia abajo y toque la opción "Seguridad" o "Privacidad".
-                                                            </li>
-                                                            <li>
-                                                                Activa la opción “Fuentes desconocidas”. Esto le permitirá instalar aplicaciones de fuentes distintas a Google Play Store.
-                                                            </li>
-                                                        </ol>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        B. Abre la aplicación para completar el proceso, dale click al botón <b>Solicitar Permisos</b>, busca y selecciona la aplicación <b>Notification Listener</b> en tu dispositivo Android.
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        C. Asegúrate de activar todos los permisos necesarios, ya que la aplicación requiere acceso completo a las notificaciones. Verifica que todos los permisos estén activados correctamente.
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        D. Regresa a la pantalla de inicio de la aplicación y selecciona el yape de la lista desplegable. Notarás que los botones "Iniciar" y "Detener" están ahora habilitados.
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        E. Dale lick en el botón Iniciar para capturar las notificaciones de Yape, esto enviará al listados de los últimos Yapes almacenados del día.
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
+
 
                                     </div>
                                     <div class="col-lg-4">
@@ -97,122 +65,452 @@
                                     </div> <!-- end col -->
                                 </div> <!-- end row-->
                             </div>
-                            <div class="tab-pane" id="errors">
+                            <!-- End Billing Information Content-->
+
+                            <!-- Shipping Content-->
+                            <div class="tab-pane" id="shipping-information">
                                 <div class="row">
                                     <div class="col-lg-8">
-                                        <h4 class="mt-2 p-2">
-                                            <i class="uil-info-circle"></i>
-                                            Acerca de está de aplicación:
-                                        </h4>
-                                        <p class="text-muted mb-4 text-justify p-2">
-                                            El registro de notificaciones aprovecha el Servicio de Escucha de Notificaciones oficial, disponible en el sistema operativo Android, para capturar y almacenar las notificaciones que se reciben.
-                                            <br>
-                                            Esta aplicación captura todas las notificaciones de Yape! enviandolas a traves de un servicio a la base de datos de la web <a href="https://control.teleservicios.at/login">wwww.control.teleservicios.at</a>
-                                        </p>
+                                        <h4 class="mt-2">Saved Address</h4>
 
-                                    </div>
-                                    <div class="col-lg-4">
+                                        <p class="text-muted mb-3">Fill the form below in order to
+                                            send you the order's invoice.</p>
 
-                                    </div>
-                                    <!-- end col -->
-                                </div>
-                                <!-- end row-->
-                            </div>
-                            <div class="tab-pane" id="config">
-                                <div class="row">
-                                    <div class="col-lg-8">
-                                        <h4 class="mt-2 p-2">
-                                            <i class="uil-info-circle"></i>
-                                            Configuración recomendada:
-                                        </h4>
-                                        <p class="text-muted mb-4 text-justify p-2">
-                                            Si nuestra aplicación deja de enviar notificaciones después de un tiempo, es posible que tu smartphone esté bloqueando las notificaciones que se ejecutan en segundo plano, o que estés utilizando aplicaciones de limpieza de RAM o de aumento de velocidad.
-                                            <br>
-                                            Para restaurar las notificaciones, es necesario realizar algunos ajustes en la configuración del teléfono y cambiar la configuración de optimización de batería. Este paso es crucial para resolver el problema de manera permanente.
-                                        </p>
                                         <div class="row">
-                                            <div class="col-sm-3 mb-2 mb-sm-0">
-                                                <div class="nav flex-column nav-pills" id="config-mobile" role="tablist" aria-orientation="vertical">
-                                                    <a class="nav-link active show" id="xiaomi" data-bs-toggle="pill" href="#xiaomi-home" role="tab" aria-controls="xiaomi-home"
-                                                        aria-selected="true">
-                                                        <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                                                        <span class="d-none d-md-block">XIAOMI</span>
-                                                    </a>
-                                                    <a class="nav-link" id="samsung" data-bs-toggle="pill" href="#samsung-home" role="tab" aria-controls="samsung-home"
-                                                        aria-selected="false">
-                                                        <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                                        <span class="d-none d-md-block">SAMSUNG</span>
-                                                    </a>
-                                                    <a class="nav-link" id="huawei" data-bs-toggle="pill" href="#huawei-home" role="tab" aria-controls="huawei-home"
-                                                        aria-selected="false">
-                                                        <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                                                        <span class="d-none d-md-block">HUAWEI</span>
-                                                    </a>
+                                            <div class="col-md-6">
+                                                <div class="border p-3 rounded mb-3 mb-md-0">
+                                                    <address class="mb-0 address-lg">
+                                                        <div class="form-check">
+                                                            <input type="radio" id="customRadio1" name="customRadio" class="form-check-input" checked="">
+                                                            <label class="form-check-label font-16 fw-bold" for="customRadio1">Home</label>
+                                                        </div>
+                                                        <br>
+                                                        <span class="fw-semibold">Stanley Jones</span> <br>
+                                                        795 Folsom Ave, Suite 600<br>
+                                                        San Francisco, CA 94107<br>
+                                                        <abbr title="Phone">P:</abbr> (123) 456-7890 <br>
+                                                    </address>
                                                 </div>
-                                            </div> <!-- end col-->
-
-                                            <div class="col-sm-9">
-                                                <div class="tab-content" id="config-mobileContent">
-                                                    <div class="tab-pane fade active show" id="xiaomi-home" role="tabpanel" aria-labelledby="xiaomi">
-                                                        <p class="mb-0">...</p>
-                                                    </div>
-                                                    <div class="tab-pane fade" id="samsung-home" role="tabpanel" aria-labelledby="samsung">
-                                                        <p class="mb-0">...</p>
-                                                    </div>
-                                                    <div class="tab-pane fade" id="huawei-home" role="tabpanel" aria-labelledby="huawei">
-                                                        <p class="mb-0">...</p>
-                                                    </div>
-                                                </div> <!-- end tab-content-->
-                                            </div> <!-- end col-->
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="border p-3 rounded">
+                                                    <address class="mb-0 address-lg">
+                                                        <div class="form-check">
+                                                            <input type="radio" id="customRadio2" name="customRadio" class="form-check-input">
+                                                            <label class="form-check-label font-16 fw-bold" for="customRadio2">Office</label>
+                                                        </div>
+                                                        <br>
+                                                        <span class="fw-semibold">Stanley Jones</span> <br>
+                                                        795 Folsom Ave, Suite 600<br>
+                                                        San Francisco, CA 94107<br>
+                                                        <abbr title="Phone">P:</abbr> (123) 456-7890 <br>
+                                                    </address>
+                                                </div>
+                                            </div>
                                         </div>
                                         <!-- end row-->
+
+                                        <h4 class="mt-4">Add New Address</h4>
+
+                                        <p class="text-muted mb-4">Fill the form below so we can
+                                            send you the order's invoice.</p>
+
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="new-adr-first-name" class="form-label">First Name</label>
+                                                        <input class="form-control" type="text" placeholder="Enter your first name" id="new-adr-first-name">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="new-adr-last-name" class="form-label">Last Name</label>
+                                                        <input class="form-control" type="text" placeholder="Enter your last name" id="new-adr-last-name">
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end row -->
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="new-adr-email-address" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                                        <input class="form-control" type="email" placeholder="Enter your email" id="new-adr-email-address">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="new-adr-phone" class="form-label">Phone <span class="text-danger">*</span></label>
+                                                        <input class="form-control" type="text" placeholder="(xx) xxx xxxx xxx" id="new-adr-phone">
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end row -->
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                        <label for="new-adr-address" class="form-label">Address</label>
+                                                        <input class="form-control" type="text" placeholder="Enter full address" id="new-adr-address">
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end row -->
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="new-adr-town-city" class="form-label">Town / City</label>
+                                                        <input class="form-control" type="text" placeholder="Enter your city name" id="new-adr-town-city">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="new-adr-state" class="form-label">State</label>
+                                                        <input class="form-control" type="text" placeholder="Enter your state" id="new-adr-state">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="new-adr-zip-postal" class="form-label">Zip / Postal Code</label>
+                                                        <input class="form-control" type="text" placeholder="Enter your zip code" id="new-adr-zip-postal">
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end row -->
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end row -->
+
+                                            <h4 class="mt-4">Shipping Method</h4>
+
+                                            <p class="text-muted mb-3">Fill the form below in order to
+                                                send you the order's invoice.</p>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="border p-3 rounded mb-3 mb-md-0">
+                                                        <div class="form-check">
+                                                            <input type="radio" id="shippingMethodRadio1" name="shippingOptions" class="form-check-input" checked="">
+                                                            <label class="form-check-label font-16 fw-bold" for="shippingMethodRadio1">Standard Delivery - FREE</label>
+                                                        </div>
+                                                        <p class="mb-0 ps-3 pt-1">Estimated 5-7 days shipping (Duties and tax may be due upon delivery)</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="border p-3 rounded">
+                                                        <div class="form-check">
+                                                            <input type="radio" id="shippingMethodRadio2" name="shippingOptions" class="form-check-input">
+                                                            <label class="form-check-label font-16 fw-bold" for="shippingMethodRadio2">Fast Delivery - $25</label>
+                                                        </div>
+                                                        <p class="mb-0 ps-3 pt-1">Estimated 1-2 days shipping (Duties and tax may be due upon delivery)</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end row-->
+
+                                            <div class="row mt-4">
+                                                <div class="col-sm-6">
+                                                    <a href="apps-ecommerce-shopping-cart.html" class="btn text-muted d-none d-sm-inline-block btn-link fw-semibold">
+                                                        <i class="mdi mdi-arrow-left"></i> Back to Shopping Cart </a>
+                                                </div> <!-- end col -->
+                                                <div class="col-sm-6">
+                                                    <div class="text-sm-end">
+                                                        <a href="apps-ecommerce-checkout.html" class="btn btn-danger">
+                                                            <i class="mdi mdi-cash-multiple me-1"></i> Continue to Payment </a>
+                                                    </div>
+                                                </div> <!-- end col -->
+                                            </div> <!-- end row -->
+                                        </form>
                                     </div>
                                     <div class="col-lg-4">
-                                        <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-                                            <li class="nav-item">
-                                                <a href="#xiaomi-home" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0 active">
-                                                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                                                    <span class="d-none d-md-block">XIAOMI</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="#samsung-home" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
-                                                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                                    <span class="d-none d-md-block">SAMSUNG</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="#huawei-home" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
-                                                    <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                                                    <span class="d-none d-md-block">HUAWEI</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                        <div class="border p-3 mt-4 mt-lg-0 rounded">
+                                            <h4 class="header-title mb-3">Order Summary</h4>
 
-                                        <div class="tab-content">
-                                            <div class="tab-pane show active" id="xiaomi-home">
-                                                <p>...</p>
+                                            <div class="table-responsive">
+                                                <table class="table table-centered mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <img src="assets/images/products/product-1.jpg" alt="contact-img" title="contact-img" class="rounded me-2" height="48">
+                                                                <p class="m-0 d-inline-block align-middle">
+                                                                    <a href="apps-ecommerce-products-details.html" class="text-body fw-semibold">Amazing Modern Chair</a>
+                                                                    <br>
+                                                                    <small>5 x $148.66</small>
+                                                                </p>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $743.30
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <img src="assets/images/products/product-2.jpg" alt="contact-img" title="contact-img" class="rounded me-2" height="48">
+                                                                <p class="m-0 d-inline-block align-middle">
+                                                                    <a href="apps-ecommerce-products-details.html" class="text-body fw-semibold">Designer Awesome Chair</a>
+                                                                    <br>
+                                                                    <small>2 x $99.00</small>
+                                                                </p>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $198.00
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <img src="assets/images/products/product-3.jpg" alt="contact-img" title="contact-img" class="rounded me-2" height="48">
+                                                                <p class="m-0 d-inline-block align-middle">
+                                                                    <a href="apps-ecommerce-products-details.html" class="text-body fw-semibold">Biblio Plastic Armchair</a>
+                                                                    <br>
+                                                                    <small>1 x $129.99</small>
+                                                                </p>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $129.99
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-end">
+                                                            <td>
+                                                                <h6 class="m-0">Sub Total:</h6>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $1071.29
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-end">
+                                                            <td>
+                                                                <h6 class="m-0">Shipping:</h6>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                FREE
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-end">
+                                                            <td>
+                                                                <h5 class="m-0">Total:</h5>
+                                                            </td>
+                                                            <td class="text-end fw-semibold">
+                                                                $1071.29
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                            <div class="tab-pane" id="samsung-home">
-                                                <p>...</p>
-                                            </div>
-                                            <div class="tab-pane" id="huawei-home">
-                                                <p>...</p>
+                                            <!-- end table-responsive -->
+                                        </div> <!-- end .border-->
+
+                                    </div> <!-- end col -->
+                                </div> <!-- end row-->
+                            </div>
+                            <!-- End Shipping Information Content-->
+
+                            <!-- Payment Content-->
+                            <div class="tab-pane" id="payment-information">
+                                <div class="row">
+
+                                    <div class="col-lg-8">
+                                        <h4 class="mt-2">Payment Selection</h4>
+
+                                        <p class="text-muted mb-4">Fill the form below in order to
+                                            send you the order's invoice.</p>
+
+                                        <!-- Pay with Paypal box-->
+                                        <div class="border p-3 mb-3 rounded">
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <div class="form-check">
+                                                        <input type="radio" id="BillingOptRadio2" name="billingOptions" class="form-check-input">
+                                                        <label class="form-check-label font-16 fw-bold" for="BillingOptRadio2">Pay with Paypal</label>
+                                                    </div>
+                                                    <p class="mb-0 ps-3 pt-1">You will be redirected to PayPal website to complete your purchase securely.</p>
+                                                </div>
+                                                <div class="col-sm-4 text-sm-end mt-3 mt-sm-0">
+                                                    <img src="assets/images/payments/paypal.png" height="25" alt="paypal-img">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- end col -->
-                                </div>
-                                <!-- end row-->
+                                        <!-- end Pay with Paypal box-->
+
+                                        <!-- Credit/Debit Card box-->
+                                        <div class="border p-3 mb-3 rounded">
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <div class="form-check">
+                                                        <input type="radio" id="BillingOptRadio1" name="billingOptions" class="form-check-input" checked="">
+                                                        <label class="form-check-label font-16 fw-bold" for="BillingOptRadio1">Credit / Debit Card</label>
+                                                    </div>
+                                                    <p class="mb-0 ps-3 pt-1">Safe money transfer using your bank account. We support Mastercard, Visa, Discover and Stripe.</p>
+                                                </div>
+                                                <div class="col-sm-4 text-sm-end mt-3 mt-sm-0">
+                                                    <img src="assets/images/payments/master.png" height="24" alt="master-card-img">
+                                                    <img src="assets/images/payments/discover.png" height="24" alt="discover-card-img">
+                                                    <img src="assets/images/payments/visa.png" height="24" alt="visa-card-img">
+                                                    <img src="assets/images/payments/stripe.png" height="24" alt="stripe-card-img">
+                                                </div>
+                                            </div> <!-- end row -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="mb-3">
+                                                        <label for="card-number" class="form-label">Card Number</label>
+                                                        <input type="text" id="card-number" class="form-control" data-toggle="input-mask" data-mask-format="0000 0000 0000 0000" placeholder="4242 4242 4242 4242">
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end row -->
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="card-name-on" class="form-label">Name on card</label>
+                                                        <input type="text" id="card-name-on" class="form-control" placeholder="Master Shreyu">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="mb-3">
+                                                        <label for="card-expiry-date" class="form-label">Expiry date</label>
+                                                        <input type="text" id="card-expiry-date" class="form-control" data-toggle="input-mask" data-mask-format="00/00" placeholder="MM/YY">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="mb-3">
+                                                        <label for="card-cvv" class="form-label">CVV code</label>
+                                                        <input type="text" id="card-cvv" class="form-control" data-toggle="input-mask" data-mask-format="000" placeholder="012">
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end row -->
+                                        </div>
+                                        <!-- end Credit/Debit Card box-->
+
+                                        <!-- Pay with Payoneer box-->
+                                        <div class="border p-3 mb-3 rounded">
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <div class="form-check">
+                                                        <input type="radio" id="BillingOptRadio3" name="billingOptions" class="form-check-input">
+                                                        <label class="form-check-label font-16 fw-bold" for="BillingOptRadio3">Pay with Payoneer</label>
+                                                    </div>
+                                                    <p class="mb-0 ps-3 pt-1">You will be redirected to Payoneer website to complete your purchase securely.</p>
+                                                </div>
+                                                <div class="col-sm-4 text-sm-end mt-3 mt-sm-0">
+                                                    <img src="assets/images/payments/payoneer.png" height="30" alt="paypal-img">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end Pay with Payoneer box-->
+
+                                        <!-- Cash on Delivery box-->
+                                        <div class="border p-3 mb-3 rounded">
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <div class="form-check">
+                                                        <input type="radio" id="BillingOptRadio4" name="billingOptions" class="form-check-input">
+                                                        <label class="form-check-label font-16 fw-bold" for="BillingOptRadio4">Cash on Delivery</label>
+                                                    </div>
+                                                    <p class="mb-0 ps-3 pt-1">Pay with cash when your order is delivered.</p>
+                                                </div>
+                                                <div class="col-sm-4 text-sm-end mt-3 mt-sm-0">
+                                                    <img src="assets/images/payments/cod.png" height="22" alt="paypal-img">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end Cash on Delivery box-->
+
+                                        <div class="row mt-4">
+                                            <div class="col-sm-6">
+                                                <a href="apps-ecommerce-shopping-cart.html" class="btn text-muted d-none d-sm-inline-block btn-link fw-semibold">
+                                                    <i class="mdi mdi-arrow-left"></i> Back to Shopping Cart </a>
+                                            </div> <!-- end col -->
+                                            <div class="col-sm-6">
+                                                <div class="text-sm-end">
+                                                    <a href="apps-ecommerce-checkout.html" class="btn btn-danger">
+                                                        <i class="mdi mdi-cash-multiple me-1"></i> Complete Order </a>
+                                                </div>
+                                            </div> <!-- end col -->
+                                        </div> <!-- end row-->
+
+                                    </div> <!-- end col -->
+
+                                    <div class="col-lg-4">
+                                        <div class="border p-3 mt-4 mt-lg-0 rounded">
+                                            <h4 class="header-title mb-3">Order Summary</h4>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-centered mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <img src="assets/images/products/product-1.jpg" alt="contact-img" title="contact-img" class="rounded me-2" height="48">
+                                                                <p class="m-0 d-inline-block align-middle">
+                                                                    <a href="apps-ecommerce-products-details.html" class="text-body fw-semibold">Amazing Modern Chair</a>
+                                                                    <br>
+                                                                    <small>5 x $148.66</small>
+                                                                </p>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $743.30
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <img src="assets/images/products/product-2.jpg" alt="contact-img" title="contact-img" class="rounded me-2" height="48">
+                                                                <p class="m-0 d-inline-block align-middle">
+                                                                    <a href="apps-ecommerce-products-details.html" class="text-body fw-semibold">Designer Awesome Chair</a>
+                                                                    <br>
+                                                                    <small>2 x $99.00</small>
+                                                                </p>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $198.00
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <img src="assets/images/products/product-3.jpg" alt="contact-img" title="contact-img" class="rounded me-2" height="48">
+                                                                <p class="m-0 d-inline-block align-middle">
+                                                                    <a href="apps-ecommerce-products-details.html" class="text-body fw-semibold">Biblio Plastic Armchair</a>
+                                                                    <br>
+                                                                    <small>1 x $129.99</small>
+                                                                </p>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $129.99
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-end">
+                                                            <td>
+                                                                <h6 class="m-0">Sub Total:</h6>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $1071.29
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-end">
+                                                            <td>
+                                                                <h6 class="m-0">Shipping:</h6>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                FREE
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-end">
+                                                            <td>
+                                                                <h5 class="m-0">Total:</h5>
+                                                            </td>
+                                                            <td class="text-end fw-semibold">
+                                                                $1071.29
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- end table-responsive -->
+                                        </div> <!-- end .border-->
+
+                                    </div> <!-- end col -->
+                                </div> <!-- end row-->
                             </div>
-                        </div>
-                        <!-- end tab content-->
-                    </div>
-                    <!-- end card-body-->
-                </div>
-                <!-- end card-->
-            </div>
-            <!-- end col -->
+                            <!-- End Payment Information Content-->
+
+                        </div> <!-- end tab content-->
+
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col -->
         </div>
         <!-- end row-->
     </div>

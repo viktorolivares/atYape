@@ -44,12 +44,12 @@
                                 </router-link>
                             </li>
                         </template>
-                        <li class="side-nav-item">
+                        <!-- <li class="side-nav-item">
                             <router-link class="side-nav-link" :to="{ name: 'apk.index' }">
                                 <i class="uil-mobile-vibrate"></i>
                                 <span>APK</span>
                             </router-link>
-                        </li>
+                        </li> -->
                     </template>
                     <!-- Gestión de Usuarios -->
                     <template v-if="permissions.includes('users.index') || permissions.includes('roles.index')">
