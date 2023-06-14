@@ -341,7 +341,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="amount" class="form-label">Monto</label>
-                                <input type="number" class="form-control" id="amount" v-model="transactionData.amount"
+                                <input type="text" class="form-control" id="amount" v-model="transactionData.amount"
                                     required>
                             </div>
                         </div>

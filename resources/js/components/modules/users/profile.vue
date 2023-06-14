@@ -50,8 +50,9 @@
                         <div class="tab-content mt-lg-2">
                             <div class="tab-pane show active" id="settings">
                                     <form class="needs-validation" @submit.prevent="updateUser" novalidate>
-                                    <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Personal
-                                        Info</h5>
+                                    <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i>
+                                        INFORMACIÓN PERSONAL
+                                    </h5>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
