@@ -42,7 +42,7 @@ export default {
             });
 
             this.updateItems(response.data.data);
-            this.pageTotal = response.data.totalAmount;
+            this.pageTotal = response.data.totalAmount.toFixed(2);
             this.loading = false;
 
         } catch (error) {

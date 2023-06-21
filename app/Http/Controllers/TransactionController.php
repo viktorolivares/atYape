@@ -238,8 +238,8 @@ class TransactionController extends Controller
         $sortField = $request->sort_field;
         $sortDirection = $request->sort_direction;
 
-        $startDate = Carbon::now()->subDays(2)->format('Y-m-d H:i:s');
-        $endDate = Carbon::now()->format('Y-m-d H:i:s');
+        $startDate = Carbon::now()->startOfDay();
+        $endDate = Carbon::now()->endOfDay();
 
         $transactions = Transaction::whereBetween('created_at', [$startDate, $endDate])
             ->when($description, function ($query, $description) {
