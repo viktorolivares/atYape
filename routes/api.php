@@ -26,5 +26,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::controller(TransactionApiController::class)->group(function () {
         Route::post('/transactions/saveApk', 'saveTransaction');
         Route::get('/transactions/listApk', 'listTransactions');
+        Route::get('/transactions/changeStatusApk', 'changeStatus');
     });
 });
