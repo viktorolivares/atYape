@@ -238,8 +238,19 @@ class TransactionController extends Controller
         $sortField = $request->sort_field;
         $sortDirection = $request->sort_direction;
 
-        $startDate = Carbon::now()->subHours(48);
-        $endDate = Carbon::now();
+
+        $dayFilter = $request->day_filter;
+
+        if ($dayFilter == 'hoy') {
+            $startDate = Carbon::today();
+            $endDate = Carbon::tomorrow();
+        } elseif ($dayFilter == 'ayer') {
+            $startDate = Carbon::yesterday();
+            $endDate = Carbon::today();
+        } else {
+            $startDate = Carbon::yesterday();
+            $endDate = Carbon::tomorrow();
+        }
 
         $transactions = Transaction::whereBetween('created_at', [$startDate, $endDate])
             ->when($description, function ($query, $description) {

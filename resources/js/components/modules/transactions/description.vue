@@ -22,7 +22,7 @@
 
         <!-- Formulario de filtro -->
         <form class="row g-1 mb-2" @submit.prevent="fetchData">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="input-group">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Mostrar</small>
@@ -36,7 +36,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="input-group">
                     <span class="input-group-text bg-primary border-primary text-white">
                         <small>Estado</small>
@@ -46,6 +46,19 @@
                         <option :value="''">Todos</option>
                         <option :value="'validated'">Validados</option>
                         <option :value="'pending'">Pendientes</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="input-group">
+                    <span class="input-group-text bg-primary border-primary text-white">
+                        <small>Día</small>
+                    </span>
+                    <select id="dayFilter" v-model="filter.dayFilter" class="form-select" @change="fetchData"
+                        aria-label="Filtrar por día">
+                        <option :value="'ambos'">Ambos</option>
+                        <option :value="'hoy'">Hoy</option>
+                        <option :value="'ayer'">Ayer</option>
                     </select>
                 </div>
             </div>
@@ -320,6 +333,7 @@ export default {
             filter: {
                 state: '',
                 person: '',
+                dayFilter: 'ambos',
             },
             paginated: {
                 perPage: 100,
@@ -379,6 +393,7 @@ export default {
             return {
                 person: this.filter.person,
                 state: this.filter.state,
+                day_filter: this.filter.dayFilter,
                 page: this.paginated.page,
                 perPage: this.paginated.perPage,
             };
