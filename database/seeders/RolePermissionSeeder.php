@@ -38,6 +38,7 @@ class RolePermissionSeeder extends Seeder
             array('role_id' => '1', 'permission_id' => '20'),
             array('role_id' => '1', 'permission_id' => '21'),
             array('role_id' => '1', 'permission_id' => '22'),
+            array('role_id' => '1', 'permission_id' => '23'),
 
             //Analistas
             array('role_id' => '2', 'permission_id' => '5'),

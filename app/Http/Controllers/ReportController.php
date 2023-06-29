@@ -66,6 +66,8 @@ class ReportController extends Controller
             })
             ->paginate($perPage);
 
+        $totalAmount = $transactions->sum('amount');
+
         $transactions->map(function ($created) {
             $created->formatted_date = Carbon::parse($created->created_at)->format('d/m/Y H:i:s');
             return $created;
@@ -74,6 +76,7 @@ class ReportController extends Controller
         return response()->json([
             'success' => true,
             'data' => $transactions,
+            'totalAmount' => $totalAmount
         ], Response::HTTP_OK);
     }
 
