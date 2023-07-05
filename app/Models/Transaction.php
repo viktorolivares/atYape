@@ -21,8 +21,10 @@ class Transaction extends Model
         'state',
         'details',
         'register_date',
+        'external_user',
         'created_by',
         'updated_by',
+
     ];
 
     public function createdBy()
