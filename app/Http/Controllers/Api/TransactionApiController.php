@@ -22,6 +22,9 @@ class TransactionApiController extends Controller
         $amount = end($amount_array);
         $transaction = substr((string) $key, 36) . '|' . $description;
 
+        $person = str_replace('-', ' ', $person);
+        $person = preg_replace('/\s+/', ' ', $person);
+        $person = trim($person);
 
         $data = [
             'description' => $description,
