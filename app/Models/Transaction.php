@@ -39,17 +39,17 @@ class Transaction extends Model
 
     public function setPersonAttribute($value)
     {
-        $this->attributes['person'] = strtoupper($value);
+        $this->attributes['person'] = mb_strtoupper($value);
     }
 
     public function setDetailsAttribute($value)
     {
-        $this->attributes['details'] = strtoupper($value);
+        $this->attributes['details'] = mb_strtoupper($value);
     }
 
     public function setMessageAttribute($value)
     {
-        $this->attributes['message'] = strtoupper($value);
+        $this->attributes['message'] = mb_strtoupper($value);
     }
 
 }

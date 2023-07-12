@@ -16,6 +16,13 @@ class TransactionApiController extends Controller
         $message = $request->message;
         $description = $request->description;
 
+        if (strpos($message, "Yape!") === false || strpos($message, "te envió un pago") === false) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No es un depósito',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $person = explode("te", $message)[0];
         $person = trim(str_replace("Yape! ", "", $person));
         $amount_array = explode(" ", $message);
