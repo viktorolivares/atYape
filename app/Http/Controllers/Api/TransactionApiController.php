@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use DB;
 
 class TransactionApiController extends Controller
 {
@@ -85,5 +86,14 @@ class TransactionApiController extends Controller
 
         return response()->json($transactions, Response::HTTP_OK);
 
+    }
+
+    public function updateMessage() {
+
+        Transaction::query()->update(['message' => DB::raw('UPPER(message)')]);
+
+        return response()->json([
+            'success' => true,
+        ], Response::HTTP_OK);
     }
 }

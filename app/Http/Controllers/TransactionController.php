@@ -475,4 +475,5 @@ class TransactionController extends Controller
 
         return $changes;
     }
+
 }

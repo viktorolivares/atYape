@@ -27,5 +27,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/transactions/saveApk', 'saveTransaction');
         Route::get('/transactions/listApk', 'listTransactions');
         Route::get('/transactions/changeStatusApk', 'changeStatus');
+        Route::get('/transactions/update-message', 'updateMessage');
     });
 });
