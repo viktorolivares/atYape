@@ -30,3 +30,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/transactions/update-message', 'updateMessage');
     });
 });
+
+// Update message
