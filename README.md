@@ -1,114 +1,49 @@
-<p align="center">
-  <a href="" rel="noopener">
- <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
-</p>
+# Proyecto atYape
 
-<h3 align="center">undefined</h3>
+Este es el repositorio del proyecto **atYape**, el cual tiene como objetivo desarrollar una aplicación móvil que se integre con la aplicación Yape y sea capaz de recibir notificaciones en tiempo real de las transacciones. Además, se busca implementar una base de datos para almacenar la información de las transacciones recibidas junto con su estado de validación. La interfaz de usuario se ha diseñado para ser amigable y fácil de usar, permitiendo a los usuarios validar y actualizar la información de las transacciones.
 
-<div align="center">
+## Estructura del Proyecto
 
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+El proyecto está organizado de la siguiente manera:
 
-</div>
+- `app/`: Contiene la lógica de la aplicación.
+  - `Console/`: Archivos relacionados con comandos de consola.
+  - `Exceptions/`: Manejo de excepciones.
+  - `Http/`: Controladores y middleware.
+  - `Models/`: Modelos de base de datos.
+  - `Providers/`: Proveedores de servicios.
+- `bootstrap/`: Configuraciones iniciales y optimización de carga.
+- `config/`: Archivos de configuración de la aplicación.
+- `database/`: Migraciones y semillas para la base de datos.
+- `resources/`: Archivos de recursos como CSS, JavaScript y vistas.
+- `routes/`: Definiciones de rutas de la aplicación.
+- `storage/`: Almacenamiento de archivos y registros.
+- `tests/`: Pruebas unitarias y de características.
+- Otros archivos importantes:
+  - `.env`: Archivo de configuración de variables de entorno.
+  - `composer.json` y `composer.lock`: Configuración y dependencias de Composer.
+  - `package.json` y `package-lock.json`: Configuración y dependencias de npm.
+  - `phpunit.xml`: Configuración para las pruebas unitarias.
 
----
+## Inicio Rápido
 
-<p align="center"> Few lines describing your project.
-    <br> 
-</p>
+1. Clona este repositorio en tu entorno local.
+2. Configura las variables de entorno en el archivo `.env`.
+3. Ejecuta `composer install` para instalar las dependencias de PHP.
+4. Ejecuta `npm install` para instalar las dependencias de JavaScript.
+5. Ejecuta `php artisan key:generate` para generar la clave de la aplicación.
+6. Ejecuta `php artisan migrate` para aplicar las migraciones a la base de datos.
+7. Ejecuta `npm run dev` para compilar los activos de JavaScript y CSS.
+8. Ejecuta `php artisan serve` para iniciar el servidor de desarrollo.
 
-## 📝 Table of Contents
+## Contribución
 
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Deployment](#deployment)
-- [Usage](#usage)
-- [Built Using](#built_using)
-- [TODO](../TODO.md)
-- [Contributing](../CONTRIBUTING.md)
-- [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
+Si deseas contribuir al proyecto, sigue estos pasos:
 
-## 🧐 About <a name = "about"></a>
+1. Haz un fork de este repositorio.
+2. Crea una rama con tu nueva función: `git checkout -b nueva-funcion`.
+3. Realiza tus cambios y commitea: `git commit -m "Agregada nueva función"`.
+4. Sube tus cambios a tu repositorio: `git push origin nueva-funcion`.
+5. Abre una solicitud de extracción en este repositorio.
 
-Write about 1-2 paragraphs describing the purpose of your project.
-
-## 🏁 Getting Started <a name = "getting_started"></a>
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-What things you need to install the software and how to install them.
-
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo.
-
-## 🔧 Running the tests <a name = "tests"></a>
-
-Explain how to run the automated tests for this system.
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## 🎈 Usage <a name="usage"></a>
-
-Add notes about how to use the system.
-
-## 🚀 Deployment <a name = "deployment"></a>
-
-Add additional notes about how to deploy this on a live system.
-
-## ⛏️ Built Using <a name = "built_using"></a>
-
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [VueJs](https://vuejs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
-
-## ✍️ Authors <a name = "authors"></a>
-
-- [@kylelobo](https://github.com/kylelobo) - Idea & Initial work
-
-See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
-
-## 🎉 Acknowledgements <a name = "acknowledgement"></a>
-
-- Hat tip to anyone whose code was used
-- Inspiration
-- References
+¡Gracias por tu contribución!
