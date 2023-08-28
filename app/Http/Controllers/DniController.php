@@ -10,8 +10,7 @@ use App\Http\Services\DniQuery;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
-class DniController extends Controller
-{
+class DniController extends Controller {
 
     public function getDni(Request $request)
     {
@@ -63,7 +62,10 @@ class DniController extends Controller
     public function getCookiesCaptcha()
     {
 
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
+
         $urlCaptcha = 'https://serviciosbiometricos.reniec.gob.pe/appConsultaHuellas/captcha';
         $routeCaptcha = storage_path('app/public/captcha.jpg');
 
