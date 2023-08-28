@@ -19,11 +19,13 @@ class MinorsDeceased
             'Content-Type: application/json;charset=UTF-8',
             'Cookie: JSESSIONID=' . $cookie
         );
+
         $options = array(
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => json_encode($payload),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_SSL_VERIFYPEER => false,
         );
 
         $ch = curl_init($url);

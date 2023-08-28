@@ -54,6 +54,7 @@ class DniController extends Controller {
             return response()->json([
                 'data' => $data
             ]);
+
         } catch (ValidationException $e) {
             return response()->json(['error' => $e->errors()], 422);
         }
