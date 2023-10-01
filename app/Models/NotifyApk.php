@@ -9,6 +9,8 @@ class NotifyApk extends Model
 {
     use HasFactory;
 
+    protected $table = 'notify_apk';
+
     protected $fillable = [
         'message',
     ];
