@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use App\Models\NotifyApk;
 use DB;
 
 class TransactionApiController extends Controller
@@ -96,6 +97,19 @@ class TransactionApiController extends Controller
             'success' => true,
         ], Response::HTTP_OK);
     }
-}
 
-// Update message
+    public function messageNotify(Request $request) {
+        $msg = $request->msg;
+
+        $notifyApk = new NotifyApk();
+
+        $notifyApk->message = $msg;
+
+        $notifyApk->save();
+
+        return response()->json([
+            'success' => true,
+        ], Response::HTTP_OK);
+
+    }
+}
